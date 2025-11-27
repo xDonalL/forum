@@ -10,6 +10,8 @@ public class User extends AbstractBaseEntity {
 
     private String email;
 
+    private String name;
+
     private String password;
 
     private boolean enabled;
