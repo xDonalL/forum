@@ -2,7 +2,7 @@ package com.forum.forum.service;
 
 import com.forum.forum.model.Role;
 import com.forum.forum.model.User;
-import com.forum.forum.repository.UserRepository;
+import com.forum.forum.repository.user.UserRepository;
 import com.forum.forum.util.ValidUtil;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;

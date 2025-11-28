@@ -32,11 +32,11 @@ public class InMemoryBaseRepository<T extends AbstractBaseEntity> {
         return map.get(id);
     }
 
-    Collection<T> getCollection() {
+    public Collection<T> getCollection() {
         return map.values();
     }
 
-    void put(T entity) {
+    public void put(T entity) {
         Objects.requireNonNull(entity, "Entity must not be null");
         map.put(entity.getId(), entity);
     }

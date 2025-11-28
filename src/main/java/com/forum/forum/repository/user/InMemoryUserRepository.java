@@ -1,6 +1,7 @@
-package com.forum.forum.repository;
+package com.forum.forum.repository.user;
 
 import com.forum.forum.model.User;
+import com.forum.forum.repository.InMemoryBaseRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Comparator;
