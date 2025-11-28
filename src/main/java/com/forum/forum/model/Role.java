@@ -1,5 +1,7 @@
 package com.forum.forum.model;
 
-enum Role {
-    USER, ADMIN, MODERATOR
+public enum Role {
+    USER,
+    ADMIN,
+    MODERATOR
 }
