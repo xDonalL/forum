@@ -1,10 +1,8 @@
 package com.forum.forum.service;
 
-import com.forum.forum.model.Role;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.user.UserRepository;
 import com.forum.forum.util.ValidUtil;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +13,6 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @PostConstruct
-    private void init() {
-        createUser(new User("user@gmail.com", "user", "password", Role.USER));
-    }
 
     public User createUser(User user) {
         ValidUtil.checkIsNew(user);
