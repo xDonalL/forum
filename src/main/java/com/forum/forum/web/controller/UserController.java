@@ -26,10 +26,4 @@ public class UserController {
         model.addAttribute("user", user);
         return "user-profile";
     }
-
-    @GetMapping("/users")
-    public String usersPage(Model model) {
-        model.addAttribute("users", userService.getAll());
-        return "users";
-    }
 }
