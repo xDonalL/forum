@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+</head>
+
+<body>
+
+<div class="profile-card">
+
+    <div>
+        <h2>User Profile</h2>
+    </div>
+
+    <div>
+        <span class="label">Name:</span>
+        <span class="value" th:text="${user.name}"></span>
+    </div>
+
+    <div>
+        <span class="label">Email:</span>
+        <span class="value" th:text="${user.email}"></span>
+    </div>
+
+    <div>
+        <span class="label">Account status:</span>
+        <span class="value"
+              th:classappend="${user.enabled} ? 'status-active' : 'status-inactive'"
+              th:text="${user.enabled} ? 'Active' : 'Inactive'">
+        </span>
+    </div>
+
+    <div>
+        <span class="label">Created at:</span>
+        <span class="value"
+              th:text="${#temporals.format(user.register, 'yyyy-MM-dd HH:mm')}">
+        </span>
+    </div>
+</div>
+
+</body>
+</html>
