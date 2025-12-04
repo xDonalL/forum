@@ -7,6 +7,7 @@ import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.to.RegistrationUserTo;
 import com.forum.forum.util.ValidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -74,5 +75,11 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User " + email + " is not found");
         }
         return new AuthorizedUser(user);
+    }
+
+    public User getCurrentUser() {
+        AuthorizedUser auth = (AuthorizedUser) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        return userRepository.get(auth.getUser().getId());
     }
 }
