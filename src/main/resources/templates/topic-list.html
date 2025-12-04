@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<a href="/" class="btn">Home</a>
+<h1>Topics</h1>
+
+<ul>
+    <li th:each="t : ${topics}">
+        <a th:href="@{'forum/' + ${t.id}}"
+           th:text="${t.title}"></a>
+    </li>
+</ul>
+
+<a href="/forum/add/topic">
+    <button>Create topic</button>
+</a>

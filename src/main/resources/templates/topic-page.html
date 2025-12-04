@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<a href="/forum" class="btn">Back</a>
+<h1 th:text="${topic.author.name}"></h1>
+<h1 th:text="${topic.title}"></h1>
+
+<hr>
+
+<h2>Messages</h2>
+
+<div th:each="m : ${messages}">
+    <b th:text="${m.author.name}"></b>:
+    <span th:text="${m.comment}"></span>
+    <br>
+</div>
+
+<hr>
+
+<form method="post" action="/forum/add/comment">
+    <input type="hidden" name="topicId" th:value="${topic.id}">
+    <textarea name="content" placeholder="Write message..."></textarea>
+    <button type="submit">Send</button>
+</form>
