@@ -32,19 +32,19 @@ public class User extends AbstractBaseEntity {
         this(user.id, user.email, user.name, user.password, user.roles.toArray(new Role[0]));
     }
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "register", nullable = false, updatable = false)
     private LocalDateTime register = LocalDateTime.now();
 
     @ElementCollection(fetch = FetchType.EAGER)
