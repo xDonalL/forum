@@ -74,7 +74,7 @@ class UserServiceTest {
 
     @Test
     void getAll() {
-        List<User> list = List.of(user, admin);
+        List<User> list = List.of(USER, ADMIN);
 
         when(userRepository.getAll()).thenReturn(list);
 
