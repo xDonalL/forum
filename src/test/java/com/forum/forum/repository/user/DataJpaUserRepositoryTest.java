@@ -58,8 +58,8 @@ class DataJpaUserRepositoryTest {
 
     @Test
     void getAll() {
-        userRepository.save(UserTestData.user);
-        userRepository.save(UserTestData.admin);
+        userRepository.save(UserTestData.USER);
+        userRepository.save(UserTestData.ADMIN);
 
         List<User> users = userRepository.getAll();
         assertEquals(2, users.size());

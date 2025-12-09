@@ -22,7 +22,7 @@ public class RootController {
     }
 
     @GetMapping
-    public String usersPage(Model model) {
+    public String homePage(Model model) {
         return "home-page";
     }
 
