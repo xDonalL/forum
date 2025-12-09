@@ -3,7 +3,6 @@ package com.forum.forum.service;
 import com.forum.forum.model.ForumTopic;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.CrudForumTopicRepository;
-import com.forum.forum.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,15 +14,14 @@ import java.util.List;
 public class ForumTopicService {
 
     private final CrudForumTopicRepository topicRepository;
-    private final UserRepository userRepository;
 
     @Transactional
-    public void createTopic(String title, String description, User user) {
+    public ForumTopic createTopic(String title, String content, User user) {
         ForumTopic topic = new ForumTopic();
         topic.setTitle(title);
-        topic.setContent(description);
+        topic.setContent(content);
         topic.setAuthor(user);
-        topicRepository.save(topic);
+        return topicRepository.save(topic);
     }
 
     public List<ForumTopic> getAll() {

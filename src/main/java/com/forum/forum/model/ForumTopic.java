@@ -2,6 +2,7 @@ package com.forum.forum.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -11,8 +12,16 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "forum_topics")
 public class ForumTopic extends AbstractBaseEntity {
+
+    public ForumTopic(Integer id, String title, String content, User author) {
+        super(id);
+        this.title = title;
+        this.content = content;
+        this.author = author;
+    }
 
     @Column(name = "title", nullable = false)
     private String title;
