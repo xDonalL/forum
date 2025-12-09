@@ -11,13 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class ForumMessageService {
+public class ForumCommentService {
 
     private final CrudForumCommentRepository messageRepository;
     private final CrudForumTopicRepository topicRepository;
 
     @Transactional
-    public void addMessage(Integer topicId, User author, String content) {
+    public ForumComment addComment(Integer topicId, User author, String content) {
         ForumTopic topic = topicRepository.findById(topicId)
                 .orElseThrow(() -> new IllegalArgumentException("Topic not found"));
 
@@ -26,6 +26,6 @@ public class ForumMessageService {
         msg.setAuthor(author);
         msg.setComment(content);
 
-        messageRepository.save(msg);
+        return messageRepository.save(msg);
     }
 }
