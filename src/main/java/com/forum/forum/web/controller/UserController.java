@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -25,5 +27,23 @@ public class UserController {
         User user = userService.getByEmail(auth.getName());
         model.addAttribute("user", user);
         return "user-profile";
+    }
+
+    @GetMapping("/edit")
+    public String editProfile(Model model, Authentication auth) {
+        User user = userService.getByEmail(auth.getName());
+        model.addAttribute("user", user);
+        return "edit-profile";
+    }
+
+    @PostMapping("/edit")
+    public String updateProfile(@ModelAttribute("user") User userForm, Authentication auth) {
+        User user = userService.getByEmail(auth.getName());
+
+        user.setName(userForm.getName());
+
+        userService.update(user);
+
+        return "redirect:/profile";
     }
 }

@@ -9,9 +9,19 @@
         </span>
 
         <span sec:authorize="isAuthenticated()">
+        <div>
+            <a href="/" style="margin-right: 20px;">Main</a>
+        </div>
+
+        <div>
+            <span th:text="${#authentication.name}">Username</span>
+
+            <a href="/profile" style="margin-left: 15px;">Profile</a>
+
             <form th:action="@{/logout}" method="post" style="display:inline;">
-                <button type="submit">Выйти</button>
+                <button type="submit" style="margin-left: 15px;">Exit</button>
             </form>
+        </div>
         </span>
     </header>
 </div>

@@ -49,6 +49,10 @@ public class UserService implements UserDetailsService {
         return userRepository.getAll();
     }
 
+    public void update(User user) {
+        userRepository.save(user);
+    }
+
     public void register(RegistrationUserTo registrationTo) {
         if (!registrationTo.getPassword().equals(registrationTo.getConfirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match");
