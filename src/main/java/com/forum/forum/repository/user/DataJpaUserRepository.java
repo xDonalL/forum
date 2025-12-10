@@ -1,7 +1,6 @@
 package com.forum.forum.repository.user;
 
 import com.forum.forum.model.User;
-import com.forum.forum.repository.CrudUserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

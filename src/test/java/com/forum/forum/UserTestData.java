@@ -5,6 +5,9 @@ import com.forum.forum.model.User;
 
 public class UserTestData {
 
+    public static final Integer USER_ID = 1;
+    public static final Integer ADMIN_ID = 2;
+
     public static final User USER = new User("user@yandex.ru", "user", "password", Role.USER);
     public static final User ADMIN = new User("admin@gmail.com", "admin", "admin", Role.ADMIN, Role.USER);
 

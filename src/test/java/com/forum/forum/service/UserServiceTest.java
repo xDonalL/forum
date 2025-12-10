@@ -33,23 +33,23 @@ class UserServiceTest {
 
     @Test
     void createUser() {
-        when(userRepository.save(any(User.class))).thenReturn(getNew());
+        when(userRepository.save(any(User.class))).thenReturn(USER);
 
-        User saved = userService.createUser(getNew());
+        User saved = userService.createUser(USER);
 
         assertNotNull(saved);
-        assertEquals(getNew().getName(), saved.getName());
-        verify(userRepository).save(getNew());
+        assertEquals(USER.getName(), saved.getName());
+        verify(userRepository).save(USER);
     }
 
     @Test
     void deleteUser() {
-        when(userRepository.delete(1)).thenReturn(true);
+        when(userRepository.delete(USER_ID)).thenReturn(true);
 
-        boolean deleted = userService.delete(1);
+        boolean deleted = userService.delete(USER_ID);
 
         assertTrue(deleted);
-        verify(userRepository).delete(1);
+        verify(userRepository).delete(USER_ID);
     }
 
     @Test
@@ -64,12 +64,12 @@ class UserServiceTest {
     @Test
     void getUserById() {
         User user = getNew();
-        user.setId(1);
+        user.setId(USER_ID);
         when(userRepository.get(user.getId())).thenReturn(user);
 
-        User result = userService.getUserById(user.getId());
+        User result = userService.getUserById(USER_ID);
 
-        assertEquals(user.getId(), result.getId());
+        assertEquals(USER_ID, result.getId());
     }
 
     @Test
@@ -80,6 +80,6 @@ class UserServiceTest {
 
         List<User> all = userService.getAll();
 
-        assertEquals(2, all.size());
+        assertEquals(list.size(), all.size());
     }
 }

@@ -1,4 +1,4 @@
-package com.forum.forum.repository;
+package com.forum.forum.repository.user;
 
 import com.forum.forum.model.User;
 import org.springframework.data.jpa.repository.*;
