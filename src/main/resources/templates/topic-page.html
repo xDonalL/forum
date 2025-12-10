@@ -1,16 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum</title>
+</head>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+
 <a href="/forum" class="btn">Back</a>
 <h1 th:text="${topic.author.name}"></h1>
 <h1 th:text="${topic.title}"></h1>
+<h1 th:text="${topic.content}"></h1>
+
 
 <hr>
 
 <h2>Messages</h2>
 
-<div th:each="m : ${messages}">
-    <b th:text="${m.author.name}"></b>:
-    <span th:text="${m.comment}"></span>
+<div th:each="c : ${content}">
+    <b th:text="${c.author.name}"></b>:
+    <span th:text="${c.comment}"></span>
     <br>
 </div>
 
@@ -18,6 +27,7 @@
 
 <form method="post" action="/forum/add/comment">
     <input type="hidden" name="topicId" th:value="${topic.id}">
-    <textarea name="content" placeholder="Write message..."></textarea>
+    <textarea name="comment" placeholder="Write comment..."></textarea>
     <button type="submit">Send</button>
 </form>
+</body>
