@@ -16,7 +16,8 @@
         <div>
             <span th:text="${#authentication.name}">Username</span>
 
-            <a href="/profile" style="margin-left: 15px;">Profile</a>
+            <a th:href="@{/profile/{id}-{login}(id=${#authentication.principal.id}, login=${#authentication.principal.login})}"
+               style="margin-left: 15px;">Profile</a>
 
             <form th:action="@{/logout}" method="post" style="display:inline;">
                 <button type="submit" style="margin-left: 15px;">Exit</button>

@@ -9,7 +9,7 @@
 <div th:replace="fragments/header :: header"></div>
 
 <a href="/forum" class="btn">Back</a>
-<h1 th:text="${topic.author.name}"></h1>
+<h1 th:text="${topic.author.login}"></h1>
 <h1 th:text="${topic.title}"></h1>
 <h1 th:text="${topic.content}"></h1>
 
@@ -20,7 +20,7 @@
 
 <div th:each="c : ${content}">
     <div class="user-info">
-        <a th:href="@{/user/{id}(id=${c.author.id})}">
+        <a th:href="@{/profile/{id}-{login}(id=${c.author.id}, login=${c.author.login})}">
             <img th:src="@{/avatars/{file}(file=${c.author.avatar})}" class="avatar">
         </a>
 

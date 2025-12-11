@@ -26,7 +26,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping("/{id}-{login}")
     public String profilePage(Model model, Authentication auth) {
         User user = userService.getByEmail(auth.getName());
         model.addAttribute("user", user);

@@ -15,12 +15,12 @@
 <ul>
     <li th:each="t : ${topics}">
         <div class="user-info">
-            <a th:href="@{/user/{id}(id=${t.author.id})}">
+            <a th:href="@{/profile/{id}-{login}(id=${t.author.id}, login=${t.author.login})}">
                 <img th:src="@{/avatars/{file}(file=${t.author.avatar})}" class="avatar">
             </a>
 
-            <a th:href="@{/user/{id}(id=${t.author.id})}" class="username">
-                <span th:text="${t.author.name}"></span>
+            <a th:href="@{/profile/{id}-{login}(id=${t.author.id}, login=${t.author.login})}" class="username">
+                <span th:text="${t.author.login}"></span>
             </a>
         </div>
         <a th:href="@{'forum/' + ${t.id}}"
