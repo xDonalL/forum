@@ -6,10 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/profile")
@@ -37,10 +41,24 @@ public class UserController {
     }
 
     @PostMapping("/edit")
-    public String updateProfile(@ModelAttribute("user") User userForm, Authentication auth) {
+    public String updateProfile(@ModelAttribute("user") User userForm,
+                                @RequestParam("avatarFile") MultipartFile avatarFile,
+                                Authentication auth) throws IOException {
         User user = userService.getByEmail(auth.getName());
 
         user.setName(userForm.getName());
+
+        if (!avatarFile.isEmpty()) {
+            String filename = UUID.randomUUID() + "_" + avatarFile.getOriginalFilename();
+            Path uploadPath = Paths.get("/uploads/avatars");
+
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            avatarFile.transferTo(uploadPath.resolve(filename));
+            user.setAvatar(filename);
+        }
 
         userService.update(user);
 

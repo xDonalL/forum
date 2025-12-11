@@ -13,11 +13,20 @@
 
     <h2>Edit profile</h2>
 
-    <form th:action="@{/profile/edit}" th:object="${user}" method="post">
+    <form th:action="@{/profile/edit}" th:object="${user}" method="post" enctype="multipart/form-data">
 
         <div class="form-group">
             <label>Name:</label>
             <input type="text" th:field="*{name}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Avatar:</label>
+            <input type="file" name="avatarFile" accept="image/*">
+            <div th:if="${user.avatar != null}">
+                <img th:src="@{/uploads/avatars/{filename}(filename=${user.avatar})}"
+                     alt="Avatar" style="max-width: 100px; max-height: 100px; margin-top: 10px;">
+            </div>
         </div>
 
         <button type="submit">Save</button>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <meta charset="UTF-8">
     <title>Forum</title>
 </head>
@@ -15,12 +16,21 @@
 
 <hr>
 
-<h2>Messages</h2>
+<h2>Comments</h2>
 
 <div th:each="c : ${content}">
-    <b th:text="${c.author.name}"></b>:
+    <div class="user-info">
+        <a th:href="@{/user/{id}(id=${c.author.id})}">
+            <img th:src="@{/avatars/{file}(file=${c.author.avatar})}" class="avatar">
+        </a>
+
+        <a th:href="@{/user/{id}(id=${c.author.id})}" class="username">
+            <span th:text="${c.author.name}"></span>
+        </a>
+    </div>
     <span th:text="${c.comment}"></span>
     <br>
+    <hr>
 </div>
 
 <hr>
