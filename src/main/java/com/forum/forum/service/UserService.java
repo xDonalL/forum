@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
 
         User newUser = new User(
                 registrationTo.getEmail(),
-                registrationTo.getName(),
+                registrationTo.getLogin(),
                 passwordEncoder.encode(registrationTo.getPassword()),
                 Role.USER
         );

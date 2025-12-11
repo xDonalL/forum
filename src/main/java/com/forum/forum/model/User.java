@@ -16,27 +16,31 @@ import java.util.*;
 @Table(name = "users")
 public class User extends AbstractBaseEntity {
 
-    public User(String email, String name, String password, Role... role) {
+    public User(String email, String login, String password, Role... role) {
         this.email = email;
-        this.name = name;
+        this.login = login;
         this.password = password;
         this.enabled = true;
         this.roles.addAll(Arrays.asList(role));
     }
 
-    public User(Integer id, String email, String name, String password, Role... role) {
-        this(email, name, password, role);
+    public User(Integer id, String email, String login, String password, Role... role) {
+        this(email, login, password, role);
         this.id = id;
     }
 
     public User(User user) {
-        this(user.id, user.email, user.name, user.password, user.roles.toArray(new Role[0]));
+        this(user.id, user.email, user.login, user.password, user.roles.toArray(new Role[0]));
     }
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "login", nullable = false, unique = true)
+    private String login;
+
+    @Nullable
+    @Column(name = "name")
     private String name;
 
     @Nullable
