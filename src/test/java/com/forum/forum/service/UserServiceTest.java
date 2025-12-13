@@ -5,6 +5,7 @@ import com.forum.forum.repository.user.UserRepository;
 import com.forum.forum.to.RegistrationUserTo;
 import com.forum.forum.util.exception.EmailAlreadyExistsException;
 import com.forum.forum.util.exception.LoginAlreadyExistsException;
+import com.forum.forum.util.exception.NotFoundException;
 import com.forum.forum.util.exception.PasswordMismatchException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,18 +37,42 @@ class UserServiceTest {
     }
 
     @Test
-    void createUser() {
-        when(userRepository.save(any(User.class))).thenReturn(USER);
+    void createUserSuccess() {
+        User newUser = getNew();
+        when(userRepository.save(any(User.class))).thenReturn(newUser);
 
-        User saved = userService.createUser(USER);
+        User saved = userService.createUser(newUser);
 
         assertNotNull(saved);
-        assertEquals(USER.getName(), saved.getName());
-        verify(userRepository).save(USER);
+        assertEquals(newUser.getName(), saved.getName());
+        verify(userRepository).save(any(User.class));
     }
 
     @Test
-    void deleteUser() {
+    void updateUserException() {
+        User updateUser = getUpdated();
+
+        when(userRepository.get(USER_ID)).thenReturn(USER);
+        when(userRepository.save(any(User.class))).thenReturn(updateUser);
+
+        User saved = userService.update(updateUser);
+
+        assertNotNull(saved);
+        assertEquals(updateUser.getName(), saved.getName());
+        assertEquals(updateUser.getRoles(), saved.getRoles());
+
+        verify(userRepository).get(USER_ID);
+        verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    void updateUserNotFoundException() {
+        when(userRepository.save(any(User.class))).thenReturn(null);
+
+    }
+
+    @Test
+    void deleteUserSuccess() {
         when(userRepository.delete(USER_ID)).thenReturn(true);
 
         boolean deleted = userService.delete(USER_ID);
@@ -57,19 +82,32 @@ class UserServiceTest {
     }
 
     @Test
-    void getByEmail() {
-        when(userRepository.getByEmail(getNew().getEmail())).thenReturn(getNew());
+    void deleteUserNotFoundException() {
+        when(userRepository.delete(NOT_FOUND_ID)).thenReturn(false);
 
-        User result = userService.getByEmail(getNew().getEmail());
-
-        assertEquals(getNew().getEmail(), result.getEmail());
+        assertThrows(NotFoundException.class, () -> userService.delete(NOT_FOUND_ID));
     }
 
     @Test
-    void getUserById() {
-        User user = getNew();
-        user.setId(USER_ID);
-        when(userRepository.get(user.getId())).thenReturn(user);
+    void getByEmailSuccess() {
+        when(userRepository.getByEmail(USER.getEmail())).thenReturn(USER);
+
+        User result = userService.getByEmail(USER.getEmail());
+
+        assertEquals(USER.getEmail(), result.getEmail());
+    }
+
+    @Test
+    void getByEmailNotFoundException() {
+        when(userRepository.getByEmail(NOT_FOUND_EMAIL)).thenReturn(null);
+
+        assertThrows(NotFoundException.class,
+                () -> userService.getByEmail(NOT_FOUND_EMAIL));
+    }
+
+    @Test
+    void getUserByIdSuccess() {
+        when(userRepository.get(USER.getId())).thenReturn(USER);
 
         User result = userService.getUserById(USER_ID);
 
@@ -77,7 +115,14 @@ class UserServiceTest {
     }
 
     @Test
-    void getAll() {
+    void getUserByIdNotFoundException() {
+        when(userRepository.get(NOT_FOUND_ID)).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> userService.getUserById(NOT_FOUND_ID));
+    }
+
+    @Test
+    void getAllUserSuccess() {
         List<User> list = List.of(USER, ADMIN);
 
         when(userRepository.getAll()).thenReturn(list);

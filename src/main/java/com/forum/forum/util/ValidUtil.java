@@ -13,10 +13,11 @@ public class ValidUtil {
         return object;
     }
 
-    public static void checkNotFound(boolean found, String msg) {
+    public static boolean checkNotFound(boolean found, String msg) {
         if (!found) {
             throw new NotFoundException("Not found entity with " + msg);
         }
+        return true;
     }
 
     public static void checkIsNew(AbstractBaseEntity bean) {

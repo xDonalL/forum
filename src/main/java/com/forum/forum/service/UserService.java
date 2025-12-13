@@ -1,14 +1,14 @@
 package com.forum.forum.service;
 
-import com.forum.forum.util.exception.EmailAlreadyExistsException;
-import com.forum.forum.util.exception.LoginAlreadyExistsException;
-import com.forum.forum.util.exception.PasswordMismatchException;
 import com.forum.forum.model.Role;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.user.UserRepository;
 import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.to.RegistrationUserTo;
 import com.forum.forum.util.ValidUtil;
+import com.forum.forum.util.exception.EmailAlreadyExistsException;
+import com.forum.forum.util.exception.LoginAlreadyExistsException;
+import com.forum.forum.util.exception.PasswordMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,26 +34,28 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean delete(int id) {
-        ValidUtil.checkNotFound(id, "user with id= " + id + " not exist");
-        return userRepository.delete(id);
+        return ValidUtil.checkNotFound(
+                userRepository.delete(id), "user with id= " + id + " not exist");
     }
 
     public User getByEmail(String email) {
-        ValidUtil.checkNotFound(email, "user with email= " + email + " not exist");
-        return userRepository.getByEmail(email);
+        return ValidUtil.checkNotFound(
+                userRepository.getByEmail(email), "user with email= " + email + " not exist");
     }
 
     public User getUserById(int id) {
-        ValidUtil.checkNotFound(id, "user with id= " + id + " not exist");
-        return userRepository.get(id);
+        return ValidUtil.checkNotFound(
+                userRepository.get(id), "user with id= " + id + " not exist");
     }
 
     public List<User> getAll() {
         return userRepository.getAll();
     }
 
-    public void update(User user) {
-        userRepository.save(user);
+    public User update(User user) {
+        ValidUtil.checkNotFound(
+                userRepository.get(user.getId()), "user with id= " + user.getId() + " not exist");
+        return userRepository.save(user);
     }
 
     public User register(RegistrationUserTo registrationTo) {
