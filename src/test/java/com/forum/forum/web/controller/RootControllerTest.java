@@ -46,7 +46,7 @@ class RootControllerTest {
     void register() throws Exception {
         mockMvc.perform(post("/register")
                         .param("email", USER.getEmail())
-                        .param("name", USER.getName())
+                        .param("login", USER.getLogin())
                         .param("password", USER.getPassword())
                         .param("confirmPassword", USER.getPassword()))
                 .andExpect(status().is3xxRedirection())

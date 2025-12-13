@@ -39,9 +39,8 @@ public class User extends AbstractBaseEntity {
     @Column(name = "login", nullable = false, unique = true)
     private String login;
 
-    @Nullable
     @Column(name = "name")
-    private String name;
+    private String name = "Name";
 
     @Nullable
     @Column(name = "avatar")

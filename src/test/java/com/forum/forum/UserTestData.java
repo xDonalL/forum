@@ -3,6 +3,8 @@ package com.forum.forum;
 import com.forum.forum.model.Role;
 import com.forum.forum.model.User;
 
+import java.util.List;
+
 public class UserTestData {
 
     public static final Integer USER_ID = 1;
@@ -13,6 +15,8 @@ public class UserTestData {
 
     public static final User USER = new User(USER_ID, "user@yandex.ru", "user", "password", Role.USER);
     public static final User ADMIN = new User(ADMIN_ID, "admin@gmail.com", "admin", "admin", Role.ADMIN, Role.USER);
+
+    public static final List<User> ALL_USERS = List.of(USER, ADMIN);
 
     public static User getNew() {
         return new User("newEmail@gmail.com", "newUser", "newPassword", Role.USER);

@@ -1,7 +1,7 @@
 package com.forum.forum.repository.user;
 
-import com.forum.forum.UserTestData;
 import com.forum.forum.model.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
+import static com.forum.forum.UserTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -22,46 +23,44 @@ class DataJpaUserRepositoryTest {
     @Autowired
     private DataJpaUserRepository userRepository;
 
+    private User savedUser;
+
+    @BeforeEach
+    void setUp() {
+        savedUser = userRepository.save(getNew());
+    }
+
     @Test
     void save() {
-        User saved = userRepository.save(UserTestData.getNew());
-
-        assertNotNull(saved.getId());
-        assertEquals(UserTestData.getNew().getEmail(), saved.getEmail());
+        assertNotNull(savedUser.getId());
+        assertEquals(savedUser.getEmail(), getNew().getEmail());
     }
 
     @Test
     void delete() {
-        User saved = userRepository.save(UserTestData.getNew());
-
-        assertTrue(userRepository.delete(saved.getId()));
+        assertTrue(userRepository.delete(savedUser.getId()));
     }
 
     @Test
-    void get() {
-        User saved = userRepository.save(UserTestData.getNew());
-
-        User found = userRepository.get(saved.getId());
+    void getById() {
+        User found = userRepository.get(savedUser.getId());
         assertNotNull(found);
-        assertEquals(UserTestData.getNew().getEmail(), found.getEmail());
+        assertEquals(savedUser.getId(), found.getId());
     }
 
     @Test
     void getByEmail() {
-        User newUser = UserTestData.getNew();
-        userRepository.save(newUser);
-
-        User found = userRepository.getByEmail(newUser.getEmail());
+        User found = userRepository.getByEmail(savedUser.getEmail());
         assertNotNull(found);
-        assertEquals(UserTestData.getNew().getEmail(), found.getEmail());
+        assertEquals(savedUser.getEmail(), found.getEmail());
     }
 
     @Test
     void getAll() {
-        userRepository.save(UserTestData.USER);
-        userRepository.save(UserTestData.ADMIN);
+        ADMIN.setId(null);
+        userRepository.save(ADMIN);
 
         List<User> users = userRepository.getAll();
-        assertEquals(2, users.size());
+        assertEquals(ALL_USERS.size(), users.size());
     }
 }
