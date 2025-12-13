@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" th:href="@{/css/header.css}">
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/topic.css}">
     <meta charset="UTF-8">
     <title>Forum</title>
 </head>
@@ -15,41 +16,49 @@
 
     <main class="content">
 
-<a href="/forum" class="btn">Back</a>
-<h1 th:text="${topic.author.login}"></h1>
-<h1 th:text="${topic.title}"></h1>
-<h1 th:text="${topic.content}"></h1>
+        <div class="topic-card">
+            <div class="topic-header">
+                <div class="user-info">
+                    <a th:href="@{/profile/{id}-{login}(id=${topic.author.id}, login=${topic.author.login})}">
+                        <img th:src="@{/avatars/{file}(file=${topic.author.avatar})}" class="avatar">
+                    </a>
+                    <a th:href="@{/profile/{id}-{login}(id=${topic.author.id}, login=${topic.author.login})}">
+                        <span th:text="${topic.author.login}"></span>
+                    </a>
+                </div>
+                <span th:text="${#temporals.format(topic.dateCreated, 'yyyy-MM-dd HH:mm')}"></span>
+            </div>
+            <h2 th:text="${topic.title}"></h2>
+            <p th:text="${topic.content}"></p>
+        </div>
 
+        <h3>Комментарии</h3>
+        <div th:each="c : ${content}" class="comment-card">
+            <div class="comment-header">
+                <div class="user-info">
+                    <a th:href="@{/profile/{id}-{login}(id=${c.author.id}, login=${c.author.login})}">
+                        <img th:src="@{/avatars/{file}(file=${c.author.avatar})}" class="avatar">
+                    </a>
+                    <a th:href="@{/profile/{id}-{login}(id=${c.author.id}, login=${c.author.login})}">
+                        <span th:text="${c.author.login}"></span>
+                    </a>
+                </div>
+                <span th:text="${#temporals.format(c.dateCreated, 'yyyy-MM-dd HH:mm')}"></span>
+            </div>
+            <p th:text="${c.comment}"></p>
+        </div>
 
-<hr>
+        <div class="comment-form">
+            <form method="post" action="/forum/add/comment">
+                <input type="hidden" name="topicId" th:value="${topic.id}">
+                <textarea name="comment" placeholder="Write comment..."></textarea>
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
 
-<h2>Comments</h2>
+    </main>
 
-<div th:each="c : ${content}">
-    <div class="user-info">
-        <a th:href="@{/profile/{id}-{login}(id=${c.author.id}, login=${c.author.login})}">
-            <img th:src="@{/avatars/{file}(file=${c.author.avatar})}" class="avatar">
-        </a>
-
-        <a th:href="@{/user/{id}(id=${c.author.id})}" class="username">
-            <span th:text="${c.author.name}"></span>
-        </a>
-    </div>
-    <span th:text="${c.comment}"></span>
-    <br>
-    <hr>
-</div>
-
-<hr>
-
-<form method="post" action="/forum/add/comment">
-    <input type="hidden" name="topicId" th:value="${topic.id}">
-    <textarea name="comment" placeholder="Write comment..."></textarea>
-    <button type="submit">Send</button>
-</form>
-</main>
-
-<div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="fragments/footer :: footer"></div>
 
 </div>
 
