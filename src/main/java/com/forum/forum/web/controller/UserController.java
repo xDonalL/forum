@@ -27,8 +27,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}-{login}")
-    public String profilePage(Model model, Authentication auth) {
-        User user = userService.getByEmail(auth.getName());
+    public String profilePage(Model model, @PathVariable Integer id) {
+        User user = userService.getUserById(id);
         model.addAttribute("user", user);
         return "user-profile";
     }
