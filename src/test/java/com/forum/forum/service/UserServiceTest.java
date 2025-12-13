@@ -2,6 +2,10 @@ package com.forum.forum.service;
 
 import com.forum.forum.model.User;
 import com.forum.forum.repository.user.UserRepository;
+import com.forum.forum.to.RegistrationUserTo;
+import com.forum.forum.util.exception.EmailAlreadyExistsException;
+import com.forum.forum.util.exception.LoginAlreadyExistsException;
+import com.forum.forum.util.exception.PasswordMismatchException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -81,5 +85,55 @@ class UserServiceTest {
         List<User> all = userService.getAll();
 
         assertEquals(list.size(), all.size());
+    }
+
+    @Test
+    void registerValidNewUser() {
+        User newUser = getNew();
+        when(userRepository.save(any(User.class))).thenReturn(newUser);
+
+        User registerUser = userService.register(new RegistrationUserTo(
+                newUser.getEmail(), newUser.getLogin(), newUser.getPassword(), newUser.getPassword()));
+
+        assertNotNull(newUser);
+        assertEquals(newUser.getName(), registerUser.getName());
+        assertEquals(newUser.getRoles().toString(), registerUser.getRoles().toString());
+    }
+
+    @Test
+    void registerEmailAlreadyExistException() {
+        User existing = getNew();
+
+        when(userRepository.getByEmail(existing.getEmail())).thenReturn(existing);
+
+        User newUser = getNew();
+        newUser.setEmail(existing.getEmail());
+
+        assertThrows(EmailAlreadyExistsException.class,
+                () -> userService.register(new RegistrationUserTo(newUser)));
+
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void registerLoginAlreadyExistException() {
+        User existing = getNew();
+        when(userRepository.getByLogin(existing.getLogin())).thenReturn(existing);
+
+        User newUser = getNew();
+        newUser.setLogin(existing.getLogin());
+
+        assertThrows(LoginAlreadyExistsException.class,
+                () -> userService.register(new RegistrationUserTo(newUser)));
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void registerPasswordMismatchException() {
+        assertThrows(PasswordMismatchException.class,
+                () -> userService.register(new RegistrationUserTo(
+                        USER.getEmail(), USER.getLogin(), "password", "confirmPassword")));
+
+        verify(userRepository, never()).save(any());
     }
 }
