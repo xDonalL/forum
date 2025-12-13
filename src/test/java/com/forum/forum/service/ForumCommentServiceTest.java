@@ -31,7 +31,7 @@ class ForumCommentServiceTest {
     }
 
     @Test
-    void addComment() {
+    void addCommentSuccess() {
         User author = ForumTestData.COMMENT1.getAuthor();
         ForumTopic topic = ForumTestData.COMMENT1.getTopic();
         ForumComment newComment = ForumTestData.getNewComment(author, topic);

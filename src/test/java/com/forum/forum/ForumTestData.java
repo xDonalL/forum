@@ -17,6 +17,8 @@ public class ForumTestData {
     public static final ForumTopic TOPIC1 = new ForumTopic(TOPIC1_ID, "Topic One", "Description for topic one", USER);
     public static final ForumTopic TOPIC2 = new ForumTopic(TOPIC2_ID, "Topic Two", "Description for topic two", ADMIN);
 
+    public static final List<ForumTopic> ALL_TOPIC = List.of(TOPIC1, TOPIC2);
+
     public static final ForumComment COMMENT1 = new ForumComment("First comment", USER, TOPIC1);
     public static final ForumComment COMMENT2 = new ForumComment("Second comment", ADMIN, TOPIC1);
 
@@ -26,9 +28,5 @@ public class ForumTestData {
 
     public static ForumComment getNewComment(User author, ForumTopic topic) {
         return new ForumComment("New message", author, topic);
-    }
-
-    public static List<ForumTopic> getAllTopics() {
-        return List.of(TOPIC1, TOPIC2);
     }
 }

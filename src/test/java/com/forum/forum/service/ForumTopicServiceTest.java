@@ -5,6 +5,7 @@ import com.forum.forum.UserTestData;
 import com.forum.forum.model.ForumTopic;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.CrudForumTopicRepository;
+import com.forum.forum.util.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -12,6 +13,7 @@ import org.mockito.ArgumentCaptor;
 import java.util.List;
 import java.util.Optional;
 
+import static com.forum.forum.ForumTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -27,8 +29,8 @@ class ForumTopicServiceTest {
     }
 
     @Test
-    void createTopic() {
-        User author = ForumTestData.TOPIC1.getAuthor();
+    void createTopicSuccess() {
+        User author = TOPIC1.getAuthor();
         ForumTopic newTopic = ForumTestData.getNewTopic(author);
 
         when(topicRepository.save(any(ForumTopic.class)))
@@ -50,23 +52,32 @@ class ForumTopicServiceTest {
     }
 
     @Test
-    void getAll() {
-        when(topicRepository.findAll()).thenReturn(ForumTestData.getAllTopics());
+    void getAllTopicSuccess() {
+        when(topicRepository.findAll()).thenReturn(ALL_TOPIC);
 
         List<ForumTopic> topics = topicService.getAll();
 
-        assertEquals(2, topics.size());
-        assertTrue(topics.contains(ForumTestData.TOPIC1));
-        assertTrue(topics.contains(ForumTestData.TOPIC2));
+        assertEquals(ALL_TOPIC.size(), topics.size());
+        assertTrue(topics.contains(TOPIC1));
+        assertTrue(topics.contains(TOPIC2));
     }
 
     @Test
-    void get() {
-        when(topicRepository.findById(ForumTestData.TOPIC1.getId()))
-                .thenReturn(Optional.of(ForumTestData.TOPIC1));
+    void getTopicSuccess() {
+        when(topicRepository.findById(TOPIC1_ID))
+                .thenReturn(Optional.of(TOPIC1));
 
-        ForumTopic topic = topicService.get(ForumTestData.TOPIC1.getId());
+        ForumTopic topic = topicService.get(TOPIC1_ID);
         assertNotNull(topic);
-        assertEquals(ForumTestData.TOPIC1.getId(), topic.getId());
+        assertEquals(TOPIC1.getId(), topic.getId());
+    }
+
+    @Test
+    void getTopicNotFound() {
+        when(topicRepository.findById(anyInt()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class,
+                () -> topicService.get(TOPIC1_ID));
     }
 }

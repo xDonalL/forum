@@ -3,6 +3,7 @@ package com.forum.forum.service;
 import com.forum.forum.model.ForumTopic;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.CrudForumTopicRepository;
+import com.forum.forum.util.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,6 @@ public class ForumTopicService {
 
     public ForumTopic get(Integer id) {
         return topicRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Topic not found"));
+                .orElseThrow(() -> new NotFoundException("Topic not found"));
     }
 }
