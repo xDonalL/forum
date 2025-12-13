@@ -19,7 +19,9 @@
 
         <div class="auth">
             <span th:if="${#authorization.expression('isAuthenticated()')}">
-                <a th:href="@{/profile}" class="profile-link"
+                <a th:href="@{/profile/{id}-{login}
+                (id=${#authentication.principal.getId()}, login=${#authentication.principal.getLogin()})}"
+                   class="profile-link"
                    th:text="${#authentication.name}"></a>
                 |
                 <a th:href="@{/logout}">Выход</a>
