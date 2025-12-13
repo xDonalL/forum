@@ -1,9 +1,30 @@
 <!DOCTYPE html>
+<head>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <meta charset="UTF-8">
+    <title>Add Topic</title>
+</head>
+<body>
+<div class="page">
 
+    <div th:replace="fragments/header :: header"></div>
+
+    <main class="content">
+<link rel="stylesheet" th:href="@{/css/header.css}">
 <form method="post" action="/forum/add/topic">
     <input type="text" name="title" placeholder="Title" required>
     <textarea name="content" placeholder="Content" required></textarea>
     <button type="submit">Create topic</button>
 </form>
-
+<div th:replace="fragments/footer :: footer"></div>
 <a href="/forum" class="btn">Back</a>
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</div>
+
+</body>
+</html>

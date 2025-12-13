@@ -1,28 +1,38 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
 
-<div th:fragment="header">
-    <header style="padding: 10px; background: #eee;">
-        <span sec:authorize="isAnonymous()">
-            <a th:href="@{/login}">Login</a>
-            <a th:href="@{/register}">Register</a>
-        </span>
+<header class="header">
+    <div class="header-inner">
 
-        <span sec:authorize="isAuthenticated()">
-        <div>
-            <a href="/" style="margin-right: 20px;">Main</a>
+        <div class="header-left">
+            <a th:href="@{/}" class="logo">
+                <img src="/img/logo.jpg" alt="Logo">
+            </a>
         </div>
 
-        <div>
-            <span th:text="${#authentication.name}">Username</span>
+        <nav class="nav">
+            <a th:href="@{/}" th:classappend="${activePage=='home'} ? 'active'" class="nav-item">Главная</a>
 
-            <a th:href="@{/profile/{id}-{login}(id=${#authentication.principal.id}, login=${#authentication.principal.login})}"
-               style="margin-left: 15px;">Profile</a>
+            <a th:href="@{/forum}" th:classappend="${activePage=='forum'} ? 'active'" class="nav-item">Форум</a>
+        </nav>
 
-            <form th:action="@{/logout}" method="post" style="display:inline;">
-                <button type="submit" style="margin-left: 15px;">Exit</button>
-            </form>
+        <div class="auth">
+            <span th:if="${#authorization.expression('isAuthenticated()')}">
+                <a th:href="@{/profile}" class="profile-link"
+                   th:text="${#authentication.name}"></a>
+                |
+                <a th:href="@{/logout}">Выход</a>
+            </span>
+
+            <span th:if="${!#authorization.expression('isAuthenticated()')}">
+                <a th:href="@{/login}">Войти</a> |
+                <a th:href="@{/register}">Регистрация</a>
+            </span>
         </div>
-        </span>
-    </header>
-</div>
+
+    </div>
+</header>
+
+</body>
+</html>

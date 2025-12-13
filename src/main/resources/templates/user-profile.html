@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
     <meta charset="UTF-8">
     <title>User Profile</title>
 </head>
 
 <body>
-<div th:replace="fragments/header :: header"></div>
+<div class="page">
+
+    <div th:replace="fragments/header :: header"></div>
+
+    <main class="content">
 
 <div class="profile-card">
 
@@ -45,6 +52,11 @@
     </div>
 </div>
 <a href="/profile/edit" class="btn">Edit</a>
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</div>
 
 </body>
 </html>

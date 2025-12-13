@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
     <meta charset="UTF-8">
     <title>Registration</title>
 </head>
 <body>
+<div class="page">
+
+    <div th:replace="fragments/header :: header"></div>
+
+    <main class="content">
 
 <h1>Registration</h1>
 
@@ -28,6 +36,12 @@
 
     <button type="submit">Register</button>
 </form>
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</div>
 
 </body>
+</html>
 </html>
