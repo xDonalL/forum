@@ -2,9 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" th:href="@{/css/header.css}">
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/forum.css}">
     <meta charset="UTF-8">
     <title>Forum</title>
 </head>
@@ -15,32 +15,35 @@
     <div th:replace="fragments/header :: header"></div>
 
     <main class="content">
+        <a href="/forum/add/topic" class="btn-create-topic">Create topic</a>
 
-<a href="/" class="btn">Home</a>
-<h1>Topics</h1>
+        <div class="topics-list">
+            <div class="topic-card" th:each="t : ${topics}">
+                <div class="topic-header">
+                    <a th:href="@{'forum/' + ${t.id}}"
+                       class="username">
+                        <h2 th:text="${t.title}"></h2>
+                    </a>
+                </div>
 
-<ul>
-    <li th:each="t : ${topics}">
-        <div class="user-info">
-            <a th:href="@{/profile/{id}-{login}(id=${t.author.id}, login=${t.author.login})}">
-                <img th:src="@{/avatars/{file}(file=${t.author.avatar})}" class="avatar">
-            </a>
-
-            <a th:href="@{/profile/{id}-{login}(id=${t.author.id}, login=${t.author.login})}" class="username">
-                <span th:text="${t.author.login}"></span>
-            </a>
+                <div class="topic-footer">
+                    <div class="author-info">
+                        <a th:href="@{/profile/{id}-{login}(id=${t.author.id}, login=${t.author.login})}">
+                            <img th:src="@{/avatars/{file}(file=${t.author.avatar})}" class="avatar">
+                        </a>
+                        <a th:href="@{/profile/{id}-{login}(id=${t.author.id}, login=${t.author.login})}"
+                           class="username">
+                            <span th:text="${t.author.login}" class="username"></span>
+                        </a>
+                    </div>
+                    <span class="created-date" th:text="${#temporals.format(t.dateCreated, 'yyyy-MM-dd HH:mm')}"></span>
+                </div>
+            </div>
         </div>
-        <a th:href="@{'forum/' + ${t.id}}"
-           th:text="${t.title}"></a>
-    </li>
-</ul>
 
-<a href="/forum/add/topic">
-    <button>Create topic</button>
-</a>
-</main>
+    </main>
 
-<div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="fragments/footer :: footer"></div>
 
 </div>
 
