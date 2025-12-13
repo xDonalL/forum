@@ -4,6 +4,7 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
     <meta charset="UTF-8">
     <title>User Profile</title>
 </head>
@@ -15,44 +16,42 @@
 
     <main class="content">
 
-<div class="profile-card">
+        <div class="profile-container">
+            <div class="profile-card">
 
-    <div>
-        <h2>User Profile</h2>
-    </div>
+                <div th:if="${user.avatar != null}">
+                    <img th:src="@{/avatars/{file}(file=${user.avatar})}" class="avatar">
+                </div>
+                <div class="profile-info">
+                    <div class="info-row">
+                        <span class="label">Name:</span>
+                        <span th:text="${user.name}"></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Login:</span>
+                        <span th:text="${user.login}"></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Email:</span>
+                        <span th:text="${user.email}"></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Account status:</span>
+                        <span th:classappend="${user.enabled} ? 'status-active' : 'status-inactive'"
+                              th:text="${user.enabled} ? 'Active' : 'Inactive'"></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Created at:</span>
+                        <span th:text="${#temporals.format(user.register, 'yyyy-MM-dd HH:mm')}"></span>
+                    </div>
+                </div>
 
-    <div>
-        <span class="label">Name:</span>
-        <span class="value" th:text="${user.name}"></span>
-    </div>
+            </div>
+        </div>
+        <a href="/profile/edit" class="edit-btn">Edit Profile</a>
 
-    <div>
-        <span class="label">Login:</span>
-        <span class="value" th:text="${user.login}"></span>
-    </div>
 
-    <div>
-        <span class="label">Email:</span>
-        <span class="value" th:text="${user.email}"></span>
-    </div>
-
-    <div>
-        <span class="label">Account status:</span>
-        <span class="value"
-              th:classappend="${user.enabled} ? 'status-active' : 'status-inactive'"
-              th:text="${user.enabled} ? 'Active' : 'Inactive'">
-        </span>
-    </div>
-
-    <div>
-        <span class="label">Created at:</span>
-        <span class="value"
-              th:text="${#temporals.format(user.register, 'yyyy-MM-dd HH:mm')}">
-        </span>
-    </div>
-</div>
-<a href="/profile/edit" class="btn">Edit</a>
-</main>
+    </main>
 
 <div th:replace="fragments/footer :: footer"></div>
 
