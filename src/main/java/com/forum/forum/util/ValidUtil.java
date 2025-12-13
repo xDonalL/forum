@@ -1,6 +1,6 @@
 package com.forum.forum.util;
 
-import com.forum.forum.exception.NotFoundException;
+import com.forum.forum.util.exception.NotFoundException;
 import com.forum.forum.model.AbstractBaseEntity;
 
 public class ValidUtil {

@@ -1,5 +1,8 @@
 package com.forum.forum.service;
 
+import com.forum.forum.util.exception.EmailAlreadyExistsException;
+import com.forum.forum.util.exception.LoginAlreadyExistsException;
+import com.forum.forum.util.exception.PasswordMismatchException;
 import com.forum.forum.model.Role;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.user.UserRepository;
@@ -53,23 +56,23 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public void register(RegistrationUserTo registrationTo) {
+    public User register(RegistrationUserTo registrationTo) {
         if (!registrationTo.getPassword().equals(registrationTo.getConfirmPassword())) {
-            throw new IllegalArgumentException("Passwords do not match");
+            throw new PasswordMismatchException();
         }
-
         if (userRepository.getByEmail(registrationTo.getEmail()) != null) {
-            throw new IllegalArgumentException("A user with this email exists");
+            throw new EmailAlreadyExistsException(registrationTo.getEmail());
+        }
+        if (userRepository.getByLogin(registrationTo.getLogin()) != null) {
+            throw new LoginAlreadyExistsException(registrationTo.getLogin());
         }
 
-        User newUser = new User(
+        return createUser(new User(
                 registrationTo.getEmail(),
                 registrationTo.getLogin(),
-                passwordEncoder.encode(registrationTo.getPassword()),
+                registrationTo.getPassword(),
                 Role.USER
-        );
-
-        userRepository.save(newUser);
+        ));
     }
 
     @Override

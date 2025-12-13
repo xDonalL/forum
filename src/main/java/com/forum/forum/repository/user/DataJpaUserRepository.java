@@ -35,6 +35,11 @@ public class DataJpaUserRepository implements UserRepository {
     }
 
     @Override
+    public User getByLogin(String login) {
+        return crudRepository.getByLogin(login);
+    }
+
+    @Override
     public List<User> getAll() {
         return crudRepository.findAll();
     }

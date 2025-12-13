@@ -14,5 +14,7 @@ public interface UserRepository {
 
     User getByEmail(String email);
 
+    User getByLogin(String login);
+
     List<User> getAll();
 }
