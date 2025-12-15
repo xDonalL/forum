@@ -44,7 +44,7 @@ public class User extends AbstractBaseEntity {
 
     @Nullable
     @Column(name = "avatar")
-    private String avatar;
+    private String avatar = "new_user.jpg";
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -69,6 +69,7 @@ public class User extends AbstractBaseEntity {
         return "User{" +
                 "id='" + id + '\'' +
                 "email='" + email + '\'' +
+                "login='" + login + '\'' +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +
