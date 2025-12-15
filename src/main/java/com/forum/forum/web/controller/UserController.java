@@ -10,10 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/profile")
@@ -48,19 +44,7 @@ public class UserController {
 
         user.setName(userForm.getName());
 
-        if (!avatarFile.isEmpty()) {
-            String filename = UUID.randomUUID() + "_" + avatarFile.getOriginalFilename();
-            Path uploadPath = Paths.get("/uploads/avatars");
-
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            avatarFile.transferTo(uploadPath.resolve(filename));
-            user.setAvatar(filename);
-        }
-
-        userService.update(user);
+        userService.update(user, avatarFile);
 
         return "redirect:/profile/" + user.getId() + "-" + user.getLogin();
     }

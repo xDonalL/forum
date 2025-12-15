@@ -15,8 +15,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -52,10 +58,25 @@ public class UserService implements UserDetailsService {
         return userRepository.getAll();
     }
 
-    public User update(User user) {
+    public User update(User user, MultipartFile avatarFile) throws IOException {
         ValidUtil.checkNotFound(
                 userRepository.get(user.getId()), "user with id= " + user.getId() + " not exist");
+
+        if (avatarFile != null && !avatarFile.isEmpty()) {
+            saveAvatar(user, avatarFile);
+        }
+
         return userRepository.save(user);
+    }
+
+    private void saveAvatar(User user, MultipartFile avatarFile) throws IOException {
+        String filename = UUID.randomUUID() + "_" + avatarFile.getOriginalFilename();
+        Path uploadPath = Paths.get("uploads/avatars");
+
+        Files.createDirectories(uploadPath);
+        avatarFile.transferTo(uploadPath.resolve(filename));
+
+        user.setAvatar(filename);
     }
 
     public User register(RegistrationUserTo registrationTo) {
