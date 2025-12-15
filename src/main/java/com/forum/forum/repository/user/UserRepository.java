@@ -1,20 +1,12 @@
 package com.forum.forum.repository.user;
 
 import com.forum.forum.model.User;
+import com.forum.forum.repository.BaseRepository;
 
-import java.util.List;
-
-public interface UserRepository {
-
-    User save(User user);
-
-    boolean delete(int id);
-
-    User get(int id);
+public interface UserRepository extends BaseRepository<User> {
 
     User getByEmail(String email);
 
     User getByLogin(String login);
 
-    List<User> getAll();
 }
