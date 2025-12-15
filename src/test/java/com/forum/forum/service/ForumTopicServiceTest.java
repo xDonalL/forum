@@ -4,14 +4,13 @@ import com.forum.forum.ForumTestData;
 import com.forum.forum.UserTestData;
 import com.forum.forum.model.ForumTopic;
 import com.forum.forum.model.User;
-import com.forum.forum.repository.forum.CrudForumTopicRepository;
+import com.forum.forum.repository.forum.DataJpaForumTopicRepository;
 import com.forum.forum.util.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.forum.forum.ForumTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,12 +18,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class ForumTopicServiceTest {
-    private CrudForumTopicRepository topicRepository;
+    private DataJpaForumTopicRepository topicRepository;
     private ForumTopicService topicService;
 
     @BeforeEach
     void setUp() {
-        topicRepository = mock(CrudForumTopicRepository.class);
+        topicRepository = mock(DataJpaForumTopicRepository.class);
         topicService = new ForumTopicService(topicRepository);
     }
 
@@ -53,7 +52,7 @@ class ForumTopicServiceTest {
 
     @Test
     void getAllTopicSuccess() {
-        when(topicRepository.findAll()).thenReturn(ALL_TOPIC);
+        when(topicRepository.getAll()).thenReturn(ALL_TOPIC);
 
         List<ForumTopic> topics = topicService.getAll();
 
@@ -64,8 +63,7 @@ class ForumTopicServiceTest {
 
     @Test
     void getTopicSuccess() {
-        when(topicRepository.findById(TOPIC1_ID))
-                .thenReturn(Optional.of(TOPIC1));
+        when(topicRepository.get(TOPIC1_ID)).thenReturn(TOPIC1);
 
         ForumTopic topic = topicService.get(TOPIC1_ID);
         assertNotNull(topic);
@@ -74,8 +72,7 @@ class ForumTopicServiceTest {
 
     @Test
     void getTopicNotFound() {
-        when(topicRepository.findById(anyInt()))
-                .thenReturn(Optional.empty());
+        when(topicRepository.get(anyInt())).thenReturn(null);
 
         assertThrows(NotFoundException.class,
                 () -> topicService.get(TOPIC1_ID));

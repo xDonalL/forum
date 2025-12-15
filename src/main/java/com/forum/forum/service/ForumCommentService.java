@@ -3,8 +3,8 @@ package com.forum.forum.service;
 import com.forum.forum.model.ForumComment;
 import com.forum.forum.model.ForumTopic;
 import com.forum.forum.model.User;
-import com.forum.forum.repository.forum.CrudForumCommentRepository;
-import com.forum.forum.repository.forum.CrudForumTopicRepository;
+import com.forum.forum.repository.forum.DataJpaForumCommentRepository;
+import com.forum.forum.repository.forum.DataJpaForumTopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,19 +13,18 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ForumCommentService {
 
-    private final CrudForumCommentRepository messageRepository;
-    private final CrudForumTopicRepository topicRepository;
+    private final DataJpaForumCommentRepository commentRepository;
+    private final DataJpaForumTopicRepository topicRepository;
 
     @Transactional
     public ForumComment addComment(Integer topicId, User author, String content) {
-        ForumTopic topic = topicRepository.findById(topicId)
-                .orElseThrow(() -> new IllegalArgumentException("Topic not found"));
+        ForumTopic topic = topicRepository.get(topicId);
 
         ForumComment msg = new ForumComment();
         msg.setTopic(topic);
         msg.setAuthor(author);
         msg.setComment(content);
 
-        return messageRepository.save(msg);
+        return commentRepository.save(msg);
     }
 }

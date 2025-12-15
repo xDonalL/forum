@@ -4,13 +4,11 @@ import com.forum.forum.ForumTestData;
 import com.forum.forum.model.ForumComment;
 import com.forum.forum.model.ForumTopic;
 import com.forum.forum.model.User;
-import com.forum.forum.repository.forum.CrudForumCommentRepository;
-import com.forum.forum.repository.forum.CrudForumTopicRepository;
+import com.forum.forum.repository.forum.DataJpaForumCommentRepository;
+import com.forum.forum.repository.forum.DataJpaForumTopicRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -19,14 +17,14 @@ import static org.mockito.Mockito.*;
 
 class ForumCommentServiceTest {
 
-    private CrudForumCommentRepository commentRepository;
-    private CrudForumTopicRepository topicRepository;
+    private DataJpaForumCommentRepository commentRepository;
+    private DataJpaForumTopicRepository topicRepository;
     private ForumCommentService commentService;
 
     @BeforeEach
     void setUp() {
-        commentRepository = mock(CrudForumCommentRepository.class);
-        topicRepository = mock(CrudForumTopicRepository.class);
+        commentRepository = mock(DataJpaForumCommentRepository.class);
+        topicRepository = mock(DataJpaForumTopicRepository.class);
         commentService = new ForumCommentService(commentRepository, topicRepository);
     }
 
@@ -36,10 +34,8 @@ class ForumCommentServiceTest {
         ForumTopic topic = ForumTestData.COMMENT1.getTopic();
         ForumComment newComment = ForumTestData.getNewComment(author, topic);
 
-        when(topicRepository.findById(topic.getId()))
-                .thenReturn(Optional.of(topic));
-        when(commentRepository.save(any(ForumComment.class)))
-                .thenReturn(newComment);
+        when(topicRepository.get(topic.getId())).thenReturn(topic);
+        when(commentRepository.save(any(ForumComment.class))).thenReturn(newComment);
 
         ForumComment saved = commentService.addComment(topic.getId(), author, newComment.getComment());
 
