@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.forum.forum.UserTestData.*;
@@ -49,13 +50,13 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUserException() {
+    void updateUserSuccess() throws IOException {
         User updateUser = getUpdated();
 
         when(userRepository.get(USER_ID)).thenReturn(USER);
         when(userRepository.save(any(User.class))).thenReturn(updateUser);
 
-        User saved = userService.update(updateUser);
+        User saved = userService.update(updateUser, null);
 
         assertNotNull(saved);
         assertEquals(updateUser.getName(), saved.getName());

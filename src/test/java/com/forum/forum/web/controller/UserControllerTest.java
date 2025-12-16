@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.forum.forum.UserTestData.USER;
 import static org.mockito.ArgumentMatchers.any;
@@ -68,7 +69,7 @@ class UserControllerTest {
     @Test
     void updateProfile() throws Exception {
         when(userService.getByEmail(USER.getEmail())).thenReturn(USER);
-        when(userService.update(USER)).thenReturn(USER);
+        when(userService.update(USER, null)).thenReturn(USER);
 
         MockMultipartFile avatar = new MockMultipartFile(
                 "avatarFile",
@@ -83,9 +84,9 @@ class UserControllerTest {
                         .with(user(USER.getEmail()).roles("USER"))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/profile"));
+                .andExpect(redirectedUrl("/profile/" + USER.getId() + "-" + USER.getLogin()));
 
         verify(userService).getByEmail(USER.getEmail());
-        verify(userService).update(any(User.class));
+        verify(userService).update(any(User.class), any(MultipartFile.class));
     }
 }
