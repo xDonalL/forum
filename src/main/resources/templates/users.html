@@ -14,29 +14,43 @@
 
     <main class="content">
 
-<h1>Users list</h1>
+        <h1>Users list</h1>
 
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Email</th>
-        <th>Login</th>
-        <th>Name</th>
-        <th>Roles</th>
-    </tr>
+        <table border="1">
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Login</th>
+                <th>Name</th>
+                <th>Roles</th>
+            </tr>
 
-    <tr th:each="user : ${users}">
-        <td th:text="${user.id}"></td>
-        <td th:text="${user.email}"></td>
-        <td th:text="${user.login}"></td>
-        <td th:text="${user.name}"></td>
-        <td th:text="${user.roles}"></td>
-    </tr>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.login}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.roles}"></td>
 
-</table>
-</main>
+                <td>
+                    <form th:if="${user.enabled}"
+                          th:action="@{/admin/{id}/ban(id=${user.id})}"
+                          method="post">
+                        <button class="btn-danger">Ban</button>
+                    </form>
 
-<div th:replace="fragments/footer :: footer"></div>
+                    <form th:if="${!user.enabled}"
+                          th:action="@{/admin/{id}/unban(id=${user.id})}"
+                          method="post">
+                        <button class="btn-success">Unban</button>
+                    </form>
+                </td>
+            </tr>
+
+        </table>
+    </main>
+
+    <div th:replace="fragments/footer :: footer"></div>
 
 </div>
 
