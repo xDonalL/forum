@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,6 +24,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
+
+import static com.forum.forum.util.ValidUtil.checkNotFound;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -40,18 +43,15 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean delete(int id) {
-        return ValidUtil.checkNotFound(
-                userRepository.delete(id), "user with id= " + id + " not exist");
+        return checkNotFound(userRepository.delete(id), "user with id= " + id + " not exist");
     }
 
     public User getByEmail(String email) {
-        return ValidUtil.checkNotFound(
-                userRepository.getByEmail(email), "user with email= " + email + " not exist");
+        return checkNotFound(userRepository.getByEmail(email), "user with email= " + email + " not exist");
     }
 
     public User getUserById(int id) {
-        return ValidUtil.checkNotFound(
-                userRepository.get(id), "user with id= " + id + " not exist");
+        return checkNotFound(userRepository.get(id), "user with id= " + id + " not exist");
     }
 
     public List<User> getAll() {
@@ -59,8 +59,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User update(User user, MultipartFile avatarFile) throws IOException {
-        ValidUtil.checkNotFound(
-                userRepository.get(user.getId()), "user with id= " + user.getId() + " not exist");
+        checkNotFound(userRepository.get(user.getId()), "user with id= " + user.getId() + " not exist");
 
         if (avatarFile != null && !avatarFile.isEmpty()) {
             saveAvatar(user, avatarFile);
@@ -96,6 +95,20 @@ public class UserService implements UserDetailsService {
                 registrationTo.getPassword(),
                 Role.USER
         ));
+    }
+
+    @Transactional
+    public void banUser(int id) {
+        User user = userRepository.get(id);
+        checkNotFound(user, "user with id= " + user.getId() + " not exist");
+        user.setEnabled(false);
+    }
+
+    @Transactional
+    public void unbanUser(int id) {
+        User user = userRepository.get(id);
+        checkNotFound(user, "user with id= " + user.getId() + " not exist");
+        user.setEnabled(true);
     }
 
     @Override
