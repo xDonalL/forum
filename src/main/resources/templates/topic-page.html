@@ -49,7 +49,7 @@
         </div>
 
         <div class="comment-form">
-            <form method="post" action="/forum/add/comment">
+            <form method="post" action="/topic/comment/add">
                 <input type="hidden" name="topicId" th:value="${topic.id}">
                 <textarea name="comment" placeholder="Write comment..."></textarea>
                 <button type="submit">Отправить</button>
