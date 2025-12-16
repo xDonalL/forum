@@ -36,20 +36,20 @@ class AdminControllerTest {
 
         AuthorizedUser authAdmin = new AuthorizedUser(ADMIN);
 
-        mockMvc.perform(get("/admin/users")
+        mockMvc.perform(get("/admin/panel")
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authAdmin, null, authAdmin.getAuthorities()))))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("users"))
                 .andExpect(model().attribute("users", ALL_USERS))
-                .andExpect(view().name("users"));
+                .andExpect(view().name("panel"));
 
         verify(userService).getAll();
     }
 
     @Test
     void usersPageForbiddenForUser() throws Exception {
-        mockMvc.perform(get("/admin/users")
+        mockMvc.perform(get("/admin/panel")
                         .with(user(USER.getEmail())
                                 .roles(String.valueOf(Role.USER))))
                 .andExpect(status().isForbidden());

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <body>
 
 <header class="header">
@@ -15,6 +15,8 @@
             <a th:href="@{/}" th:classappend="${activePage=='home'} ? 'active'" class="nav-item">Главная</a>
 
             <a th:href="@{/forum}" th:classappend="${activePage=='forum'} ? 'active'" class="nav-item">Форум</a>
+
+            <a href="/admin/panel" sec:authorize="hasRole('ADMIN')" class="nav-item">Admin panel</a>
         </nav>
 
         <div class="auth">

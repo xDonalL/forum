@@ -4,6 +4,7 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/panel.css}">
     <meta charset="UTF-8">
     <title>Users</title>
 </head>
@@ -12,27 +13,31 @@
 
     <div th:replace="fragments/header :: header"></div>
 
+    <h1 class="page-title">Admin panel</h1>
+
     <main class="content">
 
-        <h1>Users list</h1>
+        <div class="admin-users">
 
-        <table border="1">
-            <tr>
-                <th>ID</th>
-                <th>Email</th>
-                <th>Login</th>
-                <th>Name</th>
-                <th>Roles</th>
-            </tr>
+            <div class="user-card" th:each="user : ${users}">
+                <div class="user-main">
 
-            <tr th:each="user : ${users}">
-                <td th:text="${user.id}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.login}"></td>
-                <td th:text="${user.name}"></td>
-                <td th:text="${user.roles}"></td>
+                    <div class="user-info-left">
+                        <div class="user-login" th:text="${user.login}"></div>
+                        <div class="user-email" th:text="${user.email}"></div>
+                    </div>
 
-                <td>
+                    <div class="user-info-right">
+                        <div class="user-role" th:text="${user.roles}"></div>
+                        <div class="user-status"
+                             th:classappend="${user.enabled} ? 'status-active' : 'status-banned'"
+                             th:text="${user.enabled} ? 'Active' : 'Banned'">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="user-actions">
                     <form th:if="${user.enabled}"
                           th:action="@{/admin/{id}/ban(id=${user.id})}"
                           method="post">
@@ -44,10 +49,10 @@
                           method="post">
                         <button class="btn-success">Unban</button>
                     </form>
-                </td>
-            </tr>
+                </div>
+            </div>
 
-        </table>
+        </div>
     </main>
 
     <div th:replace="fragments/footer :: footer"></div>

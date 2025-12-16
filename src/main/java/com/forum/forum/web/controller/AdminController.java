@@ -20,21 +20,21 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/panel")
     public String usersPage(Model model) {
         model.addAttribute("users", userService.getAll());
-        return "users";
+        return "panel";
     }
 
     @PostMapping("/{id}/ban")
     public String banUser(@PathVariable int id) {
         userService.banUser(id);
-        return "redirect:/admin/users";
+        return "redirect:/admin/panel";
     }
 
     @PostMapping("/{id}/unban")
     public String unbanUser(@PathVariable int id) {
         userService.unbanUser(id);
-        return "redirect:/admin/users";
+        return "redirect:/admin/panel";
     }
 }

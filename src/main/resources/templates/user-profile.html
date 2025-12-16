@@ -36,11 +36,6 @@
                         <span th:text="${user.email}"></span>
                     </div>
                     <div class="info-row">
-                        <span class="label">Account status:</span>
-                        <span th:classappend="${user.enabled} ? 'status-active' : 'status-inactive'"
-                              th:text="${user.enabled} ? 'Active' : 'Inactive'"></span>
-                    </div>
-                    <div class="info-row">
                         <span class="label">Created at:</span>
                         <span th:text="${#temporals.format(user.register, 'yyyy-MM-dd HH:mm')}"></span>
                     </div>
