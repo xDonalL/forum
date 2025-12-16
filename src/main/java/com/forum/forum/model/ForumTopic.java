@@ -37,5 +37,5 @@ public class ForumTopic extends AbstractBaseEntity {
     private final LocalDateTime dateCreated = LocalDateTime.now();
 
     @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<ForumComment> messages = new ArrayList<>();
+    private final List<ForumComment> comments = new ArrayList<>();
 }

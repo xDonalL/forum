@@ -13,5 +13,10 @@ public interface CrudForumCommentRepository extends JpaRepository<ForumComment, 
     @Modifying
     @Query("DELETE FROM ForumComment c WHERE c.id=:id")
     int delete(@Param("id") int id);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM ForumComment c WHERE c.topic.id = :topicId")
+    int deleteByTopicId(@Param("topicId") int topicId);
 }
 

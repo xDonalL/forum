@@ -5,6 +5,7 @@ import com.forum.forum.model.User;
 import com.forum.forum.service.ForumTopicService;
 import com.forum.forum.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class ForumTopicController {
     public String showTopicPage(@PathVariable Integer id, Model model) {
         ForumTopic topic = topicService.get(id);
         model.addAttribute("topic", topic);
-        model.addAttribute("content", topic.getMessages());
+        model.addAttribute("content", topic.getComments());
         return "topic-page";
     }
 
@@ -43,6 +44,13 @@ public class ForumTopicController {
         User user = userService.getCurrentUser();
         topicService.createTopic(title, content, user);
 
+        return "redirect:/forum";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/topic/delete/{id}")
+    public String deleteTopic(@PathVariable Integer id) {
+        topicService.delete(id);
         return "redirect:/forum";
     }
 }

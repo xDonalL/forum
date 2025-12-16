@@ -2,6 +2,7 @@ package com.forum.forum.service;
 
 import com.forum.forum.model.ForumTopic;
 import com.forum.forum.model.User;
+import com.forum.forum.repository.forum.DataJpaForumCommentRepository;
 import com.forum.forum.repository.forum.DataJpaForumTopicRepository;
 import com.forum.forum.util.ValidUtil;
 import lombok.RequiredArgsConstructor;
@@ -10,11 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.forum.forum.util.ValidUtil.checkNotFound;
+
 @Service
 @RequiredArgsConstructor
 public class ForumTopicService {
 
     private final DataJpaForumTopicRepository topicRepository;
+    private final DataJpaForumCommentRepository commentRepository;
 
     @Transactional
     public ForumTopic createTopic(String title, String content, User user) {
@@ -30,6 +34,13 @@ public class ForumTopicService {
     }
 
     public ForumTopic get(Integer id) {
-        return ValidUtil.checkNotFound(topicRepository.get(id), "topic with id= " + id + " not exist");
+        return checkNotFound(topicRepository.get(id), "topic with id= " + id + " not exist");
+    }
+
+    @Transactional
+    public boolean delete(Integer id) {
+        checkNotFound(topicRepository.get(id), "topic with id= " + id + " not exist");
+        commentRepository.deleteByTopicId(id);
+        return topicRepository.delete(id);
     }
 }

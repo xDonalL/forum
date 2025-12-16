@@ -25,6 +25,10 @@ public class DataJpaForumCommentRepository implements BaseRepository<ForumCommen
         return commentRepository.delete(id) != 0;
     }
 
+    public int deleteByTopicId(int topicId) {
+        return commentRepository.deleteByTopicId(topicId);
+    }
+
     @Override
     public ForumComment get(int id) {
         return commentRepository.findById(id).orElse(null);

@@ -4,11 +4,15 @@ import com.forum.forum.ForumTestData;
 import com.forum.forum.UserTestData;
 import com.forum.forum.model.ForumTopic;
 import com.forum.forum.model.User;
+import com.forum.forum.repository.forum.DataJpaForumCommentRepository;
 import com.forum.forum.repository.forum.DataJpaForumTopicRepository;
 import com.forum.forum.util.exception.NotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
@@ -17,15 +21,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class ForumTopicServiceTest {
-    private DataJpaForumTopicRepository topicRepository;
-    private ForumTopicService topicService;
 
-    @BeforeEach
-    void setUp() {
-        topicRepository = mock(DataJpaForumTopicRepository.class);
-        topicService = new ForumTopicService(topicRepository);
-    }
+    @Mock
+    private DataJpaForumTopicRepository topicRepository;
+
+    @Mock
+    private DataJpaForumCommentRepository commentRepository;
+
+    @InjectMocks
+    private ForumTopicService topicService;
 
     @Test
     void createTopicSuccess() {
@@ -76,5 +82,26 @@ class ForumTopicServiceTest {
 
         assertThrows(NotFoundException.class,
                 () -> topicService.get(TOPIC1_ID));
+    }
+
+    @Test
+    void deleteTopicSuccess() {
+        when(topicRepository.get(TOPIC1_ID)).thenReturn(TOPIC1);
+        when(topicRepository.delete(TOPIC1_ID)).thenReturn(true);
+
+        boolean deleted = topicService.delete(TOPIC1_ID);
+
+        assertTrue(deleted);
+        verify(topicRepository).delete(TOPIC1_ID);
+        verify(commentRepository).deleteByTopicId(TOPIC1_ID);
+        verify(topicRepository).delete(TOPIC1_ID);
+    }
+
+    @Test
+    void deleteTopicNotFoundException() {
+        when(topicRepository.get(TOPIC1_ID)).thenReturn(null);
+
+        assertThrows(NotFoundException.class,
+                () -> topicService.delete(TOPIC1_ID));
     }
 }
