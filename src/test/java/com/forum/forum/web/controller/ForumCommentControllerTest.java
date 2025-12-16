@@ -12,12 +12,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.forum.forum.ForumTestData.TOPIC1;
-import static com.forum.forum.ForumTestData.TOPIC1_ID;
+import static com.forum.forum.ForumTestData.*;
+import static com.forum.forum.UserTestData.ADMIN;
 import static com.forum.forum.UserTestData.USER;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,7 +41,7 @@ class ForumCommentControllerTest {
 
         AuthorizedUser authorizedUser = new AuthorizedUser(USER);
 
-        mockMvc.perform(post("/topic/comment/add")
+        mockMvc.perform(post("/forum/topic/comment/add")
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authorizedUser, null, authorizedUser.getAuthorities())))
                         .param("topicId", String.valueOf(TOPIC1_ID))
@@ -49,5 +50,27 @@ class ForumCommentControllerTest {
                 .andExpect(redirectedUrl("/forum/" + TOPIC1_ID));
 
         verify(commentService).addComment(TOPIC1_ID, USER, TOPIC1.getContent());
+    }
+
+    @Test
+    void deleteComment() throws Exception {
+        AuthorizedUser authorizedAdmin = new AuthorizedUser(ADMIN);
+
+        mockMvc.perform(post("/forum/topic/comment/delete/" + COMMENT1_ID)
+                        .param("topicId", String.valueOf(TOPIC1_ID))
+                        .with(authentication(new UsernamePasswordAuthenticationToken(
+                                authorizedAdmin, null, authorizedAdmin.getAuthorities()))))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/forum/" + TOPIC1_ID));
+    }
+
+    @Test
+    void deleteCommentForbiddenForUser() throws Exception {
+        AuthorizedUser authorizedUser = new AuthorizedUser(USER);
+
+        mockMvc.perform(post("/forum/topic/comment/delete/" + COMMENT1_ID)
+                .param("topicId", String.valueOf(TOPIC1_ID))
+                .with(user(USER.getEmail()).roles("USER")))
+                .andExpect(status().isForbidden());
     }
 }

@@ -6,27 +6,32 @@ import com.forum.forum.model.ForumTopic;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.DataJpaForumCommentRepository;
 import com.forum.forum.repository.forum.DataJpaForumTopicRepository;
-import org.junit.jupiter.api.BeforeEach;
+import com.forum.forum.util.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static com.forum.forum.ForumTestData.COMMENT1;
+import static com.forum.forum.ForumTestData.COMMENT1_ID;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class ForumCommentServiceTest {
 
+    @Mock
     private DataJpaForumCommentRepository commentRepository;
-    private DataJpaForumTopicRepository topicRepository;
-    private ForumCommentService commentService;
 
-    @BeforeEach
-    void setUp() {
-        commentRepository = mock(DataJpaForumCommentRepository.class);
-        topicRepository = mock(DataJpaForumTopicRepository.class);
-        commentService = new ForumCommentService(commentRepository, topicRepository);
-    }
+    @Mock
+    private DataJpaForumTopicRepository topicRepository;
+
+    @InjectMocks
+    private ForumCommentService commentService;
 
     @Test
     void addCommentSuccess() {
@@ -47,5 +52,24 @@ class ForumCommentServiceTest {
         ArgumentCaptor<ForumComment> captor = ArgumentCaptor.forClass(ForumComment.class);
         verify(commentRepository).save(captor.capture());
         assertEquals(newComment.getComment(), captor.getValue().getComment());
+    }
+
+    @Test
+    void deleteCommentSuccess() {
+        when(commentRepository.get(COMMENT1_ID)).thenReturn(COMMENT1);
+        when(commentRepository.delete(COMMENT1_ID)).thenReturn(true);
+
+        boolean deleted = commentService.delete(COMMENT1_ID);
+
+        assertTrue(deleted);
+        verify(commentRepository).get(COMMENT1_ID);
+        verify(commentRepository).delete(COMMENT1_ID);
+    }
+
+    @Test
+    void deleteCommentNotFoundException() {
+        when(commentRepository.get(COMMENT1_ID)).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> commentService.delete(COMMENT1_ID));
     }
 }

@@ -20,6 +20,11 @@ public class ForumComment extends AbstractBaseEntity {
         this.topic = topic;
     }
 
+    public ForumComment(Integer id, String comment, User author, ForumTopic topic) {
+        this(comment, author, topic);
+        this.id = id;
+    }
+
     @Column(name = "comment", nullable = false, columnDefinition = "TEXT")
     private String comment;
 

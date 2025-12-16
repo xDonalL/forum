@@ -19,8 +19,11 @@ public class ForumTestData {
 
     public static final List<ForumTopic> ALL_TOPIC = List.of(TOPIC1, TOPIC2);
 
-    public static final ForumComment COMMENT1 = new ForumComment("First comment", USER, TOPIC1);
-    public static final ForumComment COMMENT2 = new ForumComment("Second comment", ADMIN, TOPIC1);
+    public static final Integer COMMENT1_ID = 1;
+    public static final Integer COMMENT2_ID = 2;
+
+    public static final ForumComment COMMENT1 = new ForumComment(COMMENT1_ID, "First comment", USER, TOPIC1);
+    public static final ForumComment COMMENT2 = new ForumComment(COMMENT2_ID, "Second comment", ADMIN, TOPIC1);
 
     public static ForumTopic getNewTopic(User author) {
         return new ForumTopic(TOPIC1_ID, "New Topic", "New description", author);

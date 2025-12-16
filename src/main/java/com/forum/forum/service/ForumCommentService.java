@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.forum.forum.util.ValidUtil.checkNotFound;
+
 @Service
 @RequiredArgsConstructor
 public class ForumCommentService {
@@ -26,5 +28,11 @@ public class ForumCommentService {
         msg.setComment(content);
 
         return commentRepository.save(msg);
+    }
+
+    @Transactional
+    public boolean delete(Integer id) {
+        checkNotFound(commentRepository.get(id), "comment with id= " + id + " not exist");
+        return commentRepository.delete(id);
     }
 }

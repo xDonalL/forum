@@ -4,17 +4,19 @@ import com.forum.forum.model.User;
 import com.forum.forum.service.ForumCommentService;
 import com.forum.forum.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/topic/comment")
+@RequestMapping("/forum/topic/comment")
 public class ForumCommentController {
 
-    private final ForumCommentService messageService;
+    private final ForumCommentService commentService;
     private final UserService userService;
 
     @PostMapping("/add")
@@ -22,8 +24,16 @@ public class ForumCommentController {
                              @RequestParam String comment) {
 
         User user = userService.getCurrentUser();
-        messageService.addComment(topicId, user, comment);
+        commentService.addComment(topicId, user, comment);
 
+        return "redirect:/forum/" + topicId;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/delete/{id}")
+    public String deleteComment(@PathVariable("id") Integer commentId,
+                                @RequestParam Integer topicId) {
+        commentService.delete(commentId);
         return "redirect:/forum/" + topicId;
     }
 }
