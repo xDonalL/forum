@@ -37,6 +37,23 @@ public class ForumTopicController {
         return "add-topic-page";
     }
 
+
+    @PreAuthorize("@topicSecurity.isOwner(#id)")
+    @GetMapping("/topic/edit/{id}")
+    public String showEditTopicPage(@PathVariable Integer id, Model model) {
+        ForumTopic topic = topicService.get(id);
+        model.addAttribute("topic", topic);
+        return "edit-topic-page";
+    }
+
+    @PreAuthorize("@topicSecurity.isOwner(#id)")
+    @PostMapping("/topic/edit/{id}")
+    public String createTopic(@PathVariable Integer id,
+                              @RequestParam String content) {
+        topicService.update(id, content);
+        return "redirect:/forum/" + id;
+    }
+
     @PostMapping("/add/topic")
     public String createTopic(@RequestParam String title,
                               @RequestParam String content) {

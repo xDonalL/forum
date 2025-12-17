@@ -26,6 +26,10 @@
                     <a th:href="@{/profile/{id}-{login}(id=${topic.author.id}, login=${topic.author.login})}">
                         <span th:text="${topic.author.login}"></span>
                     </a>
+                    <a th:if="${#authentication.principal.id == topic.author.id}"
+                       th:href="@{/forum/topic/edit/{id}(id=${topic.id})}">
+                        ✏ Редактировать
+                    </a>
                 </div>
                 <span th:text="${#temporals.format(topic.dateCreated, 'yyyy-MM-dd HH:mm')}"></span>
             </div>

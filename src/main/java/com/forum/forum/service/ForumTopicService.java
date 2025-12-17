@@ -4,7 +4,6 @@ import com.forum.forum.model.ForumTopic;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.DataJpaForumCommentRepository;
 import com.forum.forum.repository.forum.DataJpaForumTopicRepository;
-import com.forum.forum.util.ValidUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +25,13 @@ public class ForumTopicService {
         topic.setTitle(title);
         topic.setContent(content);
         topic.setAuthor(user);
+        return topicRepository.save(topic);
+    }
+
+    public ForumTopic update(Integer id, String content) {
+        ForumTopic topic = topicRepository.get(id);
+        checkNotFound(topic, "topic with id= " + id + " not exist");
+        topic.setContent(content);
         return topicRepository.save(topic);
     }
 

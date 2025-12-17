@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<form th:action="@{/forum/topic/edit/{id}(id=${topic.id})}" method="post">
+    <input type="hidden" name="id" th:value="${topic.id}" />
+    <textarea name="content" th:text="${topic.content}"></textarea>
+    <button type="submit">Сохранить</button>
+</form>
+</html>
