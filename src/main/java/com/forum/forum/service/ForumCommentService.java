@@ -35,4 +35,15 @@ public class ForumCommentService {
         checkNotFound(commentRepository.get(id), "comment with id= " + id + " not exist");
         return commentRepository.delete(id);
     }
+
+    public ForumComment get(Integer id) {
+        return checkNotFound(commentRepository.get(id), "comment with id= " + id + " not exist");
+    }
+
+    public ForumComment update(Integer id, String text) {
+        ForumComment comment = commentRepository.get(id);
+        checkNotFound(comment, "comment with id= " + id + " not exist");
+        comment.setComment(text);
+        return commentRepository.save(comment);
+    }
 }

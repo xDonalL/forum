@@ -53,6 +53,10 @@
             <input type="hidden" name="topicId" th:value="${topic.id}"/>
             <button>Удалить</button>
             </form>
+            <a th:if="${#authentication.principal.id == c.author.id}"
+               th:href="@{/forum/topic/comment/edit/{id}(id=${c.id})}">
+                ✏ Редактировать
+            </a>
         </div>
 
         <div class="comment-form">
