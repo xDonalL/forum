@@ -21,6 +21,12 @@
     position: relative;
 }
 
+.topic-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .topic-header h2 {
     margin: 0;
     font-size: 1.5em;

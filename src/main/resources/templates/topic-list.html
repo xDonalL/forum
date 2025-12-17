@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
@@ -24,6 +24,11 @@
                        class="username">
                         <h2 th:text="${t.title}"></h2>
                     </a>
+                    <form th:action="@{/forum/topic/delete/{id}(id=${t.id})}"
+                          sec:authorize="hasRole('ADMIN', 'MODER')"
+                          method="post">
+                        <button>Удалить</button>
+                    </form>
                 </div>
 
                 <div class="topic-footer">

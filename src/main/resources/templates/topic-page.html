@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
@@ -46,10 +46,15 @@
                 <span th:text="${#temporals.format(c.dateCreated, 'yyyy-MM-dd HH:mm')}"></span>
             </div>
             <p th:text="${c.comment}"></p>
+            <form th:action="@{/forum/topic/comment/delete/{id}(id=${c.id})}"
+                  sec:authorize="hasRole('ADMIN', 'MODER')" method="post">
+            <input type="hidden" name="topicId" th:value="${topic.id}"/>
+            <button>Удалить</button>
+            </form>
         </div>
 
         <div class="comment-form">
-            <form method="post" action="/topic/comment/add">
+            <form method="post" action="/forum/topic/comment/add">
                 <input type="hidden" name="topicId" th:value="${topic.id}">
                 <textarea name="comment" placeholder="Write comment..."></textarea>
                 <button type="submit">Отправить</button>
