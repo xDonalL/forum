@@ -17,8 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static com.forum.forum.ForumTestData.*;
-import static com.forum.forum.UserTestData.ADMIN;
-import static com.forum.forum.UserTestData.USER;
+import static com.forum.forum.UserTestData.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
@@ -76,12 +75,23 @@ class ForumTopicControllerTest {
     }
 
     @Test
-    void deleteTopic() throws Exception {
+    void deleteTopicByAdmin() throws Exception {
         AuthorizedUser authAdmin = new AuthorizedUser(ADMIN);
 
         mockMvc.perform(post("/forum/topic/delete/" + TOPIC1_ID)
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authAdmin, null, authAdmin.getAuthorities()))))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/forum"));
+    }
+
+    @Test
+    void deleteTopicByModer() throws Exception {
+        AuthorizedUser authModer = new AuthorizedUser(MODER);
+
+        mockMvc.perform(post("/forum/topic/delete/" + TOPIC1_ID)
+                        .with(authentication(new UsernamePasswordAuthenticationToken(
+                                authModer, null, authModer.getAuthorities()))))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/forum"));
     }

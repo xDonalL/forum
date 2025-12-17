@@ -47,7 +47,7 @@ public class ForumTopicController {
         return "redirect:/forum";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @PostMapping("/topic/delete/{id}")
     public String deleteTopic(@PathVariable Integer id) {
         topicService.delete(id);

@@ -29,7 +29,7 @@ public class ForumCommentController {
         return "redirect:/forum/" + topicId;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @PostMapping("/delete/{id}")
     public String deleteComment(@PathVariable("id") Integer commentId,
                                 @RequestParam Integer topicId) {

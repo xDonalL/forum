@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
@@ -47,7 +48,8 @@
             </div>
             <p th:text="${c.comment}"></p>
             <form th:action="@{/forum/topic/comment/delete/{id}(id=${c.id})}"
-                  sec:authorize="hasRole('ADMIN', 'MODER')" method="post">
+                  sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')"
+                  method="post">
             <input type="hidden" name="topicId" th:value="${topic.id}"/>
             <button>Удалить</button>
             </form>
