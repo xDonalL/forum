@@ -49,4 +49,18 @@ public class TopicService {
         commentRepository.deleteByTopicId(id);
         return topicRepository.delete(id);
     }
+
+    @Transactional
+    public boolean addLike(Integer topicId, User user) {
+        Topic topic = topicRepository.get(topicId);
+        checkNotFound(topic, "topic with id= " + topicId + " not exist");
+        return topic.getLikedUsers().add(user);
+    }
+
+    @Transactional
+    public boolean deleteLike(Integer topicId, User user) {
+        Topic topic = topicRepository.get(topicId);
+        checkNotFound(topic, "topic with id= " + topicId + " not exist");
+        return topic.getLikedUsers().remove(user);
+    }
 }

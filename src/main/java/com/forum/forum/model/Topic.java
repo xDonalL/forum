@@ -7,7 +7,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -42,4 +44,10 @@ public class Topic extends AbstractBaseEntity {
 
     @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<TopicComment> comments = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "topic_likes",
+            joinColumns = @JoinColumn(name = "topic_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private final Set<User> likedUsers = new HashSet<>();
 }

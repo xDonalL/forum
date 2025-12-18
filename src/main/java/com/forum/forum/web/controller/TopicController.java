@@ -70,4 +70,18 @@ public class TopicController {
         topicService.delete(id);
         return "redirect:/topic";
     }
+
+    @PostMapping("/like/add")
+    public String addLikeTopic(@RequestParam Integer id) {
+        User user = userService.getCurrentUser();
+        topicService.addLike(id, user);
+        return "redirect:/topic/" + id;
+    }
+
+    @PostMapping("/like/delete")
+    public String deleteLikeTopic(@RequestParam Integer id) {
+        User user = userService.getCurrentUser();
+        topicService.deleteLike(id, user);
+        return "redirect:/topic/" + id;
+    }
 }
