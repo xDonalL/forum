@@ -26,13 +26,13 @@ public class AdminController {
         return "admin/panel";
     }
 
-    @PostMapping("/{id}/ban")
+    @PostMapping("/ban/{id}")
     public String banUser(@PathVariable int id) {
         userService.banUser(id);
         return "redirect:/admin/panel";
     }
 
-    @PostMapping("/{id}/unban")
+    @PostMapping("/unban/{id}")
     public String unbanUser(@PathVariable int id) {
         userService.unbanUser(id);
         return "redirect:/admin/panel";

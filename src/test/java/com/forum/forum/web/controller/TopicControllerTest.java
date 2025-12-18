@@ -43,7 +43,7 @@ class TopicControllerTest {
         List<Topic> topics = List.of(TOPIC1, TOPIC2);
         when(topicService.getAll()).thenReturn(topics);
 
-        mockMvc.perform(get("/forum"))
+        mockMvc.perform(get("/forum/topic"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("topics"))
                 .andExpect(model().attribute("topics", topics))
@@ -54,7 +54,7 @@ class TopicControllerTest {
     void topicPage() throws Exception {
         when(topicService.get(TOPIC1_ID)).thenReturn(TOPIC1);
 
-        mockMvc.perform(get("/forum/" + TOPIC1_ID))
+        mockMvc.perform(get("/forum/topic/" + TOPIC1_ID))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("topic"))
                 .andExpect(model().attributeExists("content"))
@@ -62,14 +62,14 @@ class TopicControllerTest {
     }
 
     @Test
-    void createTopic() throws Exception {
+    void editTopic() throws Exception {
         when(userService.getCurrentUser()).thenReturn(USER);
 
-        mockMvc.perform(post("/forum/add/topic")
+        mockMvc.perform(post("/forum/topic/add")
                         .param("title", TOPIC1.getTitle())
                         .param("content", TOPIC1.getContent()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/forum"));
+                .andExpect(redirectedUrl("/forum/topic"));
 
         verify(topicService).createTopic(TOPIC1.getTitle(), TOPIC1.getContent(), USER);
     }
@@ -82,7 +82,7 @@ class TopicControllerTest {
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authAdmin, null, authAdmin.getAuthorities()))))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/forum"));
+                .andExpect(redirectedUrl("/forum/topic"));
     }
 
     @Test
@@ -93,7 +93,7 @@ class TopicControllerTest {
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authModer, null, authModer.getAuthorities()))))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/forum"));
+                .andExpect(redirectedUrl("/forum/topic"));
     }
 
     @Test

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/forum")
+@RequestMapping("/forum/topic")
 public class TopicController {
 
     private final TopicService topicService;
@@ -32,14 +32,24 @@ public class TopicController {
         return "topic/view";
     }
 
-    @GetMapping("/add/topic")
+    @GetMapping("/add")
     public String showCreateTopicPage(Model model) {
         return "topic/add";
     }
 
 
+    @PostMapping("/add")
+    public String editTopic(@RequestParam String title,
+                            @RequestParam String content) {
+
+        User user = userService.getCurrentUser();
+        topicService.createTopic(title, content, user);
+
+        return "redirect:/forum/topic";
+    }
+
     @PreAuthorize("@topicSecurity.isOwner(#id)")
-    @GetMapping("/topic/edit/{id}")
+    @GetMapping("/edit/{id}")
     public String showEditTopicPage(@PathVariable Integer id, Model model) {
         Topic topic = topicService.get(id);
         model.addAttribute("topic", topic);
@@ -47,27 +57,17 @@ public class TopicController {
     }
 
     @PreAuthorize("@topicSecurity.isOwner(#id)")
-    @PostMapping("/topic/edit/{id}")
-    public String createTopic(@PathVariable Integer id,
-                              @RequestParam String content) {
+    @PostMapping("/edit/{id}")
+    public String editTopic(@PathVariable Integer id,
+                            @RequestParam String content) {
         topicService.update(id, content);
-        return "redirect:/forum/" + id;
-    }
-
-    @PostMapping("/add/topic")
-    public String createTopic(@RequestParam String title,
-                              @RequestParam String content) {
-
-        User user = userService.getCurrentUser();
-        topicService.createTopic(title, content, user);
-
-        return "redirect:/forum";
+        return "redirect:/forum/topic/" + id;
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
-    @PostMapping("/topic/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteTopic(@PathVariable Integer id) {
         topicService.delete(id);
-        return "redirect:/forum";
+        return "redirect:/forum/topic";
     }
 }

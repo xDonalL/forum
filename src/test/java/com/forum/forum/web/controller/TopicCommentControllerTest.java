@@ -48,7 +48,7 @@ class TopicCommentControllerTest {
                         .param("topicId", String.valueOf(TOPIC1_ID))
                         .param("comment", TOPIC1.getContent()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/forum/" + TOPIC1_ID));
+                .andExpect(redirectedUrl("/forum/topic/" + TOPIC1_ID));
 
         verify(commentService).addComment(TOPIC1_ID, USER, TOPIC1.getContent());
     }
@@ -62,7 +62,7 @@ class TopicCommentControllerTest {
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authorizedAdmin, null, authorizedAdmin.getAuthorities()))))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/forum/" + TOPIC1_ID));
+                .andExpect(redirectedUrl("/forum/topic/" + TOPIC1_ID));
     }
 
     @Test
@@ -74,7 +74,7 @@ class TopicCommentControllerTest {
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authorizedModer, null, authorizedModer.getAuthorities()))))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/forum/" + TOPIC1_ID));
+                .andExpect(redirectedUrl("/forum/topic/" + TOPIC1_ID));
     }
 
     @Test
