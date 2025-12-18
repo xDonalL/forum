@@ -46,4 +46,18 @@ public class TopicCommentService {
         comment.setComment(text);
         return commentRepository.save(comment);
     }
+
+    @Transactional
+    public boolean addLike(Integer commentId, User user) {
+        TopicComment comment = commentRepository.get(commentId);
+        checkNotFound(comment, "comment with id= " + commentId + " not exist");
+        return comment.getLikedUsers().add(user);
+    }
+
+    @Transactional
+    public boolean deleteLike(Integer commentId, User user) {
+        TopicComment comment = commentRepository.get(commentId);
+        checkNotFound(comment, "comment with id= " + commentId + " not exist");
+        return comment.getLikedUsers().remove(user);
+    }
 }

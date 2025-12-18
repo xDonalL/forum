@@ -70,6 +70,17 @@
                th:href="@{/topic/comment/edit/{id}(id=${c.id})}">
                 ✏ Редактировать
             </a>
+            <form method="post" action="/topic/comment/like/add">
+                <input type="hidden" name="id" th:value="${c.id}">
+                <input type="hidden" name="topicId" th:value="${c.topic.id}">
+                <button type="submit">LIKE</button>
+            </form>
+            <form method="post" action="/topic/comment/like/delete">
+                <input type="hidden" name="id" th:value="${c.id}">
+                <input type="hidden" name="topicId" th:value="${c.topic.id}">
+                <button type="submit">DISLIKE</button>
+            </form>
+            <span th:text="${c.likedUsers.size()}"></span>
         </div>
 
         <div class="comment-form">

@@ -52,4 +52,20 @@ public class TopicCommentController {
         commentService.delete(commentId);
         return "redirect:/topic/" + topicId;
     }
+
+    @PostMapping("/like/add")
+    public String addLikeTopic(@RequestParam Integer id,
+                               @RequestParam Integer topicId) {
+        User user = userService.getCurrentUser();
+        commentService.addLike(id, user);
+        return "redirect:/topic/" + topicId;
+    }
+
+    @PostMapping("/like/delete")
+    public String deleteLikeTopic(@RequestParam Integer id,
+                                  @RequestParam Integer topicId) {
+        User user = userService.getCurrentUser();
+        commentService.deleteLike(id, user);
+        return "redirect:/topic/" + topicId;
+    }
 }

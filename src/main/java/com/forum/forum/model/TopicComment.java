@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "forum_comment")
+@Table(name = "topic_comment")
 public class TopicComment extends AbstractBaseEntity {
 
     public TopicComment(String comment, User author, Topic topic) {
@@ -38,4 +40,10 @@ public class TopicComment extends AbstractBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_id", nullable = false)
     private Topic topic;
+
+    @ManyToMany
+    @JoinTable(name = "comment_likes",
+            joinColumns = @JoinColumn(name = "comment_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private final Set<User> likedUsers = new HashSet<>();
 }
