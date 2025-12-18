@@ -42,13 +42,13 @@ class TopicCommentControllerTest {
 
         AuthorizedUser authorizedUser = new AuthorizedUser(USER);
 
-        mockMvc.perform(post("/forum/topic/comment/add")
+        mockMvc.perform(post("/topic/comment/add")
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authorizedUser, null, authorizedUser.getAuthorities())))
                         .param("topicId", String.valueOf(TOPIC1_ID))
                         .param("comment", TOPIC1.getContent()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/forum/topic/" + TOPIC1_ID));
+                .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
 
         verify(commentService).addComment(TOPIC1_ID, USER, TOPIC1.getContent());
     }
@@ -57,7 +57,7 @@ class TopicCommentControllerTest {
     void deleteCommentByAdmin() throws Exception {
         AuthorizedUser authorizedAdmin = new AuthorizedUser(ADMIN);
 
-        mockMvc.perform(post("/forum/topic/comment/delete/" + COMMENT1_ID)
+        mockMvc.perform(post("/topic/comment/delete/" + COMMENT1_ID)
                         .param("topicId", String.valueOf(TOPIC1_ID))
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authorizedAdmin, null, authorizedAdmin.getAuthorities()))))
@@ -69,7 +69,7 @@ class TopicCommentControllerTest {
     void deleteCommentByModer() throws Exception {
         AuthorizedUser authorizedModer = new AuthorizedUser(MODER);
 
-        mockMvc.perform(post("/forum/topic/comment/delete/" + COMMENT1_ID)
+        mockMvc.perform(post("/topic/comment/delete/" + COMMENT1_ID)
                         .param("topicId", String.valueOf(TOPIC1_ID))
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authorizedModer, null, authorizedModer.getAuthorities()))))
@@ -81,7 +81,7 @@ class TopicCommentControllerTest {
     void deleteCommentForbiddenForUser() throws Exception {
         AuthorizedUser authorizedUser = new AuthorizedUser(USER);
 
-        mockMvc.perform(post("/forum/topic/comment/delete/" + COMMENT1_ID)
+        mockMvc.perform(post("/topic/comment/delete/" + COMMENT1_ID)
                         .param("topicId", String.valueOf(TOPIC1_ID))
                         .with(user(USER.getEmail()).roles("USER")))
                 .andExpect(status().isForbidden());

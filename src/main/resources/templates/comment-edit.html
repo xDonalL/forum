@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<form th:action="@{/forum/topic/comment/edit/{id}(id=${comment.id})}" method="post">
+<form th:action="@{/topic/comment/edit/{id}(id=${comment.id})}" method="post">
     <input type="hidden" name="topicId" th:value="${comment.topic.id}" />
     <textarea name="text" th:text="${comment.comment}"></textarea>
     <button type="submit">Сохранить</button>

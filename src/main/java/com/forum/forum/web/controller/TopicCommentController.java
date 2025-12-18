@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/forum/topic/comment")
+@RequestMapping("/topic/comment")
 public class TopicCommentController {
 
     private final TopicCommentService commentService;
@@ -25,7 +25,7 @@ public class TopicCommentController {
         User user = userService.getCurrentUser();
         commentService.addComment(topicId, user, comment);
 
-        return "redirect:/forum/topic/" + topicId;
+        return "redirect:/topic/" + topicId;
     }
 
     @PreAuthorize("@commentSecurity.isOwner(#id)")
@@ -42,7 +42,7 @@ public class TopicCommentController {
                               @RequestParam String text,
                               @RequestParam Integer topicId) {
         commentService.update(id, text);
-        return "redirect:/forum/topic/" + topicId;
+        return "redirect:/topic/" + topicId;
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
@@ -50,6 +50,6 @@ public class TopicCommentController {
     public String deleteComment(@PathVariable("id") Integer commentId,
                                 @RequestParam Integer topicId) {
         commentService.delete(commentId);
-        return "redirect:/forum/topic/" + topicId;
+        return "redirect:/topic/" + topicId;
     }
 }

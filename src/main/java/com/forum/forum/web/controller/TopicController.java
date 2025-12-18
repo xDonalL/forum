@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/forum/topic")
+@RequestMapping("/topic")
 public class TopicController {
 
     private final TopicService topicService;
@@ -45,7 +45,7 @@ public class TopicController {
         User user = userService.getCurrentUser();
         topicService.createTopic(title, content, user);
 
-        return "redirect:/forum/topic";
+        return "redirect:/topic";
     }
 
     @PreAuthorize("@topicSecurity.isOwner(#id)")
@@ -61,13 +61,13 @@ public class TopicController {
     public String editTopic(@PathVariable Integer id,
                             @RequestParam String content) {
         topicService.update(id, content);
-        return "redirect:/forum/topic/" + id;
+        return "redirect:/topic/" + id;
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @PostMapping("/delete/{id}")
     public String deleteTopic(@PathVariable Integer id) {
         topicService.delete(id);
-        return "redirect:/forum/topic";
+        return "redirect:/topic";
     }
 }

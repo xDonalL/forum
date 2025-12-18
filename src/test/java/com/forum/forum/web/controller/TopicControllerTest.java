@@ -43,7 +43,7 @@ class TopicControllerTest {
         List<Topic> topics = List.of(TOPIC1, TOPIC2);
         when(topicService.getAll()).thenReturn(topics);
 
-        mockMvc.perform(get("/forum/topic"))
+        mockMvc.perform(get("/topic"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("topics"))
                 .andExpect(model().attribute("topics", topics))
@@ -54,7 +54,7 @@ class TopicControllerTest {
     void topicPage() throws Exception {
         when(topicService.get(TOPIC1_ID)).thenReturn(TOPIC1);
 
-        mockMvc.perform(get("/forum/topic/" + TOPIC1_ID))
+        mockMvc.perform(get("/topic/" + TOPIC1_ID))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("topic"))
                 .andExpect(model().attributeExists("content"))
@@ -65,7 +65,7 @@ class TopicControllerTest {
     void editTopic() throws Exception {
         when(userService.getCurrentUser()).thenReturn(USER);
 
-        mockMvc.perform(post("/forum/topic/add")
+        mockMvc.perform(post("/topic/add")
                         .param("title", TOPIC1.getTitle())
                         .param("content", TOPIC1.getContent()))
                 .andExpect(status().is3xxRedirection())
@@ -78,7 +78,7 @@ class TopicControllerTest {
     void deleteTopicByAdmin() throws Exception {
         AuthorizedUser authAdmin = new AuthorizedUser(ADMIN);
 
-        mockMvc.perform(post("/forum/topic/delete/" + TOPIC1_ID)
+        mockMvc.perform(post("/topic/delete/" + TOPIC1_ID)
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authAdmin, null, authAdmin.getAuthorities()))))
                 .andExpect(status().is3xxRedirection())
@@ -89,7 +89,7 @@ class TopicControllerTest {
     void deleteTopicByModer() throws Exception {
         AuthorizedUser authModer = new AuthorizedUser(MODER);
 
-        mockMvc.perform(post("/forum/topic/delete/" + TOPIC1_ID)
+        mockMvc.perform(post("/topic/delete/" + TOPIC1_ID)
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authModer, null, authModer.getAuthorities()))))
                 .andExpect(status().is3xxRedirection())
@@ -100,7 +100,7 @@ class TopicControllerTest {
     void deleteTopicForbiddenForUser() throws Exception {
         AuthorizedUser authUser = new AuthorizedUser(USER);
 
-        mockMvc.perform(post("/forum/topic/delete/" + TOPIC1_ID)
+        mockMvc.perform(post("/topic/delete/" + TOPIC1_ID)
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authUser, null, authUser.getAuthorities()))))
                 .andExpect(status().isForbidden());
@@ -108,7 +108,7 @@ class TopicControllerTest {
 
     @Test
     void deleteTopicNotAuthorized() throws Exception {
-        mockMvc.perform(post("/forum/topic/delete/" + TOPIC1_ID))
+        mockMvc.perform(post("/topic/delete/" + TOPIC1_ID))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/login"));
     }

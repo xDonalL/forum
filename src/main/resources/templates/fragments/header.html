@@ -14,7 +14,7 @@
         <nav class="nav">
             <a th:href="@{/}" th:classappend="${activePage=='home'} ? 'active'" class="nav-item">Главная</a>
 
-            <a th:href="@{/forum}" th:classappend="${activePage=='forum'} ? 'active'" class="nav-item">Форум</a>
+            <a th:href="@{/topic}" th:classappend="${activePage=='forum'} ? 'active'" class="nav-item">Форум</a>
 
             <a href="/admin/panel" sec:authorize="hasRole('ADMIN')" class="nav-item">Admin panel</a>
         </nav>

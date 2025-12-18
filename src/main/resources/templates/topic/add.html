@@ -12,13 +12,13 @@
     <div th:replace="fragments/header :: header"></div>
 
     <main class="content">
-<form method="post" action="/forum/add/topic">
+<form method="post" action="/topic/add">
     <input type="text" name="title" placeholder="Title" required>
     <textarea name="content" placeholder="Content" required></textarea>
     <button type="submit">Create topic</button>
 </form>
 <div th:replace="fragments/footer :: footer"></div>
-<a href="/forum" class="btn">Back</a>
+<a href="/topic" class="btn">Back</a>
 </main>
 
 <div th:replace="fragments/footer :: footer"></div>

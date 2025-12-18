@@ -16,16 +16,16 @@
     <div th:replace="fragments/header :: header"></div>
 
     <main class="content">
-        <a href="/forum/add/topic" class="btn-create-topic">Create topic</a>
+        <a href="/topic/add" class="btn-create-topic">Create topic</a>
 
         <div class="topics-list">
             <div class="topic-card" th:each="t : ${topics}">
                 <div class="topic-header">
-                    <a th:href="@{'forum/' + ${t.id}}"
+                    <a th:href="@{'topic/' + ${t.id}}"
                        class="username">
                         <h2 th:text="${t.title}"></h2>
                     </a>
-                    <form th:action="@{/forum/topic/delete/{id}(id=${t.id})}"
+                    <form th:action="@{/topic/delete/{id}(id=${t.id})}"
                           sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')"
                           method="post">
                         <button>Удалить</button>
