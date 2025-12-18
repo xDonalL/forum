@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static com.forum.forum.ForumTestData.*;
+import static com.forum.forum.ForumTopicTestData.*;
 import static com.forum.forum.UserTestData.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

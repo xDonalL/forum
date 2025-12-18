@@ -16,11 +16,15 @@ import java.util.List;
 @Table(name = "forum_topics")
 public class ForumTopic extends AbstractBaseEntity {
 
-    public ForumTopic(Integer id, String title, String content, User author) {
-        super(id);
+    public ForumTopic(String title, String content, User author) {
         this.title = title;
         this.content = content;
         this.author = author;
+    }
+
+    public ForumTopic(Integer id, String title, String content, User author) {
+        this(title, content, author);
+        this.id = id;
     }
 
     @Column(name = "title", nullable = false)

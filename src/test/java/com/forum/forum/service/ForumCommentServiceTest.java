@@ -1,6 +1,5 @@
 package com.forum.forum.service;
 
-import com.forum.forum.ForumTestData;
 import com.forum.forum.model.ForumComment;
 import com.forum.forum.model.ForumTopic;
 import com.forum.forum.model.User;
@@ -14,8 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.forum.forum.ForumTestData.COMMENT1;
-import static com.forum.forum.ForumTestData.COMMENT1_ID;
+import static com.forum.forum.ForumCommentTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -35,9 +33,9 @@ class ForumCommentServiceTest {
 
     @Test
     void addCommentSuccess() {
-        User author = ForumTestData.COMMENT1.getAuthor();
-        ForumTopic topic = ForumTestData.COMMENT1.getTopic();
-        ForumComment newComment = ForumTestData.getNewComment(author, topic);
+        User author = COMMENT1.getAuthor();
+        ForumTopic topic = COMMENT1.getTopic();
+        ForumComment newComment = getNewComment(author, topic);
 
         when(topicRepository.get(topic.getId())).thenReturn(topic);
         when(commentRepository.save(any(ForumComment.class))).thenReturn(newComment);

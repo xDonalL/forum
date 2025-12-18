@@ -1,6 +1,5 @@
 package com.forum.forum.service;
 
-import com.forum.forum.ForumTestData;
 import com.forum.forum.UserTestData;
 import com.forum.forum.model.ForumTopic;
 import com.forum.forum.model.User;
@@ -16,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.forum.forum.ForumTestData.*;
+import static com.forum.forum.ForumTopicTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -36,7 +35,7 @@ class ForumTopicServiceTest {
     @Test
     void createTopicSuccess() {
         User author = TOPIC1.getAuthor();
-        ForumTopic newTopic = ForumTestData.getNewTopic(author);
+        ForumTopic newTopic = getNewTopic(author);
 
         when(topicRepository.save(any(ForumTopic.class)))
                 .thenReturn(newTopic);

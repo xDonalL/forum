@@ -12,7 +12,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.forum.forum.ForumTestData.*;
+import static com.forum.forum.ForumCommentTestData.COMMENT1_ID;
+import static com.forum.forum.ForumTopicTestData.TOPIC1;
+import static com.forum.forum.ForumTopicTestData.TOPIC1_ID;
 import static com.forum.forum.UserTestData.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
