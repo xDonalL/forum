@@ -1,8 +1,8 @@
 package com.forum.forum.web.controller;
 
-import com.forum.forum.model.ForumTopic;
+import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
-import com.forum.forum.service.ForumTopicService;
+import com.forum.forum.service.TopicService;
 import com.forum.forum.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/forum")
-public class ForumTopicController {
+public class TopicController {
 
-    private final ForumTopicService topicService;
+    private final TopicService topicService;
     private final UserService userService;
 
     @GetMapping
@@ -26,7 +26,7 @@ public class ForumTopicController {
 
     @GetMapping("/{id}")
     public String showTopicPage(@PathVariable Integer id, Model model) {
-        ForumTopic topic = topicService.get(id);
+        Topic topic = topicService.get(id);
         model.addAttribute("topic", topic);
         model.addAttribute("content", topic.getComments());
         return "topic/view";
@@ -41,7 +41,7 @@ public class ForumTopicController {
     @PreAuthorize("@topicSecurity.isOwner(#id)")
     @GetMapping("/topic/edit/{id}")
     public String showEditTopicPage(@PathVariable Integer id, Model model) {
-        ForumTopic topic = topicService.get(id);
+        Topic topic = topicService.get(id);
         model.addAttribute("topic", topic);
         return "topic/edit";
     }

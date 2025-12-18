@@ -1,23 +1,23 @@
 package com.forum.forum.repository.forum;
 
-import com.forum.forum.model.ForumTopic;
+import com.forum.forum.model.Topic;
 import com.forum.forum.repository.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class DataJpaForumTopicRepository implements BaseRepository<ForumTopic> {
+public class DataJpaTopicRepository implements BaseRepository<Topic> {
 
-    public DataJpaForumTopicRepository(CrudForumTopicRepository topicRepository) {
+    public DataJpaTopicRepository(CrudTopicRepository topicRepository) {
         this.topicRepository = topicRepository;
     }
 
-    private final CrudForumTopicRepository topicRepository;
+    private final CrudTopicRepository topicRepository;
 
 
     @Override
-    public ForumTopic save(ForumTopic topic) {
+    public Topic save(Topic topic) {
         return topicRepository.save(topic);
     }
 
@@ -27,12 +27,12 @@ public class DataJpaForumTopicRepository implements BaseRepository<ForumTopic> {
     }
 
     @Override
-    public ForumTopic get(int id) {
+    public Topic get(int id) {
         return topicRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<ForumTopic> getAll() {
+    public List<Topic> getAll() {
         return topicRepository.findAll();
     }
 }

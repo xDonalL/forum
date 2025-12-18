@@ -1,22 +1,22 @@
 package com.forum.forum.repository.forum;
 
-import com.forum.forum.model.ForumComment;
+import com.forum.forum.model.TopicComment;
 import com.forum.forum.repository.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class DataJpaForumCommentRepository implements BaseRepository<ForumComment> {
+public class DataJpaTopicCommentRepository implements BaseRepository<TopicComment> {
 
-    public DataJpaForumCommentRepository(CrudForumCommentRepository commentRepository) {
+    public DataJpaTopicCommentRepository(CrudTopicCommentRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
 
-    private final CrudForumCommentRepository commentRepository;
+    private final CrudTopicCommentRepository commentRepository;
 
     @Override
-    public ForumComment save(ForumComment comment) {
+    public TopicComment save(TopicComment comment) {
         return commentRepository.save(comment);
     }
 
@@ -30,12 +30,12 @@ public class DataJpaForumCommentRepository implements BaseRepository<ForumCommen
     }
 
     @Override
-    public ForumComment get(int id) {
+    public TopicComment get(int id) {
         return commentRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<ForumComment> getAll() {
+    public List<TopicComment> getAll() {
         return commentRepository.findAll();
     }
 }

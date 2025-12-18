@@ -1,10 +1,10 @@
 package com.forum.forum.service;
 
-import com.forum.forum.model.ForumComment;
-import com.forum.forum.model.ForumTopic;
+import com.forum.forum.model.TopicComment;
+import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
-import com.forum.forum.repository.forum.DataJpaForumCommentRepository;
-import com.forum.forum.repository.forum.DataJpaForumTopicRepository;
+import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
+import com.forum.forum.repository.forum.DataJpaTopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,16 +13,16 @@ import static com.forum.forum.util.ValidUtil.checkNotFound;
 
 @Service
 @RequiredArgsConstructor
-public class ForumCommentService {
+public class TopicCommentService {
 
-    private final DataJpaForumCommentRepository commentRepository;
-    private final DataJpaForumTopicRepository topicRepository;
+    private final DataJpaTopicCommentRepository commentRepository;
+    private final DataJpaTopicRepository topicRepository;
 
     @Transactional
-    public ForumComment addComment(Integer topicId, User author, String content) {
-        ForumTopic topic = topicRepository.get(topicId);
+    public TopicComment addComment(Integer topicId, User author, String content) {
+        Topic topic = topicRepository.get(topicId);
 
-        ForumComment msg = new ForumComment();
+        TopicComment msg = new TopicComment();
         msg.setTopic(topic);
         msg.setAuthor(author);
         msg.setComment(content);
@@ -36,12 +36,12 @@ public class ForumCommentService {
         return commentRepository.delete(id);
     }
 
-    public ForumComment get(Integer id) {
+    public TopicComment get(Integer id) {
         return checkNotFound(commentRepository.get(id), "comment with id= " + id + " not exist");
     }
 
-    public ForumComment update(Integer id, String text) {
-        ForumComment comment = commentRepository.get(id);
+    public TopicComment update(Integer id, String text) {
+        TopicComment comment = commentRepository.get(id);
         checkNotFound(comment, "comment with id= " + id + " not exist");
         comment.setComment(text);
         return commentRepository.save(comment);

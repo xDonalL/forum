@@ -1,9 +1,9 @@
 package com.forum.forum.web.controller;
 
-import com.forum.forum.model.ForumTopic;
+import com.forum.forum.model.Topic;
 import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.security.SecurityConfig;
-import com.forum.forum.service.ForumTopicService;
+import com.forum.forum.service.TopicService;
 import com.forum.forum.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,22 +25,22 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ForumTopicController.class)
+@WebMvcTest(TopicController.class)
 @Import(SecurityConfig.class)
 @EnableMethodSecurity
-class ForumTopicControllerTest {
+class TopicControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ForumTopicService topicService;
+    private TopicService topicService;
 
     @MockBean
     private UserService userService;
 
     @Test
     void listTopics() throws Exception {
-        List<ForumTopic> topics = List.of(TOPIC1, TOPIC2);
+        List<Topic> topics = List.of(TOPIC1, TOPIC2);
         when(topicService.getAll()).thenReturn(topics);
 
         mockMvc.perform(get("/forum"))

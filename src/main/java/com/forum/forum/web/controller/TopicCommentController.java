@@ -1,8 +1,8 @@
 package com.forum.forum.web.controller;
 
-import com.forum.forum.model.ForumComment;
+import com.forum.forum.model.TopicComment;
 import com.forum.forum.model.User;
-import com.forum.forum.service.ForumCommentService;
+import com.forum.forum.service.TopicCommentService;
 import com.forum.forum.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/forum/topic/comment")
-public class ForumCommentController {
+public class TopicCommentController {
 
-    private final ForumCommentService commentService;
+    private final TopicCommentService commentService;
     private final UserService userService;
 
     @PostMapping("/add")
@@ -31,7 +31,7 @@ public class ForumCommentController {
     @PreAuthorize("@commentSecurity.isOwner(#id)")
     @GetMapping("/edit/{id}")
     public String editCommentPage(@PathVariable Integer id, Model model) {
-        ForumComment comment = commentService.get(id);
+        TopicComment comment = commentService.get(id);
         model.addAttribute("comment", comment);
         return "comment-edit";
     }

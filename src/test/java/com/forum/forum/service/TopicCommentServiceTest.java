@@ -1,10 +1,10 @@
 package com.forum.forum.service;
 
-import com.forum.forum.model.ForumComment;
-import com.forum.forum.model.ForumTopic;
+import com.forum.forum.model.TopicComment;
+import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
-import com.forum.forum.repository.forum.DataJpaForumCommentRepository;
-import com.forum.forum.repository.forum.DataJpaForumTopicRepository;
+import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
+import com.forum.forum.repository.forum.DataJpaTopicRepository;
 import com.forum.forum.util.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,34 +20,34 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ForumCommentServiceTest {
+class TopicCommentServiceTest {
 
     @Mock
-    private DataJpaForumCommentRepository commentRepository;
+    private DataJpaTopicCommentRepository commentRepository;
 
     @Mock
-    private DataJpaForumTopicRepository topicRepository;
+    private DataJpaTopicRepository topicRepository;
 
     @InjectMocks
-    private ForumCommentService commentService;
+    private TopicCommentService commentService;
 
     @Test
     void addCommentSuccess() {
         User author = COMMENT1.getAuthor();
-        ForumTopic topic = COMMENT1.getTopic();
-        ForumComment newComment = getNewComment(author, topic);
+        Topic topic = COMMENT1.getTopic();
+        TopicComment newComment = getNewComment(author, topic);
 
         when(topicRepository.get(topic.getId())).thenReturn(topic);
-        when(commentRepository.save(any(ForumComment.class))).thenReturn(newComment);
+        when(commentRepository.save(any(TopicComment.class))).thenReturn(newComment);
 
-        ForumComment saved = commentService.addComment(topic.getId(), author, newComment.getComment());
+        TopicComment saved = commentService.addComment(topic.getId(), author, newComment.getComment());
 
         assertNotNull(saved);
         assertEquals(newComment.getComment(), saved.getComment());
         assertEquals(author, saved.getAuthor());
         assertEquals(topic, saved.getTopic());
 
-        ArgumentCaptor<ForumComment> captor = ArgumentCaptor.forClass(ForumComment.class);
+        ArgumentCaptor<TopicComment> captor = ArgumentCaptor.forClass(TopicComment.class);
         verify(commentRepository).save(captor.capture());
         assertEquals(newComment.getComment(), captor.getValue().getComment());
     }

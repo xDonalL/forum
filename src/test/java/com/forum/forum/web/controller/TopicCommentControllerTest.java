@@ -2,7 +2,7 @@ package com.forum.forum.web.controller;
 
 import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.security.SecurityConfig;
-import com.forum.forum.service.ForumCommentService;
+import com.forum.forum.service.TopicCommentService;
 import com.forum.forum.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +24,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ForumCommentController.class)
+@WebMvcTest(TopicCommentController.class)
 @Import(SecurityConfig.class)
-class ForumCommentControllerTest {
+class TopicCommentControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ForumCommentService commentService;
+    private TopicCommentService commentService;
 
     @MockBean
     private UserService userService;

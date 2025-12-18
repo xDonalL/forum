@@ -14,15 +14,15 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table(name = "forum_topics")
-public class ForumTopic extends AbstractBaseEntity {
+public class Topic extends AbstractBaseEntity {
 
-    public ForumTopic(String title, String content, User author) {
+    public Topic(String title, String content, User author) {
         this.title = title;
         this.content = content;
         this.author = author;
     }
 
-    public ForumTopic(Integer id, String title, String content, User author) {
+    public Topic(Integer id, String title, String content, User author) {
         this(title, content, author);
         this.id = id;
     }
@@ -41,5 +41,5 @@ public class ForumTopic extends AbstractBaseEntity {
     private final LocalDateTime dateCreated = LocalDateTime.now();
 
     @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<ForumComment> comments = new ArrayList<>();
+    private final List<TopicComment> comments = new ArrayList<>();
 }

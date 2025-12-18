@@ -1,10 +1,10 @@
 package com.forum.forum.service;
 
 import com.forum.forum.UserTestData;
-import com.forum.forum.model.ForumTopic;
+import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
-import com.forum.forum.repository.forum.DataJpaForumCommentRepository;
-import com.forum.forum.repository.forum.DataJpaForumTopicRepository;
+import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
+import com.forum.forum.repository.forum.DataJpaTopicRepository;
 import com.forum.forum.util.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,26 +21,26 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ForumTopicServiceTest {
+class TopicServiceTest {
 
     @Mock
-    private DataJpaForumTopicRepository topicRepository;
+    private DataJpaTopicRepository topicRepository;
 
     @Mock
-    private DataJpaForumCommentRepository commentRepository;
+    private DataJpaTopicCommentRepository commentRepository;
 
     @InjectMocks
-    private ForumTopicService topicService;
+    private TopicService topicService;
 
     @Test
     void createTopicSuccess() {
         User author = TOPIC1.getAuthor();
-        ForumTopic newTopic = getNewTopic(author);
+        Topic newTopic = getNewTopic(author);
 
-        when(topicRepository.save(any(ForumTopic.class)))
+        when(topicRepository.save(any(Topic.class)))
                 .thenReturn(newTopic);
 
-        ForumTopic savedTopic = topicService.createTopic(
+        Topic savedTopic = topicService.createTopic(
                 newTopic.getTitle(),
                 newTopic.getContent(),
                 UserTestData.USER);
@@ -50,7 +50,7 @@ class ForumTopicServiceTest {
         assertEquals(author, savedTopic.getAuthor());
 
 
-        ArgumentCaptor<ForumTopic> captor = ArgumentCaptor.forClass(ForumTopic.class);
+        ArgumentCaptor<Topic> captor = ArgumentCaptor.forClass(Topic.class);
         verify(topicRepository).save(captor.capture());
         assertEquals(savedTopic.getTitle(), captor.getValue().getTitle());
     }
@@ -59,7 +59,7 @@ class ForumTopicServiceTest {
     void getAllTopicSuccess() {
         when(topicRepository.getAll()).thenReturn(ALL_TOPIC);
 
-        List<ForumTopic> topics = topicService.getAll();
+        List<Topic> topics = topicService.getAll();
 
         assertEquals(ALL_TOPIC.size(), topics.size());
         assertTrue(topics.contains(TOPIC1));
@@ -70,7 +70,7 @@ class ForumTopicServiceTest {
     void getTopicSuccess() {
         when(topicRepository.get(TOPIC1_ID)).thenReturn(TOPIC1);
 
-        ForumTopic topic = topicService.get(TOPIC1_ID);
+        Topic topic = topicService.get(TOPIC1_ID);
         assertNotNull(topic);
         assertEquals(TOPIC1.getId(), topic.getId());
     }

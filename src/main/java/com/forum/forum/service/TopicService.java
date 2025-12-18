@@ -1,9 +1,9 @@
 package com.forum.forum.service;
 
-import com.forum.forum.model.ForumTopic;
+import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
-import com.forum.forum.repository.forum.DataJpaForumCommentRepository;
-import com.forum.forum.repository.forum.DataJpaForumTopicRepository;
+import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
+import com.forum.forum.repository.forum.DataJpaTopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,32 +14,32 @@ import static com.forum.forum.util.ValidUtil.checkNotFound;
 
 @Service
 @RequiredArgsConstructor
-public class ForumTopicService {
+public class TopicService {
 
-    private final DataJpaForumTopicRepository topicRepository;
-    private final DataJpaForumCommentRepository commentRepository;
+    private final DataJpaTopicRepository topicRepository;
+    private final DataJpaTopicCommentRepository commentRepository;
 
     @Transactional
-    public ForumTopic createTopic(String title, String content, User user) {
-        ForumTopic topic = new ForumTopic();
+    public Topic createTopic(String title, String content, User user) {
+        Topic topic = new Topic();
         topic.setTitle(title);
         topic.setContent(content);
         topic.setAuthor(user);
         return topicRepository.save(topic);
     }
 
-    public ForumTopic update(Integer id, String content) {
-        ForumTopic topic = topicRepository.get(id);
+    public Topic update(Integer id, String content) {
+        Topic topic = topicRepository.get(id);
         checkNotFound(topic, "topic with id= " + id + " not exist");
         topic.setContent(content);
         return topicRepository.save(topic);
     }
 
-    public List<ForumTopic> getAll() {
+    public List<Topic> getAll() {
         return topicRepository.getAll();
     }
 
-    public ForumTopic get(Integer id) {
+    public Topic get(Integer id) {
         return checkNotFound(topicRepository.get(id), "topic with id= " + id + " not exist");
     }
 

@@ -12,15 +12,15 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Table(name = "forum_comment")
-public class ForumComment extends AbstractBaseEntity {
+public class TopicComment extends AbstractBaseEntity {
 
-    public ForumComment(String comment, User author, ForumTopic topic) {
+    public TopicComment(String comment, User author, Topic topic) {
         this.comment = comment;
         this.author = author;
         this.topic = topic;
     }
 
-    public ForumComment(Integer id, String comment, User author, ForumTopic topic) {
+    public TopicComment(Integer id, String comment, User author, Topic topic) {
         this(comment, author, topic);
         this.id = id;
     }
@@ -37,5 +37,5 @@ public class ForumComment extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_id", nullable = false)
-    private ForumTopic topic;
+    private Topic topic;
 }
