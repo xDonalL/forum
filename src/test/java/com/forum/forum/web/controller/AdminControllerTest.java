@@ -42,7 +42,7 @@ class AdminControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("users"))
                 .andExpect(model().attribute("users", ALL_USERS))
-                .andExpect(view().name("panel"));
+                .andExpect(view().name("admin/panel"));
 
         verify(userService).getAll();
     }

@@ -47,7 +47,7 @@ class ForumTopicControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("topics"))
                 .andExpect(model().attribute("topics", topics))
-                .andExpect(view().name("topic-list"));
+                .andExpect(view().name("topic/list"));
     }
 
     @Test
@@ -58,7 +58,7 @@ class ForumTopicControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("topic"))
                 .andExpect(model().attributeExists("content"))
-                .andExpect(view().name("topic-page"));
+                .andExpect(view().name("topic/view"));
     }
 
     @Test

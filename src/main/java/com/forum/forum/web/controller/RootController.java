@@ -23,7 +23,7 @@ public class RootController {
 
     @GetMapping
     public String homePage(Model model) {
-        return "home-page";
+        return "home";
     }
 
     @GetMapping("/register")

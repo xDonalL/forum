@@ -23,7 +23,7 @@ public class AdminController {
     @GetMapping("/panel")
     public String usersPage(Model model) {
         model.addAttribute("users", userService.getAll());
-        return "panel";
+        return "admin/panel";
     }
 
     @PostMapping("/{id}/ban")

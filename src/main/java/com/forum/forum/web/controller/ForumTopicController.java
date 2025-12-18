@@ -21,7 +21,7 @@ public class ForumTopicController {
     @GetMapping
     public String list(Model model) {
         model.addAttribute("topics", topicService.getAll());
-        return "topic-list";
+        return "topic/list";
     }
 
     @GetMapping("/{id}")
@@ -29,12 +29,12 @@ public class ForumTopicController {
         ForumTopic topic = topicService.get(id);
         model.addAttribute("topic", topic);
         model.addAttribute("content", topic.getComments());
-        return "topic-page";
+        return "topic/view";
     }
 
     @GetMapping("/add/topic")
     public String showCreateTopicPage(Model model) {
-        return "add-topic-page";
+        return "topic/add";
     }
 
 
@@ -43,7 +43,7 @@ public class ForumTopicController {
     public String showEditTopicPage(@PathVariable Integer id, Model model) {
         ForumTopic topic = topicService.get(id);
         model.addAttribute("topic", topic);
-        return "edit-topic-page";
+        return "topic/edit";
     }
 
     @PreAuthorize("@topicSecurity.isOwner(#id)")

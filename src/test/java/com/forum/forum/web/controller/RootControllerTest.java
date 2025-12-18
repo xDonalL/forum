@@ -31,7 +31,7 @@ class RootControllerTest {
     void homePage() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("home-page"));
+                .andExpect(view().name("home"));
     }
 
     @Test

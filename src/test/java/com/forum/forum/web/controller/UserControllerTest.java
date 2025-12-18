@@ -43,7 +43,7 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attribute("user", USER))
-                .andExpect(view().name("user-profile"));
+                .andExpect(view().name("profile/view"));
 
         verify(userService).getUserById(USER.getId());
     }
@@ -61,7 +61,7 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attribute("user", USER))
-                .andExpect(view().name("edit-profile"));
+                .andExpect(view().name("profile/edit"));
 
         verify(userService).getByEmail(USER.getEmail());
     }

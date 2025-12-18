@@ -33,7 +33,7 @@ public class ForumCommentController {
     public String editCommentPage(@PathVariable Integer id, Model model) {
         ForumComment comment = commentService.get(id);
         model.addAttribute("comment", comment);
-        return "comment-edit-page";
+        return "comment-edit";
     }
 
     @PreAuthorize("@commentSecurity.isOwner(#id)")

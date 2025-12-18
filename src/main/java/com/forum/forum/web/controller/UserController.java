@@ -26,14 +26,14 @@ public class UserController {
     public String profilePage(Model model, @PathVariable Integer id) {
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
-        return "user-profile";
+        return "profile/view";
     }
 
     @GetMapping("/edit")
     public String editProfile(Model model, Authentication auth) {
         User user = userService.getByEmail(auth.getName());
         model.addAttribute("user", user);
-        return "edit-profile";
+        return "profile/edit";
     }
 
     @PostMapping("/edit")
