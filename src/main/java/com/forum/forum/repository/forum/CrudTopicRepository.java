@@ -7,11 +7,21 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface CrudTopicRepository extends JpaRepository<Topic, Integer> {
 
     @Transactional
     @Modifying
     @Query("DELETE FROM Topic t WHERE t.id=:id")
     int delete(@Param("id") int id);
+
+    List<Topic> findByTitleContainingIgnoreCase(String keyword);
+
+    List<Topic> findAllByOrderByCreatedAtDesc();
+
+    List<Topic> findAllByOrderByCreatedAtAsc();
+
+    List<Topic> findAllByOrderByLikedUsersAsc();
 }
 

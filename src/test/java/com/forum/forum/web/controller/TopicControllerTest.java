@@ -41,7 +41,7 @@ class TopicControllerTest {
     @Test
     void listTopics() throws Exception {
         List<Topic> topics = List.of(TOPIC1, TOPIC2);
-        when(topicService.getAll()).thenReturn(topics);
+        when(topicService.getAllSorted(null)).thenReturn(topics);
 
         mockMvc.perform(get("/topic"))
                 .andExpect(status().isOk())

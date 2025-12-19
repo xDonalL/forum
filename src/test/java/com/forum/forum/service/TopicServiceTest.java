@@ -59,7 +59,7 @@ class TopicServiceTest {
     void getAllTopicSuccess() {
         when(topicRepository.getAll()).thenReturn(ALL_TOPIC);
 
-        List<Topic> topics = topicService.getAll();
+        List<Topic> topics = topicService.getAllSorted(null);
 
         assertEquals(ALL_TOPIC.size(), topics.size());
         assertTrue(topics.contains(TOPIC1));

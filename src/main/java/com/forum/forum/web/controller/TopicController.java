@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/topic")
@@ -19,8 +21,21 @@ public class TopicController {
     private final UserService userService;
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("topics", topicService.getAll());
+    public String showTopics(
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String q,
+            Model model) {
+
+        List<Topic> topics;
+
+        if (q != null && !q.isBlank()) {
+            topics = topicService.search(q);
+        } else {
+            topics = topicService.getAllSorted(sort);
+        }
+
+        model.addAttribute("topics", topics);
+
         return "topic/list";
     }
 

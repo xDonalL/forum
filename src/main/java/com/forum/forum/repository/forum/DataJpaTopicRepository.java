@@ -33,6 +33,18 @@ public class DataJpaTopicRepository implements BaseRepository<Topic> {
 
     @Override
     public List<Topic> getAll() {
-        return topicRepository.findAll();
+        return topicRepository.findAllByOrderByCreatedAtDesc();
+    }
+
+    public List<Topic> getTopicsByLikes() {
+        return topicRepository.findAllByOrderByLikedUsersAsc();
+    }
+
+    public List<Topic> getTopicsByDateAsc() {
+        return topicRepository.findAllByOrderByCreatedAtAsc();
+    }
+
+    public List<Topic> getTopicsByTopicName(String topicName) {
+        return topicRepository.findByTitleContainingIgnoreCase(topicName);
     }
 }

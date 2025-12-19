@@ -67,9 +67,11 @@
 }
 
 .btn-create-topic {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
     padding: 10px 20px;
     background-color: #4aa3df;
+    margin: 20px auto;
     color: white;
     text-decoration: none;
     border-radius: 8px;
@@ -84,4 +86,60 @@
 
 .btn-create-topic:active {
     transform: translateY(1px);
+}
+
+.topics-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 16px;
+    gap: 12px;
+}
+
+
+.topic-footer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-top: 6px;
+    margin-top: 8px;
+
+    border-top: 1px solid #e0e0e0;
+
+    font-size: 13px;
+    color: #666;
+}
+
+.topic-date {
+    flex: 1;
+    text-align: left;
+}
+
+.topic-comments {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.topic-likes {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
+}
+
+.icon {
+    width: 14px;
+    height: 14px;
+    opacity: 0.75;
+}
+
+.search-form {
+    display: flex;
+    gap: 6px;
 }

@@ -16,8 +16,25 @@
     <div th:replace="fragments/header :: header"></div>
 
     <main class="content">
-        <a href="/topic/add" class="btn-create-topic">Create topic</a>
+        <a href="/topic/add" class="btn-create-topic">Создать тему</a>
+        <div class="topics-toolbar">
+            <form method="get" th:action="@{/topic}" class="search-form">
+                <input type="text"
+                       name="q"
+                       placeholder="Поиск по темам..."
+                       th:value="${q}">
+                <button type="submit">🔍</button>
 
+                <input type="hidden" name="sort" th:value="${currentSort}">
+            </form>
+            <div class="sort-links">
+                <form method="get" th:action="@{/topic}">
+                    <button name="sort" value="likes">Популярные</button>
+                    <button name="sort" value="dateDesc">Новые</button>
+                    <button name="sort" value="dateAsc">Старые</button>
+                </form>
+            </div>
+        </div>
         <div class="topics-list">
             <div class="topic-card" th:each="t : ${topics}">
                 <div class="topic-header">
@@ -42,7 +59,21 @@
                             <span th:text="${t.author.login}" class="username"></span>
                         </a>
                     </div>
-                    <span class="created-date" th:text="${#temporals.format(t.dateCreated, 'yyyy-MM-dd HH:mm')}"></span>
+                </div>
+                <div class="topic-footer-bar">
+                    <span class="topic-date"
+                          th:text="${#temporals.format(t.createdAt, 'yyyy-MM-dd HH:mm')}">
+                          </span>
+
+                    <span class="topic-comments">
+                         <img src="/img/comments.webp" class="icon">
+                          <span th:text="${t.comments.size()}"></span>
+                         </span>
+
+                    <span class="topic-likes">
+                            <img src="/img/likes.webp" class="icon">
+                         <span th:text="${t.likedUsers.size()}"></span>
+                            </span>
                 </div>
             </div>
         </div>

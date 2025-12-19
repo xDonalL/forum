@@ -35,10 +35,6 @@ public class TopicService {
         return topicRepository.save(topic);
     }
 
-    public List<Topic> getAll() {
-        return topicRepository.getAll();
-    }
-
     public Topic get(Integer id) {
         return checkNotFound(topicRepository.get(id), "topic with id= " + id + " not exist");
     }
@@ -62,5 +58,28 @@ public class TopicService {
         Topic topic = topicRepository.get(topicId);
         checkNotFound(topic, "topic with id= " + topicId + " not exist");
         return topic.getLikedUsers().remove(user);
+    }
+
+    public List<Topic> getAllSorted(String sort) {
+        List<Topic> topics;
+
+        if (sort == null) {
+            return topics = topicRepository.getAll();
+        }
+        switch (sort) {
+            case "dateAsc":
+                topics = topicRepository.getTopicsByDateAsc();
+                break;
+            case "likes":
+                topics = topicRepository.getTopicsByLikes();
+                break;
+            default:
+                topics = topicRepository.getAll();
+        }
+        return topics;
+    }
+
+    public List<Topic> search(String q) {
+        return topicRepository.getTopicsByTopicName(q);
     }
 }

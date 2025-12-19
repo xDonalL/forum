@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "forum_topics")
+@Table(name = "topics")
 public class Topic extends AbstractBaseEntity {
 
     public Topic(String title, String content, User author) {
@@ -39,8 +39,8 @@ public class Topic extends AbstractBaseEntity {
     @JoinColumn(name = "author_id")
     private User author;
 
-    @Column(name = "date_created", nullable = false, updatable = false)
-    private final LocalDateTime dateCreated = LocalDateTime.now();
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<TopicComment> comments = new ArrayList<>();
