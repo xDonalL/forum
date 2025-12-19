@@ -128,7 +128,7 @@ class UserServiceTest {
 
         when(userRepository.getAll()).thenReturn(list);
 
-        List<User> all = userService.getAll();
+        List<User> all = userService.filterUsers(null);
 
         assertEquals(list.size(), all.size());
     }

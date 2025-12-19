@@ -1,5 +1,6 @@
 package com.forum.forum.repository.user;
 
+import com.forum.forum.model.Role;
 import com.forum.forum.model.User;
 import org.springframework.stereotype.Repository;
 
@@ -41,6 +42,14 @@ public class DataJpaUserRepository implements UserRepository {
 
     @Override
     public List<User> getAll() {
-        return crudRepository.findAll();
+        return crudRepository.findAllByOrderByRegisteredAtDesc();
+    }
+
+    public List<User> getByRole(String role) {
+        return crudRepository.findByRoles(Role.valueOf(role.toUpperCase()));
+    }
+
+    public List<User> getBanned() {
+        return crudRepository.findByEnabledFalse();
     }
 }

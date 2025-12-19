@@ -7,7 +7,10 @@ import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -53,7 +56,7 @@ public class User extends AbstractBaseEntity {
     private boolean enabled;
 
     @Column(name = "register", nullable = false, updatable = false)
-    private LocalDateTime register = LocalDateTime.now();
+    private LocalDateTime registeredAt = LocalDateTime.now();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -73,7 +76,7 @@ public class User extends AbstractBaseEntity {
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +
-                ", register=" + register +
+                ", registeredAt=" + registeredAt +
                 ", roles=" + roles +
                 '}';
     }
@@ -84,11 +87,11 @@ public class User extends AbstractBaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         User user = (User) o;
-        return enabled == user.enabled && Objects.equals(email, user.email) && Objects.equals(name, user.name) && Objects.equals(password, user.password) && Objects.equals(register, user.register) && Objects.equals(roles, user.roles);
+        return enabled == user.enabled && Objects.equals(email, user.email) && Objects.equals(name, user.name) && Objects.equals(password, user.password) && Objects.equals(registeredAt, user.registeredAt) && Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), email, name, password, enabled, register, roles);
+        return Objects.hash(super.hashCode(), email, name, password, enabled, registeredAt, roles);
     }
 }

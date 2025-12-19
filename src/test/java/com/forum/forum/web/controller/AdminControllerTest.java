@@ -32,7 +32,7 @@ class AdminControllerTest {
 
     @Test
     void usersPage() throws Exception {
-        when(userService.getAll()).thenReturn(ALL_USERS);
+        when(userService.filterUsers(null)).thenReturn(ALL_USERS);
 
         AuthorizedUser authAdmin = new AuthorizedUser(ADMIN);
 
@@ -44,7 +44,7 @@ class AdminControllerTest {
                 .andExpect(model().attribute("users", ALL_USERS))
                 .andExpect(view().name("admin/panel"));
 
-        verify(userService).getAll();
+        verify(userService).filterUsers(null);
     }
 
     @Test

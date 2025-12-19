@@ -2,7 +2,7 @@ package com.forum.forum.service;
 
 import com.forum.forum.model.Role;
 import com.forum.forum.model.User;
-import com.forum.forum.repository.user.UserRepository;
+import com.forum.forum.repository.user.DataJpaUserRepository;
 import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.to.RegistrationUserTo;
 import com.forum.forum.util.ValidUtil;
@@ -31,7 +31,7 @@ import static com.forum.forum.util.ValidUtil.checkNotFound;
 public class UserService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private DataJpaUserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -54,8 +54,26 @@ public class UserService implements UserDetailsService {
         return checkNotFound(userRepository.get(id), "user with id= " + id + " not exist");
     }
 
-    public List<User> getAll() {
-        return userRepository.getAll();
+    public List<User> filterUsers(String filter) {
+        List<User> users;
+
+        if (filter == null) {
+            return users = userRepository.getAll();
+        }
+        switch (filter) {
+            case "banned":
+                users = userRepository.getBanned();
+                break;
+            case "admin":
+                users = userRepository.getByRole(filter);
+                break;
+            case "moderator":
+                users = userRepository.getByRole(filter);
+                break;
+            default:
+                users = userRepository.getAll();
+        }
+        return users;
     }
 
     public User update(User user, MultipartFile avatarFile) throws IOException {
