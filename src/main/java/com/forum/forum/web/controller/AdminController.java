@@ -22,9 +22,18 @@ public class AdminController {
 
     @GetMapping("/panel")
     public String usersPage(@RequestParam(required = false) String filter,
+                            @RequestParam(required = false) String type,
+                            @RequestParam(required = false) String q,
                             Model model) {
-        List<User> users = userService.filterUsers(filter);
+
+        List<User> users;
+        if (q != null && !q.isBlank()) {
+            users = userService.search(q, type);
+        } else {
+            users = userService.filterUsers(filter);
+        }
         model.addAttribute("users", users);
+
         return "admin/panel";
     }
 

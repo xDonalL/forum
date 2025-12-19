@@ -1,6 +1,7 @@
 package com.forum.forum.repository.user;
 
 import com.forum.forum.model.Role;
+import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,4 +28,8 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
     List<User> findAllByOrderByRegisteredAtDesc();
 
     List<User> findByEnabledFalse();
+
+    List<User> findByLoginContainingIgnoreCase(String q);
+
+    List<User> findByEmailContainingIgnoreCase(String q);
 }

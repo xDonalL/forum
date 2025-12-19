@@ -76,6 +76,15 @@ public class UserService implements UserDetailsService {
         return users;
     }
 
+    public List<User> search(String q, String type) {
+        List<User> users;
+        if (type.equals("email")) {
+            return users = userRepository.getByContainingEmail(q);
+        } else {
+            return users = userRepository.getByContainingLogin(q);
+        }
+    }
+
     public User update(User user, MultipartFile avatarFile) throws IOException {
         checkNotFound(userRepository.get(user.getId()), "user with id= " + user.getId() + " not exist");
 

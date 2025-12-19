@@ -52,4 +52,12 @@ public class DataJpaUserRepository implements UserRepository {
     public List<User> getBanned() {
         return crudRepository.findByEnabledFalse();
     }
+
+    public List<User> getByContainingEmail(String email) {
+        return crudRepository.findByEmailContainingIgnoreCase(email);
+    }
+
+    public List<User> getByContainingLogin(String login) {
+        return crudRepository.findByLoginContainingIgnoreCase(login);
+    }
 }

@@ -49,3 +49,8 @@ button {
 button:hover {
     background-color: #3b8ac1;
 }
+
+.search-form {
+    display: flex;
+    gap: 6px;
+}

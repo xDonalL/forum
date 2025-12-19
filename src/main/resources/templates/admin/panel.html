@@ -18,6 +18,21 @@
     <main class="content">
 
         <div class="admin-users">
+            <form method="get" th:action="@{/admin/panel}" class="search-form">
+                <input type="text"
+                       name="q"
+                       placeholder="Введите логин или email"
+                       th:value="${q}"
+                       required>
+                <button type="submit" name="type" value="login">
+                    🔍 login
+                </button>
+
+                <button type="submit" name="type" value="email">
+                    🔍 email
+                </button>
+            </form>
+
             <div class="sort-links">
                 <form method="get" th:action="@{/admin/panel}">
                     <button name="filter" value="banned">Banned</button>
