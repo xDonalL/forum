@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.forum.forum.UserTestData.AVATAR;
 import static com.forum.forum.UserTestData.USER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -71,15 +72,8 @@ class UserControllerTest {
         when(userService.getByEmail(USER.getEmail())).thenReturn(USER);
         when(userService.update(USER, null)).thenReturn(USER);
 
-        MockMultipartFile avatar = new MockMultipartFile(
-                "avatarFile",
-                "avatar.png",
-                "image/png",
-                "fake-image-content".getBytes()
-        );
-
         mockMvc.perform(multipart("/profile/edit")
-                        .file(avatar)
+                        .file(AVATAR)
                         .param("name", "newName")
                         .with(user(USER.getEmail()).roles("USER"))
                         .with(csrf()))

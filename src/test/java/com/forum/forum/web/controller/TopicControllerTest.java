@@ -69,7 +69,7 @@ class TopicControllerTest {
                         .param("title", TOPIC1.getTitle())
                         .param("content", TOPIC1.getContent()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/forum/topic"));
+                .andExpect(redirectedUrl("/topic"));
 
         verify(topicService).createTopic(TOPIC1.getTitle(), TOPIC1.getContent(), USER);
     }
@@ -82,7 +82,7 @@ class TopicControllerTest {
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authAdmin, null, authAdmin.getAuthorities()))))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/forum/topic"));
+                .andExpect(redirectedUrl("/topic"));
     }
 
     @Test
@@ -93,7 +93,7 @@ class TopicControllerTest {
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authModer, null, authModer.getAuthorities()))))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/forum/topic"));
+                .andExpect(redirectedUrl("/topic"));
     }
 
     @Test

@@ -62,7 +62,7 @@ class TopicCommentControllerTest {
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authorizedAdmin, null, authorizedAdmin.getAuthorities()))))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/forum/topic/" + TOPIC1_ID));
+                .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
     }
 
     @Test
@@ -74,7 +74,7 @@ class TopicCommentControllerTest {
                         .with(authentication(new UsernamePasswordAuthenticationToken(
                                 authorizedModer, null, authorizedModer.getAuthorities()))))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/forum/topic/" + TOPIC1_ID));
+                .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
     }
 
     @Test

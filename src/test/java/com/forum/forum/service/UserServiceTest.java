@@ -1,7 +1,7 @@
 package com.forum.forum.service;
 
 import com.forum.forum.model.User;
-import com.forum.forum.repository.user.UserRepository;
+import com.forum.forum.repository.user.DataJpaUserRepository;
 import com.forum.forum.to.RegistrationUserTo;
 import com.forum.forum.util.exception.EmailAlreadyExistsException;
 import com.forum.forum.util.exception.LoginAlreadyExistsException;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 class UserServiceTest {
 
     @Mock
-    private UserRepository userRepository;
+    private DataJpaUserRepository userRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -138,8 +138,7 @@ class UserServiceTest {
         User newUser = getNew();
         when(userRepository.save(any(User.class))).thenReturn(newUser);
 
-        User registerUser = userService.register(new RegistrationUserTo(
-                newUser.getEmail(), newUser.getLogin(), newUser.getPassword(), newUser.getPassword()));
+        User registerUser = userService.register(new RegistrationUserTo(newUser));
 
         assertNotNull(newUser);
         assertEquals(newUser.getName(), registerUser.getName());
