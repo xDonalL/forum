@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "topics")
+@Table(name = "topic")
 public class Topic extends AbstractBaseEntity {
 
     public Topic(String title, String content, User author) {

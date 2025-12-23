@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityConfig.class)
 @EnableMethodSecurity
 class TopicControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -71,7 +72,7 @@ class TopicControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/topic"));
 
-        verify(topicService).createTopic(TOPIC1.getTitle(), TOPIC1.getContent(), USER);
+        verify(topicService).create(TOPIC1.getTitle(), TOPIC1.getContent(), USER);
     }
 
     @Test
@@ -111,5 +112,39 @@ class TopicControllerTest {
         mockMvc.perform(post("/topic/delete/" + TOPIC1_ID))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/login"));
+    }
+
+    @Test
+    void addLikeTopic() throws Exception {
+        AuthorizedUser authUser = new AuthorizedUser(USER);
+
+        when(userService.getCurrentUser()).thenReturn(USER);
+
+        mockMvc.perform(post("/topic/like/add")
+                        .with(authentication(
+                                new UsernamePasswordAuthenticationToken(
+                                        authUser, null, authUser.getAuthorities())))
+                        .param("id", String.valueOf(TOPIC1.getId())))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/topic/" + TOPIC1.getId()));
+
+        verify(topicService).addLike(TOPIC1.getId(), USER);
+    }
+
+    @Test
+    void deleteLikeTopic() throws Exception {
+        AuthorizedUser authUser = new AuthorizedUser(USER);
+
+        when(userService.getCurrentUser()).thenReturn(USER);
+
+        mockMvc.perform(post("/topic/like/delete")
+                        .with(authentication(
+                                new UsernamePasswordAuthenticationToken(
+                                        authUser, null, authUser.getAuthorities())))
+                        .param("id", String.valueOf(TOPIC1.getId())))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/topic/" + TOPIC1.getId()));
+
+        verify(topicService).deleteLike(TOPIC1.getId(), USER);
     }
 }

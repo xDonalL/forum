@@ -27,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(TopicCommentController.class)
 @Import(SecurityConfig.class)
 class TopicCommentControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 

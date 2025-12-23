@@ -20,7 +20,7 @@ public class TopicService {
     private final DataJpaTopicCommentRepository commentRepository;
 
     @Transactional
-    public Topic createTopic(String title, String content, User user) {
+    public Topic create(String title, String content, User user) {
         Topic topic = new Topic();
         topic.setTitle(title);
         topic.setContent(content);
@@ -80,6 +80,6 @@ public class TopicService {
     }
 
     public List<Topic> search(String q) {
-        return topicRepository.getTopicsByTopicName(q);
+        return checkNotFound(topicRepository.getTopicsByTopicName(q), "topic with q= " + q + " not exist");
     }
 }

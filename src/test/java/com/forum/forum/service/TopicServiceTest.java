@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static com.forum.forum.ForumTopicTestData.*;
+import static com.forum.forum.UserTestData.USER;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -33,17 +34,17 @@ class TopicServiceTest {
     private TopicService topicService;
 
     @Test
-    void createTopicSuccess() {
+    void createSuccess() {
         User author = TOPIC1.getAuthor();
         Topic newTopic = getNewTopic(author);
 
         when(topicRepository.save(any(Topic.class)))
                 .thenReturn(newTopic);
 
-        Topic savedTopic = topicService.createTopic(
+        Topic savedTopic = topicService.create(
                 newTopic.getTitle(),
                 newTopic.getContent(),
-                UserTestData.USER);
+                USER);
 
         assertNotNull(savedTopic);
         assertEquals(newTopic.getTitle(), savedTopic.getTitle());
@@ -102,5 +103,60 @@ class TopicServiceTest {
 
         assertThrows(NotFoundException.class,
                 () -> topicService.delete(TOPIC1_ID));
+    }
+
+    @Test
+    void searchTopicSuccess() {
+        String topicTitle = TOPIC1.getTitle();
+        when(topicRepository.getTopicsByTopicName(topicTitle)).thenReturn((List.of(TOPIC1)));
+
+        List<Topic> topics = topicService.search(topicTitle);
+
+        assertEquals(TOPIC1.getId(), topics.getFirst().getId());
+        verify(topicRepository).getTopicsByTopicName(topicTitle);
+    }
+
+    @Test
+    void searchTopicNotFoundException() {
+        String topicTitle = TOPIC1.getTitle();
+        when(topicRepository.getTopicsByTopicName(topicTitle)).thenReturn(null);
+
+        assertThrows(NotFoundException.class,
+                () -> topicService.search(topicTitle));
+    }
+
+    @Test
+    void addLikeSuccess() {
+        Integer topicId = TOPIC1.getId();
+        when(topicRepository.get(topicId)).thenReturn(TOPIC1);
+
+        assertTrue(topicService.addLike(topicId, USER));
+    }
+
+    @Test
+    void addLikeTopicNotFoundException() {
+        Integer topicId = TOPIC1.getId();
+        when(topicRepository.get(topicId)).thenReturn(null);
+
+        assertThrows(NotFoundException.class,
+                () -> topicService.addLike(topicId, USER));
+    }
+
+    @Test
+    void deleteLikeSuccess() {
+        Integer topicId = TOPIC1.getId();
+        when(topicRepository.get(topicId)).thenReturn(TOPIC1);
+        topicService.addLike(topicId, USER);
+
+        assertTrue(topicService.deleteLike(topicId, USER));
+    }
+
+    @Test
+    void deleteLikeTopicNotFoundException() {
+        Integer topicId = TOPIC1.getId();
+        when(topicRepository.get(topicId)).thenReturn(null);
+
+        assertThrows(NotFoundException.class,
+                () -> topicService.deleteLike(topicId, USER));
     }
 }

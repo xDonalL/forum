@@ -58,7 +58,7 @@ public class TopicController {
                             @RequestParam String content) {
 
         User user = userService.getCurrentUser();
-        topicService.createTopic(title, content, user);
+        topicService.create(title, content, user);
 
         return "redirect:/topic";
     }
