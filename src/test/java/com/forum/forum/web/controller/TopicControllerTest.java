@@ -1,5 +1,6 @@
 package com.forum.forum.web.controller;
 
+import com.forum.forum.TestUrls;
 import com.forum.forum.model.Topic;
 import com.forum.forum.security.SecurityConfig;
 import com.forum.forum.security.TopicSecurity;
@@ -46,7 +47,7 @@ class TopicControllerTest {
         List<Topic> topics = List.of(TOPIC1, TOPIC2);
         when(topicService.getAllSorted(null)).thenReturn(topics);
 
-        mockMvc.perform(get("/topic"))
+        mockMvc.perform(get(TestUrls.TOPIC_LIST))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("topics"))
                 .andExpect(model().attribute("topics", topics))
@@ -57,7 +58,7 @@ class TopicControllerTest {
     void getTopicPage_whenNotAuth_thenIsOk() throws Exception {
         when(topicService.get(TOPIC1_ID)).thenReturn(TOPIC1);
 
-        mockMvc.perform(get("/topic/" + TOPIC1_ID))
+        mockMvc.perform(get(TestUrls.topicView(TOPIC1_ID)))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("topic"))
                 .andExpect(model().attributeExists("content"))
@@ -68,24 +69,24 @@ class TopicControllerTest {
     void getAddTopic_whenUser_thenRedirectAndSuccess() throws Exception {
         when(userService.getCurrentUser()).thenReturn(USER);
 
-        mockMvc.perform(post("/topic/add")
+        mockMvc.perform(post(TestUrls.TOPIC_ADD)
                         .with(authentication(getAuthToken(USER)))
                         .param("title", TOPIC1.getTitle())
                         .param("content", TOPIC1.getContent())
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/topic"));
+                .andExpect(redirectedUrl(TestUrls.TOPIC_LIST));
 
         verify(topicService).create(TOPIC1.getTitle(), TOPIC1.getContent(), USER);
     }
 
     @Test
     void postAddTopic_whenNotAuth_thenRedirectToLogin() throws Exception {
-        mockMvc.perform(post("/topic/add")
+        mockMvc.perform(post(TestUrls.TOPIC_ADD)
                         .with(csrf())
                         .param("title", TOPIC1.getTitle())
                         .param("content", TOPIC1.getContent()))
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrlPattern(TestUrls.LOGIN_VIEW));
     }
 
     @Test
@@ -93,7 +94,7 @@ class TopicControllerTest {
         when(topicSecurity.isOwner(USER_ID)).thenReturn(true);
         when(topicService.get(TOPIC1_ID)).thenReturn(TOPIC1);
 
-        mockMvc.perform(get("/topic/edit/" + TOPIC1_ID))
+        mockMvc.perform(get(TestUrls.topicEdit(TOPIC1_ID)))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("topic"))
                 .andExpect(model().attribute("topic", TOPIC1))
@@ -106,28 +107,28 @@ class TopicControllerTest {
     void postEditTopic_whenIsOwner_thenRedirectAndSuccess() throws Exception {
         when(topicSecurity.isOwner(USER_ID)).thenReturn(true);
 
-        mockMvc.perform(post("/topic/edit/" + TOPIC1_ID)
+        mockMvc.perform(post(TestUrls.topicEdit(TOPIC1_ID))
                         .param("content", TOPIC1.getContent())
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
+                .andExpect(redirectedUrl(TestUrls.topicView(TOPIC1_ID)));
 
         verify(topicService).update(TOPIC1_ID, TOPIC1.getContent());
     }
 
     @Test
     void postEditTopic_whenNotAuth_thenRedirectToLogin() throws Exception {
-        mockMvc.perform(post("/topic/edit/" + TOPIC1_ID)
+        mockMvc.perform(post(TestUrls.topicEdit(TOPIC1_ID))
                         .param("content", TOPIC1.getContent())
                         .with(csrf()))
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrlPattern(TestUrls.LOGIN_VIEW));
     }
 
     @Test
     void postEditTopic_whenNotOwner_then() throws Exception {
         when(topicSecurity.isOwner(TOPIC1_ID)).thenReturn(false);
 
-        mockMvc.perform(post("/topic/edit/" + TOPIC1_ID)
+        mockMvc.perform(post(TestUrls.topicEdit(TOPIC1_ID))
                         .with(authentication(getAuthToken(USER)))
                         .param("content", "update"))
                 .andExpect(status().isForbidden());
@@ -135,84 +136,84 @@ class TopicControllerTest {
 
     @Test
     void postDeleteTopic_whenAdmin_thenRedirectAndSuccess() throws Exception {
-        mockMvc.perform(post("/topic/delete/" + TOPIC1_ID)
+        mockMvc.perform(post(TestUrls.topicDelete(TOPIC1_ID))
                         .with(authentication(getAuthToken(ADMIN)))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/topic"));
+                .andExpect(redirectedUrl(TestUrls.TOPIC_LIST));
 
         verify(topicService).delete(TOPIC1_ID);
     }
 
     @Test
     void postDeleteTopic_whenModer_thenRedirectAndSuccess() throws Exception {
-        mockMvc.perform(post("/topic/delete/" + TOPIC1_ID)
+        mockMvc.perform(post(TestUrls.topicDelete(TOPIC1_ID))
                         .with(authentication(getAuthToken(MODER)))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/topic"));
+                .andExpect(redirectedUrl(TestUrls.TOPIC_LIST));
 
         verify(topicService).delete(TOPIC1_ID);
     }
 
     @Test
     void postDeleteTopic_whenUser_thenForbidden() throws Exception {
-        mockMvc.perform(post("/topic/delete/" + TOPIC1_ID)
+        mockMvc.perform(post(TestUrls.topicDelete(TOPIC1_ID))
                         .with(authentication(getAuthToken(USER))))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void postDeleteTopic_whenNotAuth_thenRedirectToLogin() throws Exception {
-        mockMvc.perform(post("/topic/delete/" + TOPIC1_ID)
+        mockMvc.perform(post(TestUrls.topicDelete(TOPIC1_ID))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrlPattern(TestUrls.LOGIN_VIEW));
     }
 
     @Test
     void postAddLikeTopic_whenUser_thenRedirectAndSuccess() throws Exception {
         when(userService.getCurrentUser()).thenReturn(USER);
 
-        mockMvc.perform(post("/topic/like/add")
+        mockMvc.perform(post(TestUrls.TOPIC_LIKE_ADD)
                         .with(authentication(getAuthToken(USER)))
                         .param("id", String.valueOf(TOPIC1.getId()))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/topic/" + TOPIC1.getId()));
+                .andExpect(redirectedUrl(TestUrls.topicView(TOPIC1_ID)));
 
         verify(topicService).addLike(TOPIC1.getId(), USER);
     }
 
     @Test
     void postAddLikeTopic_whenNotAuth_thenRedirectToLogin() throws Exception {
-        mockMvc.perform(post("/topic/like/add")
+        mockMvc.perform(post(TestUrls.TOPIC_LIKE_ADD)
                         .param("id", String.valueOf(TOPIC1.getId()))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrlPattern(TestUrls.LOGIN_VIEW));
     }
 
     @Test
     void postDeleteLikeTopic_whenUser_thenRedirectAndSuccess() throws Exception {
         when(userService.getCurrentUser()).thenReturn(USER);
 
-        mockMvc.perform(post("/topic/like/delete")
+        mockMvc.perform(post(TestUrls.TOPIC_LIKE_DELETE)
                         .with(authentication(getAuthToken(USER)))
                         .param("id", String.valueOf(TOPIC1.getId()))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/topic/" + TOPIC1.getId()));
+                .andExpect(redirectedUrl(TestUrls.topicView(TOPIC1_ID)));
 
         verify(topicService).deleteLike(TOPIC1.getId(), USER);
     }
 
     @Test
     void postDeleteLikeTopic_whenNotAuth_thenRedirectToLogin() throws Exception {
-        mockMvc.perform(post("/topic/like/delete")
+        mockMvc.perform(post(TestUrls.TOPIC_LIKE_DELETE)
                         .param("id", String.valueOf(TOPIC1.getId()))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrlPattern(TestUrls.LOGIN_VIEW));
     }
 }

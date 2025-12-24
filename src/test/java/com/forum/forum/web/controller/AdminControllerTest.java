@@ -1,5 +1,6 @@
 package com.forum.forum.web.controller;
 
+import com.forum.forum.TestUrls;
 import com.forum.forum.security.SecurityConfig;
 import com.forum.forum.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ class AdminControllerTest {
     void getShowUsersPanel_whenAdmin_thenIsOk() throws Exception {
         when(userService.filterUsers(null)).thenReturn(ALL_USERS);
 
-        mockMvc.perform(get("/admin/panel")
+        mockMvc.perform(get(TestUrls.ADMIN_PANEL)
                         .with(authentication(getAuthToken(ADMIN))))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("users"))
@@ -45,63 +46,63 @@ class AdminControllerTest {
 
     @Test
     void getShowUsersPanel_whenUser_thenForbidden() throws Exception {
-        mockMvc.perform(get("/admin/panel")
+        mockMvc.perform(get(TestUrls.ADMIN_PANEL)
                         .with(authentication(getAuthToken(USER))))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void getShowUsersPanel_whenNotAuthorized_thenRedirectLogin() throws Exception {
-        mockMvc.perform(get("/admin/panel"))
-                .andExpect(redirectedUrlPattern("**/login"));
+        mockMvc.perform(get(TestUrls.ADMIN_PANEL))
+                .andExpect(redirectedUrlPattern(TestUrls.LOGIN_VIEW));
     }
 
     @Test
     void postBanUser_whenAdmin_thenSuccess() throws Exception {
-        mockMvc.perform(post("/admin/ban/" + USER_ID)
+        mockMvc.perform(post(TestUrls.adminBan(USER_ID))
                         .with(authentication(getAuthToken(ADMIN)))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/panel"));
+                .andExpect(redirectedUrl(TestUrls.ADMIN_PANEL));
 
         verify(userService).banUser(USER_ID);
     }
 
     @Test
     void postBanUser_whenUser_thenForbidden() throws Exception {
-        mockMvc.perform(post("/admin/ban/" + USER_ID)
+        mockMvc.perform(post(TestUrls.adminBan(USER_ID))
                         .with(authentication(getAuthToken(USER))))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void postBanUser_whenModer_thenForbidden() throws Exception {
-        mockMvc.perform(post("/admin/ban/" + USER_ID)
+        mockMvc.perform(post(TestUrls.adminBan(USER_ID))
                         .with(authentication(getAuthToken(MODER))))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void postUnbanUser_whenAdmin_thenSuccess() throws Exception {
-        mockMvc.perform(post("/admin/unban/" + USER_ID)
+        mockMvc.perform(post(TestUrls.adminUnban(USER_ID))
                         .with(authentication(getAuthToken(ADMIN)))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/panel"));
+                .andExpect(redirectedUrl(TestUrls.ADMIN_PANEL));
 
         verify(userService).unbanUser(USER_ID);
     }
 
     @Test
     void postUnbanUser_whenUser_thenForbidden() throws Exception {
-        mockMvc.perform(post("/admin/unban/" + USER_ID)
+        mockMvc.perform(post(TestUrls.adminUnban(USER_ID))
                         .with(authentication(getAuthToken(USER))))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void postUnbanUser_whenModer_thenForbidden() throws Exception {
-        mockMvc.perform(post("/admin/unban/" + USER_ID)
+        mockMvc.perform(post(TestUrls.adminUnban(USER_ID))
                         .with(authentication(getAuthToken(MODER))))
                 .andExpect(status().isForbidden());
     }

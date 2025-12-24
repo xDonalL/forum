@@ -1,5 +1,6 @@
 package com.forum.forum.web.controller;
 
+import com.forum.forum.TestUrls;
 import com.forum.forum.model.Role;
 import com.forum.forum.security.SecurityConfig;
 import com.forum.forum.security.TopicCommentSecurity;
@@ -45,53 +46,53 @@ class TopicCommentControllerTest {
     void postAddComment_whenUser_thenRedirectAndAddComment() throws Exception {
         when(userService.getCurrentUser()).thenReturn(USER);
 
-        mockMvc.perform(post("/topic/comment/add")
+        mockMvc.perform(post(TestUrls.COMMENT_ADD)
                         .with(authentication(getAuthToken(USER)))
                         .with(csrf())
                         .param("topicId", String.valueOf(TOPIC1_ID))
                         .param("comment", TOPIC1.getContent()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
+                .andExpect(redirectedUrl(TestUrls.topicView(TOPIC1_ID)));
 
         verify(commentService).add(TOPIC1_ID, USER, TOPIC1.getContent());
     }
 
     @Test
     void postAddComment_whenNotAuth_thenRedirectToLogin() throws Exception {
-        mockMvc.perform(post("/topic/comment/add")
+        mockMvc.perform(post(TestUrls.COMMENT_ADD)
                         .with(csrf())
                         .param("topicId", String.valueOf(TOPIC1_ID))
                         .param("comment", TOPIC1.getContent()))
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrlPattern(TestUrls.LOGIN_VIEW));
     }
 
     @Test
     void postDeleteComment_whenAdmin_thenRedirectAndSuccess() throws Exception {
-        mockMvc.perform(post("/topic/comment/delete/" + COMMENT1_ID)
+        mockMvc.perform(post(TestUrls.commentDelete(TOPIC1_ID))
                         .with(authentication(getAuthToken(ADMIN)))
                         .with(csrf())
                         .param("topicId", String.valueOf(TOPIC1_ID)))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
+                .andExpect(redirectedUrl(TestUrls.topicView(TOPIC1_ID)));
 
         verify(commentService).delete(COMMENT1_ID);
     }
 
     @Test
     void postDeleteComment_whenModer_thenRedirectAndSuccess() throws Exception {
-        mockMvc.perform(post("/topic/comment/delete/" + COMMENT1_ID)
+        mockMvc.perform(post(TestUrls.commentDelete(COMMENT1_ID))
                         .with(authentication(getAuthToken(MODER)))
                         .with(csrf())
                         .param("topicId", String.valueOf(TOPIC1_ID)))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
+                .andExpect(redirectedUrl(TestUrls.topicView(TOPIC1_ID)));
 
         verify(commentService).delete(COMMENT1_ID);
     }
 
     @Test
     void postDeleteComment_whenUser_thenForbidden() throws Exception {
-        mockMvc.perform(post("/topic/comment/delete/" + COMMENT1_ID)
+        mockMvc.perform(post(TestUrls.commentDelete(COMMENT1_ID))
                         .with(authentication(getAuthToken(USER)))
                         .with(csrf())
                         .param("topicId", String.valueOf(TOPIC1_ID)))
@@ -100,10 +101,10 @@ class TopicCommentControllerTest {
 
     @Test
     void postDeleteComment_whenNotAuth_thenRedirectToLogin() throws Exception {
-        mockMvc.perform(post("/topic/comment/delete/" + COMMENT1_ID)
+        mockMvc.perform(post(TestUrls.commentDelete(COMMENT1_ID))
                         .with(csrf())
                         .param("topicId", String.valueOf(TOPIC1_ID)))
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrlPattern(TestUrls.LOGIN_VIEW));
     }
 
     @Test
@@ -112,12 +113,12 @@ class TopicCommentControllerTest {
 
         when(commentSecurity.isOwner(COMMENT1_ID)).thenReturn(true);
 
-        mockMvc.perform(post("/topic/comment/edit/" + COMMENT1_ID)
+        mockMvc.perform(post(TestUrls.commentEdit(TOPIC1_ID))
                         .param("text", updateComment)
                         .param("topicId", TOPIC1_ID.toString())
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
+                .andExpect(redirectedUrl(TestUrls.topicView(TOPIC1_ID)));
 
         verify(commentService).update(COMMENT1_ID, updateComment);
     }
@@ -126,7 +127,7 @@ class TopicCommentControllerTest {
     void postEditComment_whenNotOwner_thenForbidden() throws Exception {
         when(commentSecurity.isOwner(COMMENT1_ID)).thenReturn(false);
 
-        mockMvc.perform(post("/topic/comment/edit/" + COMMENT1_ID)
+        mockMvc.perform(post(TestUrls.commentEdit(TOPIC1_ID))
                         .with(authentication(getAuthToken(USER)))
                         .param("text", "updated")
                         .param("topicId", TOPIC1_ID.toString()))
@@ -135,11 +136,11 @@ class TopicCommentControllerTest {
 
     @Test
     void postEditComment_whenNotAuth_thenRedirectToLogin() throws Exception {
-        mockMvc.perform(post("/topic/comment/edit/" + COMMENT1_ID)
+        mockMvc.perform(post(TestUrls.commentEdit(TOPIC1_ID))
                         .param("text", "updated")
                         .param("topicId", TOPIC1_ID.toString())
                         .with(csrf()))
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrlPattern(TestUrls.LOGIN_VIEW));
     }
 
     @Test
@@ -147,7 +148,7 @@ class TopicCommentControllerTest {
         when(commentSecurity.isOwner(COMMENT1_ID)).thenReturn(true);
         when(commentService.get(COMMENT1_ID)).thenReturn(COMMENT1);
 
-        mockMvc.perform(get("/topic/comment/edit/" + COMMENT1_ID))
+        mockMvc.perform(get(TestUrls.commentEdit(COMMENT1_ID)))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("comment"))
                 .andExpect(model().attribute("comment", COMMENT1))
@@ -161,7 +162,7 @@ class TopicCommentControllerTest {
         when(commentSecurity.isOwner(COMMENT1_ID)).thenReturn(false);
         when(commentService.get(COMMENT1_ID)).thenReturn(COMMENT1);
 
-        mockMvc.perform(get("/topic/comment/edit/" + COMMENT1_ID)
+        mockMvc.perform(get(TestUrls.commentEdit(COMMENT1_ID))
                         .with(user(USER.getEmail()).roles(String.valueOf(Role.USER))))
                 .andExpect(status().isForbidden());
 
@@ -171,13 +172,13 @@ class TopicCommentControllerTest {
     void postAddLikeComment_whenUser_thenRedirectAndSuccess() throws Exception {
         when(userService.getCurrentUser()).thenReturn(USER);
 
-        mockMvc.perform(post("/topic/comment/like/add")
+        mockMvc.perform(post(TestUrls.COMMENT_LIKE_ADD)
                         .with(authentication(getAuthToken(USER)))
                         .with(csrf())
                         .param("id", String.valueOf(COMMENT1_ID))
                         .param("topicId", String.valueOf(TOPIC1_ID)))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
+                .andExpect(redirectedUrl(TestUrls.topicView(TOPIC1_ID)));
 
         verify(commentService).addLike(COMMENT1_ID, USER);
 
@@ -185,36 +186,36 @@ class TopicCommentControllerTest {
 
     @Test
     void postAddLikeComment_whenNotAuth_thenRedirectToLogin() throws Exception {
-        mockMvc.perform(post("/topic/comment/like/add")
+        mockMvc.perform(post(TestUrls.COMMENT_LIKE_ADD)
                         .with(csrf())
                         .param("id", String.valueOf(COMMENT1_ID))
                         .param("topicId", String.valueOf(TOPIC1_ID)))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrlPattern(TestUrls.LOGIN_VIEW));
     }
 
     @Test
     void postDeleteLikeComment_whenUser_thenRedirectAndSuccess() throws Exception {
         when(userService.getCurrentUser()).thenReturn(USER);
 
-        mockMvc.perform(post("/topic/comment/like/delete")
+        mockMvc.perform(post(TestUrls.COMMENT_LIKE_DELETE)
                         .with(authentication(getAuthToken(USER)))
                         .with(csrf())
                         .param("id", String.valueOf(COMMENT1_ID))
                         .param("topicId", String.valueOf(TOPIC1_ID)))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
+                .andExpect(redirectedUrl(TestUrls.topicView(TOPIC1_ID)));
 
         verify(commentService).deleteLike(COMMENT1_ID, USER);
     }
 
     @Test
     void postDeleteLikeComment_whenNotAuth_thenRedirectToLogin() throws Exception {
-        mockMvc.perform(post("/topic/comment/like/delete")
+        mockMvc.perform(post(TestUrls.COMMENT_LIKE_DELETE)
                         .with(csrf())
                         .param("id", String.valueOf(COMMENT1_ID))
                         .param("topicId", String.valueOf(TOPIC1_ID))
                         .with(csrf()))
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrlPattern(TestUrls.LOGIN_VIEW));
     }
 }
