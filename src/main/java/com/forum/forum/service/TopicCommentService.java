@@ -19,7 +19,7 @@ public class TopicCommentService {
     private final DataJpaTopicRepository topicRepository;
 
     @Transactional
-    public TopicComment addComment(Integer topicId, User author, String content) {
+    public TopicComment add(Integer topicId, User author, String content) {
         Topic topic = topicRepository.get(topicId);
 
         TopicComment msg = new TopicComment();
