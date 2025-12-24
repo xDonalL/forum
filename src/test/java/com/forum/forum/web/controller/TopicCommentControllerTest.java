@@ -1,7 +1,6 @@
 package com.forum.forum.web.controller;
 
 import com.forum.forum.model.Role;
-import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.security.SecurityConfig;
 import com.forum.forum.security.TopicCommentSecurity;
 import com.forum.forum.service.TopicCommentService;
@@ -11,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.forum.forum.AuthTestData.getAuthToken;
 import static com.forum.forum.TopicCommentTestData.COMMENT1;
 import static com.forum.forum.TopicCommentTestData.COMMENT1_ID;
 import static com.forum.forum.TopicTestData.TOPIC1;
@@ -46,12 +45,8 @@ class TopicCommentControllerTest {
     void postAddComment_whenUser_thenRedirectAndAddComment() throws Exception {
         when(userService.getCurrentUser()).thenReturn(USER);
 
-        AuthorizedUser authorizedUser = new AuthorizedUser(USER);
-
         mockMvc.perform(post("/topic/comment/add")
-                        .with(authentication(new UsernamePasswordAuthenticationToken(
-                                authorizedUser, null, authorizedUser.getAuthorities()))
-                        )
+                        .with(authentication(getAuthToken(USER)))
                         .with(csrf())
                         .param("topicId", String.valueOf(TOPIC1_ID))
                         .param("comment", TOPIC1.getContent()))
@@ -72,13 +67,10 @@ class TopicCommentControllerTest {
 
     @Test
     void postDeleteComment_whenAdmin_thenRedirectAndSuccess() throws Exception {
-        AuthorizedUser authorizedAdmin = new AuthorizedUser(ADMIN);
-
         mockMvc.perform(post("/topic/comment/delete/" + COMMENT1_ID)
+                        .with(authentication(getAuthToken(ADMIN)))
                         .with(csrf())
-                        .param("topicId", String.valueOf(TOPIC1_ID))
-                        .with(authentication(new UsernamePasswordAuthenticationToken(
-                                authorizedAdmin, null, authorizedAdmin.getAuthorities()))))
+                        .param("topicId", String.valueOf(TOPIC1_ID)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
 
@@ -87,13 +79,10 @@ class TopicCommentControllerTest {
 
     @Test
     void postDeleteComment_whenModer_thenRedirectAndSuccess() throws Exception {
-        AuthorizedUser authorizedModer = new AuthorizedUser(MODER);
-
         mockMvc.perform(post("/topic/comment/delete/" + COMMENT1_ID)
+                        .with(authentication(getAuthToken(MODER)))
                         .with(csrf())
-                        .param("topicId", String.valueOf(TOPIC1_ID))
-                        .with(authentication(new UsernamePasswordAuthenticationToken(
-                                authorizedModer, null, authorizedModer.getAuthorities()))))
+                        .param("topicId", String.valueOf(TOPIC1_ID)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
 
@@ -103,8 +92,8 @@ class TopicCommentControllerTest {
     @Test
     void postDeleteComment_whenUser_thenForbidden() throws Exception {
         mockMvc.perform(post("/topic/comment/delete/" + COMMENT1_ID)
+                        .with(authentication(getAuthToken(USER)))
                         .with(csrf())
-                        .with(user(USER.getLogin()).roles("USER"))
                         .param("topicId", String.valueOf(TOPIC1_ID)))
                 .andExpect(status().isForbidden());
     }
@@ -138,7 +127,7 @@ class TopicCommentControllerTest {
         when(commentSecurity.isOwner(COMMENT1_ID)).thenReturn(false);
 
         mockMvc.perform(post("/topic/comment/edit/" + COMMENT1_ID)
-                        .with(user(USER.getEmail()).roles(String.valueOf(Role.USER)))
+                        .with(authentication(getAuthToken(USER)))
                         .param("text", "updated")
                         .param("topicId", TOPIC1_ID.toString()))
                 .andExpect(status().isForbidden());
@@ -180,12 +169,10 @@ class TopicCommentControllerTest {
 
     @Test
     void postAddLikeComment_whenUser_thenRedirectAndSuccess() throws Exception {
-        AuthorizedUser authorizedUser = new AuthorizedUser(USER);
         when(userService.getCurrentUser()).thenReturn(USER);
 
         mockMvc.perform(post("/topic/comment/like/add")
-                        .with(authentication(new UsernamePasswordAuthenticationToken(
-                                authorizedUser, null, authorizedUser.getAuthorities())))
+                        .with(authentication(getAuthToken(USER)))
                         .with(csrf())
                         .param("id", String.valueOf(COMMENT1_ID))
                         .param("topicId", String.valueOf(TOPIC1_ID)))
@@ -208,12 +195,10 @@ class TopicCommentControllerTest {
 
     @Test
     void postDeleteLikeComment_whenUser_thenRedirectAndSuccess() throws Exception {
-        AuthorizedUser authorizedUser = new AuthorizedUser(USER);
         when(userService.getCurrentUser()).thenReturn(USER);
 
         mockMvc.perform(post("/topic/comment/like/delete")
-                        .with(authentication(new UsernamePasswordAuthenticationToken(
-                                authorizedUser, null, authorizedUser.getAuthorities())))
+                        .with(authentication(getAuthToken(USER)))
                         .with(csrf())
                         .param("id", String.valueOf(COMMENT1_ID))
                         .param("topicId", String.valueOf(TOPIC1_ID)))
