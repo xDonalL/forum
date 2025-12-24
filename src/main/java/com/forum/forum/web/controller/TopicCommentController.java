@@ -18,12 +18,13 @@ public class TopicCommentController {
     private final TopicCommentService commentService;
     private final UserService userService;
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/add")
     public String addComment(@RequestParam Integer topicId,
                              @RequestParam String comment) {
 
         User user = userService.getCurrentUser();
-        commentService.addComment(topicId, user, comment);
+        commentService.add(topicId, user, comment);
 
         return "redirect:/topic/" + topicId;
     }
@@ -38,7 +39,7 @@ public class TopicCommentController {
 
     @PreAuthorize("@commentSecurity.isOwner(#id)")
     @PostMapping("/edit/{id}")
-    public String editComment(@PathVariable("id") Integer id,
+    public String editComment(@PathVariable Integer id,
                               @RequestParam String text,
                               @RequestParam Integer topicId) {
         commentService.update(id, text);
@@ -53,16 +54,18 @@ public class TopicCommentController {
         return "redirect:/topic/" + topicId;
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/like/add")
-    public String addLikeTopic(@RequestParam Integer id,
+    public String addLikeComment(@RequestParam Integer id,
                                @RequestParam Integer topicId) {
         User user = userService.getCurrentUser();
         commentService.addLike(id, user);
         return "redirect:/topic/" + topicId;
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/like/delete")
-    public String deleteLikeTopic(@RequestParam Integer id,
+    public String deleteLikeComment(@RequestParam Integer id,
                                   @RequestParam Integer topicId) {
         User user = userService.getCurrentUser();
         commentService.deleteLike(id, user);
