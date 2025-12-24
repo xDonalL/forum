@@ -47,14 +47,15 @@ public class TopicController {
         return "topic/view";
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/add")
     public String showCreateTopicPage(Model model) {
         return "topic/add";
     }
 
-
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/add")
-    public String editTopic(@RequestParam String title,
+    public String addTopic(@RequestParam String title,
                             @RequestParam String content) {
 
         User user = userService.getCurrentUser();
@@ -86,6 +87,7 @@ public class TopicController {
         return "redirect:/topic";
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/like/add")
     public String addLikeTopic(@RequestParam Integer id) {
         User user = userService.getCurrentUser();
@@ -93,6 +95,7 @@ public class TopicController {
         return "redirect:/topic/" + id;
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/like/delete")
     public String deleteLikeTopic(@RequestParam Integer id) {
         User user = userService.getCurrentUser();
