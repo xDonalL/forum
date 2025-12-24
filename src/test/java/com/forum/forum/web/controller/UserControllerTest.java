@@ -71,7 +71,8 @@ class UserControllerTest {
         mockMvc.perform(multipart("/profile/edit")
                         .file(AVATAR)
                         .param("name", "newName")
-                        .with(user(USER.getEmail()).roles("USER")))
+                        .with(user(USER.getEmail()).roles("USER"))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/profile/" + USER.getId() + "-" + USER.getLogin()));
 

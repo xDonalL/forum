@@ -63,7 +63,8 @@ class AdminControllerTest {
     @Test
     void postBanUser_whenAdmin_thenSuccess() throws Exception {
         mockMvc.perform(post("/admin/ban/" + USER_ID)
-                        .with(user(ADMIN.getEmail()).roles(String.valueOf(Role.ADMIN))))
+                        .with(user(ADMIN.getEmail()).roles(String.valueOf(Role.ADMIN)))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/panel"));
 
@@ -87,7 +88,8 @@ class AdminControllerTest {
     @Test
     void postUnbanUser_whenAdmin_thenSuccess() throws Exception {
         mockMvc.perform(post("/admin/unban/" + USER_ID)
-                        .with(user(ADMIN.getEmail()).roles(String.valueOf(Role.ADMIN))))
+                        .with(user(ADMIN.getEmail()).roles(String.valueOf(Role.ADMIN)))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/panel"));
 

@@ -125,7 +125,8 @@ class TopicCommentControllerTest {
 
         mockMvc.perform(post("/topic/comment/edit/" + COMMENT1_ID)
                         .param("text", updateComment)
-                        .param("topicId", TOPIC1_ID.toString()))
+                        .param("topicId", TOPIC1_ID.toString())
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
 
@@ -147,7 +148,8 @@ class TopicCommentControllerTest {
     void postEditComment_whenNotAuth_thenRedirectToLogin() throws Exception {
         mockMvc.perform(post("/topic/comment/edit/" + COMMENT1_ID)
                         .param("text", "updated")
-                        .param("topicId", TOPIC1_ID.toString()))
+                        .param("topicId", TOPIC1_ID.toString())
+                        .with(csrf()))
                 .andExpect(redirectedUrlPattern("**/login"));
     }
 

@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static com.forum.forum.UserTestData.USER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -48,7 +49,8 @@ class RootControllerTest {
                         .param("email", USER.getEmail())
                         .param("login", USER.getLogin())
                         .param("password", USER.getPassword())
-                        .param("confirmPassword", USER.getPassword()))
+                        .param("confirmPassword", USER.getPassword())
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"));
 

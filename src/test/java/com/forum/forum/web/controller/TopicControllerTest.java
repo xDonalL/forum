@@ -72,7 +72,8 @@ class TopicControllerTest {
         mockMvc.perform(post("/topic/add")
                         .with(user(USER.getEmail()).roles(String.valueOf(Role.USER)))
                         .param("title", TOPIC1.getTitle())
-                        .param("content", TOPIC1.getContent()))
+                        .param("content", TOPIC1.getContent())
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/topic"));
 
@@ -107,7 +108,8 @@ class TopicControllerTest {
         when(topicSecurity.isOwner(USER_ID)).thenReturn(true);
 
         mockMvc.perform(post("/topic/edit/" + TOPIC1_ID)
-                        .param("content", TOPIC1.getContent()))
+                        .param("content", TOPIC1.getContent())
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/topic/" + TOPIC1_ID));
 
@@ -117,7 +119,8 @@ class TopicControllerTest {
     @Test
     void postEditTopic_whenNotAuth_thenRedirectToLogin() throws Exception {
         mockMvc.perform(post("/topic/edit/" + TOPIC1_ID)
-                        .param("content", TOPIC1.getContent()))
+                        .param("content", TOPIC1.getContent())
+                        .with(csrf()))
                 .andExpect(redirectedUrlPattern("**/login"));
     }
 
@@ -137,7 +140,8 @@ class TopicControllerTest {
 
         mockMvc.perform(post("/topic/delete/" + TOPIC1_ID)
                         .with(authentication(new UsernamePasswordAuthenticationToken(
-                                authAdmin, null, authAdmin.getAuthorities()))))
+                                authAdmin, null, authAdmin.getAuthorities())))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/topic"));
 
@@ -150,7 +154,8 @@ class TopicControllerTest {
 
         mockMvc.perform(post("/topic/delete/" + TOPIC1_ID)
                         .with(authentication(new UsernamePasswordAuthenticationToken(
-                                authModer, null, authModer.getAuthorities()))))
+                                authModer, null, authModer.getAuthorities())))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/topic"));
 
@@ -169,7 +174,8 @@ class TopicControllerTest {
 
     @Test
     void postDeleteTopic_whenNotAuth_thenRedirectToLogin() throws Exception {
-        mockMvc.perform(post("/topic/delete/" + TOPIC1_ID))
+        mockMvc.perform(post("/topic/delete/" + TOPIC1_ID)
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/login"));
     }
@@ -184,7 +190,8 @@ class TopicControllerTest {
                         .with(authentication(
                                 new UsernamePasswordAuthenticationToken(
                                         authUser, null, authUser.getAuthorities())))
-                        .param("id", String.valueOf(TOPIC1.getId())))
+                        .param("id", String.valueOf(TOPIC1.getId()))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/topic/" + TOPIC1.getId()));
 
@@ -194,7 +201,8 @@ class TopicControllerTest {
     @Test
     void postAddLikeTopic_whenNotAuth_thenRedirectToLogin() throws Exception {
         mockMvc.perform(post("/topic/like/add")
-                        .param("id", String.valueOf(TOPIC1.getId())))
+                        .param("id", String.valueOf(TOPIC1.getId()))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/login"));
     }
@@ -209,7 +217,8 @@ class TopicControllerTest {
                         .with(authentication(
                                 new UsernamePasswordAuthenticationToken(
                                         authUser, null, authUser.getAuthorities())))
-                        .param("id", String.valueOf(TOPIC1.getId())))
+                        .param("id", String.valueOf(TOPIC1.getId()))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/topic/" + TOPIC1.getId()));
 
@@ -219,7 +228,8 @@ class TopicControllerTest {
     @Test
     void postDeleteLikeTopic_whenNotAuth_thenRedirectToLogin() throws Exception {
         mockMvc.perform(post("/topic/like/delete")
-                        .param("id", String.valueOf(TOPIC1.getId())))
+                        .param("id", String.valueOf(TOPIC1.getId()))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/login"));
     }
