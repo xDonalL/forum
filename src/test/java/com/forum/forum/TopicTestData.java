@@ -8,7 +8,7 @@ import java.util.List;
 import static com.forum.forum.UserTestData.ADMIN;
 import static com.forum.forum.UserTestData.USER;
 
-public class ForumTopicTestData {
+public class TopicTestData {
 
     public static final Integer TOPIC1_ID = 1;
     public static final Integer TOPIC2_ID = 2;

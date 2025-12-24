@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.forum.forum.ForumCommentTestData.*;
+import static com.forum.forum.TopicCommentTestData.*;
 import static com.forum.forum.UserTestData.USER;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

@@ -4,11 +4,11 @@ import com.forum.forum.model.TopicComment;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
 
-import static com.forum.forum.ForumTopicTestData.TOPIC1;
+import static com.forum.forum.TopicTestData.TOPIC1;
 import static com.forum.forum.UserTestData.ADMIN;
 import static com.forum.forum.UserTestData.USER;
 
-public class ForumCommentTestData {
+public class TopicCommentTestData {
 
     public static final Integer COMMENT1_ID = 1;
     public static final Integer COMMENT2_ID = 2;

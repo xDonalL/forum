@@ -1,6 +1,5 @@
 package com.forum.forum.service;
 
-import com.forum.forum.UserTestData;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
@@ -15,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.forum.forum.ForumTopicTestData.*;
+import static com.forum.forum.TopicTestData.*;
 import static com.forum.forum.UserTestData.USER;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
