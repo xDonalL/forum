@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User createUser(User user) {
+    public User create(User user) {
         ValidUtil.checkIsNew(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
@@ -116,7 +116,7 @@ public class UserService implements UserDetailsService {
             throw new LoginAlreadyExistsException(registrationTo.getLogin());
         }
 
-        return createUser(new User(
+        return create(new User(
                 registrationTo.getEmail(),
                 registrationTo.getLogin(),
                 registrationTo.getPassword(),

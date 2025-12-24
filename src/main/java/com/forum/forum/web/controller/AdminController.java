@@ -19,7 +19,7 @@ public class AdminController {
     }
 
     @GetMapping("/panel")
-    public String usersPage(@RequestParam(required = false) String filter,
+    public String showUsersPanel(@RequestParam(required = false) String filter,
                             @RequestParam(required = false) String type,
                             @RequestParam(required = false) String q,
                             Model model) {

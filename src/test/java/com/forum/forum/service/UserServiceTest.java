@@ -38,11 +38,11 @@ class UserServiceTest {
     }
 
     @Test
-    void createUserSuccess() {
+    void createSuccess() {
         User newUser = getNew();
         when(userRepository.save(any(User.class))).thenReturn(newUser);
 
-        User saved = userService.createUser(newUser);
+        User saved = userService.create(newUser);
 
         assertNotNull(saved);
         assertEquals(newUser.getName(), saved.getName());

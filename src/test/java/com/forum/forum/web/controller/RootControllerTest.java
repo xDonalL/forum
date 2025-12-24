@@ -28,14 +28,14 @@ class RootControllerTest {
     private UserService userService;
 
     @Test
-    void homePage() throws Exception {
+    void getHomePage() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("home"));
     }
 
     @Test
-    void registerPage() throws Exception {
+    void getRegisterPage() throws Exception {
         mockMvc.perform(get("/register"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("registrationTo"))
@@ -43,7 +43,7 @@ class RootControllerTest {
     }
 
     @Test
-    void register() throws Exception {
+    void postRegister() throws Exception {
         mockMvc.perform(post("/register")
                         .param("email", USER.getEmail())
                         .param("login", USER.getLogin())
