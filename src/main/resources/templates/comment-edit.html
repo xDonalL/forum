@@ -1,9 +1,42 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<form th:action="@{/topic/comment/edit/{id}(id=${comment.id})}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-    <input type="hidden" name="topicId" th:value="${comment.topic.id}" />
-    <textarea name="text" th:text="${comment.comment}"></textarea>
-    <button type="submit">Сохранить</button>
-</form>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/topic-edit.css}">
+    <meta charset="UTF-8">
+    <title>Edit Comment</title>
+</head>
+<body>
+<div class="page">
+
+    <div th:replace="fragments/header :: header"></div>
+
+    <main class="content">
+        <div class="form-container">
+
+            <h2>Edit Comment</h2>
+
+            <form th:action="@{/topic/comment/edit/{id}(id=${comment.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <input type="hidden" name="topicId" th:value="${comment.topic.id}" />
+
+                <div class="form-group">
+                    <label>Comment</label>
+                    <textarea name="text" rows="6" required th:text="${comment.comment}"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Save</button>
+                    <a th:href="@{/topic/{id}(id=${comment.topic.id})}" class="btn-secondary">Cancel</a>
+                </div>
+            </form>
+
+        </div>
+    </main>
+
+    <div th:replace="fragments/footer :: footer"></div>
+</div>
+</body>
 </html>

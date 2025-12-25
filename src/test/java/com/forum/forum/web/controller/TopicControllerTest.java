@@ -108,17 +108,19 @@ class TopicControllerTest {
         when(topicSecurity.isOwner(USER_ID)).thenReturn(true);
 
         mockMvc.perform(post(TestUrls.topicEdit(TOPIC1_ID))
+                        .param("title", TOPIC1.getTitle())
                         .param("content", TOPIC1.getContent())
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(TestUrls.topicView(TOPIC1_ID)));
 
-        verify(topicService).update(TOPIC1_ID, TOPIC1.getContent());
+        verify(topicService).update(TOPIC1_ID, TOPIC1.getTitle(), TOPIC1.getContent());
     }
 
     @Test
     void postEditTopic_whenNotAuth_thenRedirectToLogin() throws Exception {
         mockMvc.perform(post(TestUrls.topicEdit(TOPIC1_ID))
+                        .param("title", TOPIC1.getTitle())
                         .param("content", TOPIC1.getContent())
                         .with(csrf()))
                 .andExpect(redirectedUrlPattern(TestUrls.LOGIN_VIEW));

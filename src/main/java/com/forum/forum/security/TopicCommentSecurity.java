@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component("commentSecurity")
 @RequiredArgsConstructor
 public class TopicCommentSecurity {
-
     private final DataJpaTopicCommentRepository commentRepository;
     private final UserService userService;
 
