@@ -47,10 +47,12 @@
             <h2 th:text="${topic.title}"></h2>
             <p th:text="${topic.content}"></p>
             <form method="post" action="/topic/like/add">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <input type="hidden" name="id" th:value="${topic.id}">
                 <button type="submit">LIKE</button>
             </form>
             <form method="post" action="/topic/like/delete">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <input type="hidden" name="id" th:value="${topic.id}">
                 <button type="submit">DISLIKE</button>
             </form>
@@ -84,6 +86,7 @@
             <form th:action="@{/topic/comment/delete/{id}(id=${c.id})}"
                   sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')"
                   method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <input type="hidden" name="topicId" th:value="${topic.id}"/>
                 <button>Удалить</button>
             </form>
@@ -93,11 +96,13 @@
                 ✏ Редактировать
             </a>
             <form method="post" action="/topic/comment/like/add">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <input type="hidden" name="id" th:value="${c.id}">
                 <input type="hidden" name="topicId" th:value="${c.topic.id}">
                 <button type="submit">LIKE</button>
             </form>
             <form method="post" action="/topic/comment/like/delete">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <input type="hidden" name="id" th:value="${c.id}">
                 <input type="hidden" name="topicId" th:value="${c.topic.id}">
                 <button type="submit">DISLIKE</button>
@@ -107,6 +112,7 @@
 
         <div class="comment-form">
             <form method="post" action="/topic/comment/add">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <input type="hidden" name="topicId" th:value="${topic.id}">
                 <textarea name="comment" placeholder="Write comment..."></textarea>
                 <button type="submit">Отправить</button>

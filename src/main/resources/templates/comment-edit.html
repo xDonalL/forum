@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <form th:action="@{/topic/comment/edit/{id}(id=${comment.id})}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     <input type="hidden" name="topicId" th:value="${comment.topic.id}" />
     <textarea name="text" th:text="${comment.comment}"></textarea>
     <button type="submit">Сохранить</button>

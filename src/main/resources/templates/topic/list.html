@@ -19,7 +19,7 @@
         <a href="/topic/add" class="btn-create-topic">Создать тему</a>
         <div class="topics-toolbar">
             <form method="get" th:action="@{/topic}" class="search-form">
-                <input type="text"
+                 <input type="text"
                        name="q"
                        placeholder="Поиск по темам..."
                        th:value="${q}">
@@ -45,6 +45,7 @@
                     <form th:action="@{/topic/delete/{id}(id=${t.id})}"
                           sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')"
                           method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                         <button>Удалить</button>
                     </form>
                 </div>
