@@ -20,9 +20,19 @@
         <div class="topic-card">
             <div class="topic-header">
                 <div class="user-info">
-                    <a th:href="@{/profile/{id}-{login}(id=${topic.author.id}, login=${topic.author.login})}">
-                        <img th:src="@{/avatars/{file}(file=${topic.author.avatar})}" class="avatar">
-                    </a>
+                    <div class="avatar-wrapper">
+                        <div class="role-badge admin" th:if="${topic.author.isAdmin()}">
+                            ADMIN
+                        </div>
+
+                        <div class="role-badge moderator" th:if="${topic.author.isModerator()}">
+                            MODERATOR
+                        </div>
+
+                        <a th:href="@{/profile/{id}-{login}(id=${topic.author.id}, login=${topic.author.login})}">
+                            <img th:src="@{/avatars/{file}(file=${topic.author.avatar})}" class="avatar">
+                        </a>
+                    </div>
                     <a th:href="@{/profile/{id}-{login}(id=${topic.author.id}, login=${topic.author.login})}">
                         <span th:text="${topic.author.login}"></span>
                     </a>
@@ -51,9 +61,19 @@
         <div th:each="c : ${content}" class="comment-card">
             <div class="comment-header">
                 <div class="user-info">
-                    <a th:href="@{/profile/{id}-{login}(id=${c.author.id}, login=${c.author.login})}">
-                        <img th:src="@{/avatars/{file}(file=${c.author.avatar})}" class="avatar">
-                    </a>
+                    <div class="avatar-wrapper">
+                        <div class="role-badge admin" th:if="${c.author.isAdmin()}">
+                            ADMIN
+                        </div>
+
+                        <div class="role-badge moderator" th:if="${c.author.isModerator()}">
+                            MODERATOR
+                        </div>
+
+                        <a th:href="@{/profile/{id}-{login}(id=${c.author.id}, login=${c.author.login})}">
+                            <img th:src="@{/avatars/{file}(file=${c.author.avatar})}" class="avatar">
+                        </a>
+                    </div>
                     <a th:href="@{/profile/{id}-{login}(id=${c.author.id}, login=${c.author.login})}">
                         <span th:text="${c.author.login}"></span>
                     </a>

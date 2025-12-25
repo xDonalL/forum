@@ -18,9 +18,18 @@
 
         <div class="profile-container">
             <div class="profile-card">
+                <div class="avatar-wrapper">
+                    <div class="role-badge admin" th:if="${user.isAdmin()}">
+                        ADMIN
+                    </div>
 
-                <div th:if="${user.avatar != null}">
-                    <img th:src="@{/avatars/{file}(file=${user.avatar})}" class="avatar">
+                    <div class="role-badge moderator" th:if="${user.isModerator}">
+                        MODERATOR
+                    </div>
+
+                    <a th:if="${user.avatar != null}">
+                        <img th:src="@{/avatars/{file}(file=${user.avatar})}" class="avatar">
+                    </a>
                 </div>
                 <div class="profile-info">
                     <div class="info-row">

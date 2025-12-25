@@ -94,4 +94,12 @@ public class User extends AbstractBaseEntity {
     public int hashCode() {
         return Objects.hash(super.hashCode(), email, name, password, enabled, registeredAt, roles);
     }
+
+    public boolean isAdmin() {
+        return roles.contains(Role.ADMIN);
+    }
+
+    public boolean isModerator() {
+        return roles.contains(Role.MODERATOR);
+    }
 }

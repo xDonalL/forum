@@ -56,7 +56,7 @@ public class TopicController {
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/add")
     public String addTopic(@RequestParam String title,
-                            @RequestParam String content) {
+                           @RequestParam String content) {
 
         User user = userService.getCurrentUser();
         topicService.create(title, content, user);
