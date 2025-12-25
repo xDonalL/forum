@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
@@ -52,7 +52,12 @@
 
             </div>
         </div>
-        <a href="/profile/edit" class="edit-btn">Edit Profile</a>
+        <a th:if="${#authorization.expression('isAuthenticated()')
+           and #authentication.principal.id == user.id}"
+           href="/profile/edit"
+           class="edit-btn">
+            Edit Profile
+        </a>
 
 
     </main>
