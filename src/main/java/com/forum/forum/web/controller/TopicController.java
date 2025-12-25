@@ -75,8 +75,9 @@ public class TopicController {
     @PreAuthorize("@topicSecurity.isOwner(#id)")
     @PostMapping("/edit/{id}")
     public String editTopic(@PathVariable Integer id,
+                            @RequestParam String title,
                             @RequestParam String content) {
-        topicService.update(id, content);
+        topicService.update(id, title, content);
         return "redirect:/topic/" + id;
     }
 

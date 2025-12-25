@@ -28,9 +28,10 @@ public class TopicService {
         return topicRepository.save(topic);
     }
 
-    public Topic update(Integer id, String content) {
+    public Topic update(Integer id, String title, String content) {
         Topic topic = topicRepository.get(id);
         checkNotFound(topic, "topic with id= " + id + " not exist");
+        topic.setTitle(title);
         topic.setContent(content);
         return topicRepository.save(topic);
     }
