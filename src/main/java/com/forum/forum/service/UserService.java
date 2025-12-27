@@ -9,6 +9,8 @@ import com.forum.forum.util.ValidUtil;
 import com.forum.forum.util.exception.EmailAlreadyExistsException;
 import com.forum.forum.util.exception.LoginAlreadyExistsException;
 import com.forum.forum.util.exception.PasswordMismatchException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,6 +32,8 @@ import static com.forum.forum.util.ValidUtil.checkNotFound;
 @Service
 public class UserService implements UserDetailsService {
 
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     private DataJpaUserRepository userRepository;
 
@@ -37,62 +41,82 @@ public class UserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     public User create(User user) {
+        log.debug("Creating user: email={}, login={}", user.getEmail(), user.getLogin());
+
         ValidUtil.checkIsNew(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+
+        User saved = userRepository.save(user);
+
+        log.info("User created: userId={}, email={}", saved.getId(), saved.getEmail());
+        return saved;
     }
 
     public boolean delete(int id) {
-        return checkNotFound(userRepository.delete(id), "user with id= " + id + " not exist");
+        log.debug("Deleting user: id={}", id);
+
+        boolean deleted = checkNotFound(userRepository.delete(id),
+                "user with id=" + id + " not exist");
+
+        log.info("User deleted: userId={}", id);
+        return deleted;
     }
 
     public User getByEmail(String email) {
-        return checkNotFound(userRepository.getByEmail(email), "user with email= " + email + " not exist");
+        log.debug("Getting user by email: {}", email);
+        return checkNotFound(userRepository.getByEmail(email),
+                "user with email=" + email + " not exist");
     }
 
     public User getUserById(int id) {
-        return checkNotFound(userRepository.get(id), "user with id= " + id + " not exist");
+        log.debug("Getting user by id: {}", id);
+        return checkNotFound(
+                userRepository.get(id),
+                "user with id=" + id + " not exist"
+        );
     }
 
     public List<User> filterUsers(String filter) {
-        List<User> users;
+        log.debug("Filtering users by '{}'", filter);
 
         if (filter == null) {
-            return users = userRepository.getAll();
+            return userRepository.getAll();
         }
-        switch (filter) {
-            case "banned":
-                users = userRepository.getBanned();
-                break;
-            case "admin":
-                users = userRepository.getByRole(filter);
-                break;
-            case "moderator":
-                users = userRepository.getByRole(filter);
-                break;
-            default:
-                users = userRepository.getAll();
-        }
-        return users;
+
+        return switch (filter) {
+            case "banned" -> userRepository.getBanned();
+            case "admin", "moderator" -> userRepository.getByRole(filter);
+            default -> userRepository.getAll();
+        };
     }
 
     public List<User> search(String q, String type) {
-        List<User> users;
-        if (type.equals("email")) {
-            return users = userRepository.getByContainingEmail(q);
-        } else {
-            return users = userRepository.getByContainingLogin(q);
-        }
+        log.debug("Searching users: query='{}', type={}", q, type);
+
+        List<User> users = type.equals("email")
+                ? userRepository.getByContainingEmail(q)
+                : userRepository.getByContainingLogin(q);
+
+        log.info("User search completed: query='{}', found={}", q, users.size());
+        return users;
     }
 
     public User update(User user, MultipartFile avatarFile) throws IOException {
-        checkNotFound(userRepository.get(user.getId()), "user with id= " + user.getId() + " not exist");
+        log.debug("Updating user: userId={}", user.getId());
+
+        checkNotFound(userRepository.get(user.getId()),
+                "user with id=" + user.getId() + " not exist");
 
         if (avatarFile != null && !avatarFile.isEmpty()) {
+            log.debug("Updating avatar: userId={}, filename={}",
+                    user.getId(), avatarFile.getOriginalFilename());
             saveAvatar(user, avatarFile);
         }
 
-        return userRepository.save(user);
+        User updated = userRepository.save(user);
+
+        log.info("User updated: userId={}", updated.getId());
+        return updated;
     }
 
     private void saveAvatar(User user, MultipartFile avatarFile) throws IOException {
@@ -103,53 +127,83 @@ public class UserService implements UserDetailsService {
         avatarFile.transferTo(uploadPath.resolve(filename));
 
         user.setAvatar(filename);
+
+        log.info("Avatar saved: userId={}, file={}", user.getId(), filename);
     }
 
     public User register(RegistrationUserTo registrationTo) {
+        log.debug("Registering user: email={}, login={}",
+                registrationTo.getEmail(), registrationTo.getLogin());
+
         if (!registrationTo.getPassword().equals(registrationTo.getConfirmPassword())) {
+            log.warn("Password mismatch during registration: email={}", registrationTo.getEmail());
             throw new PasswordMismatchException();
         }
+
         if (userRepository.getByEmail(registrationTo.getEmail()) != null) {
+            log.warn("Email already exists: {}", registrationTo.getEmail());
             throw new EmailAlreadyExistsException(registrationTo.getEmail());
         }
+
         if (userRepository.getByLogin(registrationTo.getLogin()) != null) {
+            log.warn("Login already exists: {}", registrationTo.getLogin());
             throw new LoginAlreadyExistsException(registrationTo.getLogin());
         }
 
-        return create(new User(
+        User user = create(new User(
                 registrationTo.getEmail(),
                 registrationTo.getLogin(),
                 registrationTo.getPassword(),
                 Role.USER
         ));
+
+        log.info("User registered: userId={}, email={}", user.getId(), user.getEmail());
+        return user;
     }
 
     @Transactional
     public void banUser(int id) {
+        log.debug("Banning user: userId={}", id);
+
         User user = userRepository.get(id);
-        checkNotFound(user, "user with id= " + user.getId() + " not exist");
+        checkNotFound(user, "user with id=" + id + " not exist");
+
         user.setEnabled(false);
+        log.info("User banned: userId={}", id);
     }
 
     @Transactional
     public void unbanUser(int id) {
+        log.debug("Unbanning user: userId={}", id);
+
         User user = userRepository.get(id);
-        checkNotFound(user, "user with id= " + user.getId() + " not exist");
+        checkNotFound(user, "user with id=" + id + " not exist");
+
         user.setEnabled(true);
+        log.info("User unbanned: userId={}", id);
     }
 
     @Override
     public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
+        log.debug("Authenticating user: email={}", email);
+
         User user = userRepository.getByEmail(email.toLowerCase());
         if (user == null) {
+            log.warn("Authentication failed: email={}", email);
             throw new UsernameNotFoundException("User " + email + " is not found");
         }
+
+        log.info("User authenticated: userId={}, email={}", user.getId(), email);
         return new AuthorizedUser(user);
     }
 
     public User getCurrentUser() {
         AuthorizedUser auth = (AuthorizedUser) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
-        return userRepository.get(auth.getUser().getId());
+
+        User user = userRepository.get(auth.getUser().getId());
+
+        log.debug("Current user resolved: userId={}", user.getId());
+        return user;
     }
 }
