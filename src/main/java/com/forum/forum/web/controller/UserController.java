@@ -2,7 +2,8 @@ package com.forum.forum.web.controller;
 
 import com.forum.forum.model.User;
 import com.forum.forum.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,8 @@ import java.io.IOException;
 @RequestMapping("/profile")
 public class UserController {
 
-    @Autowired
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -23,16 +25,26 @@ public class UserController {
     }
 
     @GetMapping("/{id}-{login}")
-    public String profilePage(Model model, @PathVariable Integer id) {
+    public String profilePage(Model model,
+                              @PathVariable Integer id) {
+
+        log.info("Open profile page: userId={}", id);
+
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
+
         return "profile/view";
     }
 
     @GetMapping("/edit")
     public String editProfile(Model model, Authentication auth) {
-        User user = userService.getByEmail(auth.getName());
+
+        String email = auth.getName();
+        log.info("Open profile edit page: email={}", email);
+
+        User user = userService.getByEmail(email);
         model.addAttribute("user", user);
+
         return "profile/edit";
     }
 
@@ -40,7 +52,13 @@ public class UserController {
     public String updateProfile(@ModelAttribute("user") User userForm,
                                 @RequestParam("avatarFile") MultipartFile avatarFile,
                                 Authentication auth) throws IOException {
-        User user = userService.getByEmail(auth.getName());
+
+        String email = auth.getName();
+        User user = userService.getByEmail(email);
+
+        log.info("Update profile: userId={}, avatarUploaded={}",
+                user.getId(),
+                avatarFile != null && !avatarFile.isEmpty());
 
         user.setName(userForm.getName());
 
