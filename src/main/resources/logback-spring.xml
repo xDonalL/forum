@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
+    <property name="LOG_PATH" value="logs"/>
+    <property name="LOG_FILE" value="${LOG_PATH}/application.log"/>
+
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <file>${LOG_FILE}</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/application.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <logger name="com.forum" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
     </logger>
-
-    <root level="WARN">
-        <appender-ref ref="CONSOLE"/>
-    </root>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
