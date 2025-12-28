@@ -2,15 +2,20 @@ package com.forum.forum.web.controller;
 
 import com.forum.forum.model.TopicComment;
 import com.forum.forum.model.User;
+import com.forum.forum.security.AuthorizedUser;
+import com.forum.forum.service.AdminLogService;
 import com.forum.forum.service.TopicCommentService;
 import com.forum.forum.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import static com.forum.forum.model.ActionLog.DELETE_TOPIC;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,6 +26,8 @@ public class TopicCommentController {
 
     private final TopicCommentService commentService;
     private final UserService userService;
+    private final AdminLogService adminLogService;
+    private final TopicCommentService topicCommentService;
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/add")
@@ -61,12 +68,18 @@ public class TopicCommentController {
     @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @PostMapping("/delete/{id}")
     public String deleteComment(@PathVariable Integer id,
-                                @RequestParam Integer topicId) {
-
+                                @RequestParam Integer topicId,
+                                Authentication auth) {
         log.warn("Moderator/Admin deletes comment {}, topic {}",
                 id, topicId);
 
+        String authorLogin = topicCommentService.get(id).getAuthor().getLogin();
+
         commentService.delete(id);
+
+        AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
+        adminLogService.logAction(authorizedUser.getUser().getLogin(),
+                DELETE_TOPIC, authorLogin, id);
         return "redirect:/topic/" + topicId;
     }
 

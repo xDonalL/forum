@@ -56,10 +56,8 @@ public class TopicService {
 
     public Topic get(Integer id) {
         log.debug("Getting topic: id={}", id);
-        return checkNotFound(
-                topicRepository.get(id),
-                "topic with id=" + id + " not exist"
-        );
+        return checkNotFound(topicRepository.get(id),
+                "topic with id=" + id + " not exist");
     }
 
     @Transactional

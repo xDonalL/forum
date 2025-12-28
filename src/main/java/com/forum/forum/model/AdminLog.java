@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AdminLog extends AbstractBaseEntity {
 
-    public AdminLog(String username, ActionLog action, String targetLogin, String targetId) {
+    public AdminLog(String username, ActionLog action, String targetLogin, Integer targetId) {
         this.username = username;
         this.action = action;
         this.targetLogin = targetLogin;
@@ -32,7 +32,7 @@ public class AdminLog extends AbstractBaseEntity {
     private String targetLogin;
 
     @Column(name = "target_id", nullable = false, updatable = false)
-    private String targetId;
+    private Integer targetId;
 
     @Column(name = "performedAt", nullable = false, updatable = false)
     private final LocalDateTime performedAt = LocalDateTime.now();

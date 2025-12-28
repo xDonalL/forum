@@ -4,6 +4,7 @@ import com.forum.forum.model.AdminLog;
 import com.forum.forum.model.User;
 import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.service.AdminLogService;
+import com.forum.forum.service.TopicCommentService;
 import com.forum.forum.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ public class AdminController {
     private final UserService userService;
     private final AdminLogService adminLogService;
     private final AdminLogService logService;
+    private final TopicCommentService topicCommentService;
 
     @GetMapping("/panel")
     public String showUsersPanel(@RequestParam(required = false) String filter,
@@ -54,12 +56,16 @@ public class AdminController {
     @PostMapping("/ban/{id}")
     public String banUser(@PathVariable int id,
                           Authentication auth) {
+
         log.info("Admin banning user: id={}", id);
+
+        String authorLogin = topicCommentService.get(id).getAuthor().getLogin();
+
         userService.banUser(id);
-        User user = userService.getUserById(id);
+
         AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
         logService.logAction(authorizedUser.getUser().getLogin(),
-                BAN_USER, user.getLogin(), String.valueOf(id));
+                BAN_USER, authorLogin, id);
         return "redirect:/admin/panel";
     }
 
@@ -67,12 +73,14 @@ public class AdminController {
     public String unbanUser(@PathVariable int id,
                             Authentication auth) {
         log.info("Admin unbanning user: id={}", id);
+
+        String authorLogin = topicCommentService.get(id).getAuthor().getLogin();
+
         userService.unbanUser(id);
-        User user = userService.getUserById(id);
 
         AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
         logService.logAction(authorizedUser.getUser().getLogin(),
-                UNBAN_USER, user.getLogin(), String.valueOf(id));
+                UNBAN_USER, authorLogin, id);
         return "redirect:/admin/panel";
     }
 

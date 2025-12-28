@@ -2,17 +2,22 @@ package com.forum.forum.web.controller;
 
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
+import com.forum.forum.security.AuthorizedUser;
+import com.forum.forum.service.AdminLogService;
 import com.forum.forum.service.TopicService;
 import com.forum.forum.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.forum.forum.model.ActionLog.DELETE_TOPIC;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,6 +28,7 @@ public class TopicController {
 
     private final TopicService topicService;
     private final UserService userService;
+    private final AdminLogService adminLogService;
 
     @GetMapping
     public String showTopics(@RequestParam(required = false) String sort,
@@ -103,11 +109,17 @@ public class TopicController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @PostMapping("/delete/{id}")
-    public String deleteTopic(@PathVariable Integer id) {
-
+    public String deleteTopic(@PathVariable Integer id,
+                              Authentication auth) {
         log.warn("Topic deleted: id={}", id);
 
+        String authorLogin = topicService.get(id).getAuthor().getLogin();
+
         topicService.delete(id);
+
+        AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
+        adminLogService.logAction(authorizedUser.getUser().getLogin(),
+                DELETE_TOPIC, authorLogin, id);
         return "redirect:/topic";
     }
 

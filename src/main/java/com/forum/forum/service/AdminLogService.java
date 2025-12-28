@@ -20,7 +20,7 @@ public class AdminLogService {
 
     private final DataJpaAdminLogRepository logRepository;
 
-    public AdminLog logAction(String username, ActionLog action, String targetLogin, String targetId) {
+    public AdminLog logAction(String username, ActionLog action, String targetLogin, Integer targetId) {
         AdminLog log = new AdminLog(username, action, targetLogin, targetId);
         return logRepository.save(log);
     }
