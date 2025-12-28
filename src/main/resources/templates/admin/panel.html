@@ -16,7 +16,6 @@
     <h1 class="page-title">Admin panel</h1>
 
     <main class="content">
-
         <div class="admin-users">
             <form method="get" th:action="@{/admin/panel}" class="search-form">
                 <input type="text"
@@ -30,6 +29,12 @@
 
                 <button type="submit" name="type" value="email">
                     🔍 email
+                </button>
+            </form>
+
+            <form method="get" th:action="@{/admin/log}" >
+                <button type="submit">
+                    LOG
                 </button>
             </form>
 

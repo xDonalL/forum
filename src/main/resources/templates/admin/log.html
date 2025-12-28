@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Logs</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/log.css}">
+</head>
+<body>
+<div class="page">
+
+    <div th:replace="fragments/header :: header"></div>
+
+    <main class="content">
+        <div class="logs-container">
+
+            <h2>Admin Logs</h2>
+
+            <form method="get" th:action="@{/admin/log}" class="search-form">
+                <input type="text" name="username" placeholder="Search by username"
+                       th:value="${param.username}">
+                <button type="submit" class="btn-primary">Search</button>
+            </form>
+
+            <div class="table-wrapper">
+                <table class="logs-table">
+                    <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Action</th>
+                        <th>Target Login</th>
+                        <th>Target Id</th>
+                        <th>Performed At</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="log : ${logs}">
+                        <td th:text="${log.username}"></td>
+                        <td th:text="${log.action}"></td>
+                        <td th:text="${log.targetLogin}"></td>
+                        <td th:text="${log.targetId}"></td>
+                        <td th:text="${#temporals.format(log.performedAt, 'yyyy-MM-dd HH:mm')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <div th:replace="fragments/footer :: footer"></div>
+
+</div>
+</body>
+</html>
