@@ -2,11 +2,15 @@ package com.forum.forum.web.controller;
 
 import com.forum.forum.service.UserService;
 import com.forum.forum.to.RegistrationUserTo;
+import com.forum.forum.util.exception.EmailAlreadyExistsException;
+import com.forum.forum.util.exception.LoginAlreadyExistsException;
+import com.forum.forum.util.exception.PasswordMismatchException;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,26 +42,32 @@ public class RootController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute RegistrationUserTo registrationTo,
-                           Model model) {
+    public String register(@Valid @ModelAttribute("registrationTo") RegistrationUserTo registrationTo,
+                           BindingResult bindingResult) {
 
         log.info("Registration attempt: email={}, login={}",
-                registrationTo.getEmail(),
-                registrationTo.getLogin());
+                registrationTo.getEmail(), registrationTo.getLogin());
+
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
 
         try {
             userService.register(registrationTo);
-            log.info("User successfully registered: {}",
-                    registrationTo.getEmail());
+            log.info("User successfully registered: {}", registrationTo.getEmail());
             return "redirect:/login";
 
-        } catch (IllegalArgumentException ex) {
-            log.warn("Registration failed for {}: {}",
-                    registrationTo.getEmail(),
-                    ex.getMessage());
-
-            model.addAttribute("error", ex.getMessage());
-            return "register";
+        } catch (EmailAlreadyExistsException ex) {
+            bindingResult.rejectValue(
+                    "email", "email.exists", "email is already in use");
+        } catch (LoginAlreadyExistsException ex) {
+            bindingResult.rejectValue(
+                    "login", "login.exists", "login is already in use");
+        } catch (PasswordMismatchException ex) {
+            bindingResult.rejectValue(
+                    "confirmPassword", "password.mismatch", "password mismatch");
         }
+        return "register";
     }
 }
+
