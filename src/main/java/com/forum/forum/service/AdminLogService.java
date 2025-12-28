@@ -1,5 +1,6 @@
 package com.forum.forum.service;
 
+import com.forum.forum.model.ActionLog;
 import com.forum.forum.model.AdminLog;
 import com.forum.forum.repository.admin.DataJpaAdminLogRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class AdminLogService {
 
     private final DataJpaAdminLogRepository logRepository;
 
-    public AdminLog logAction(String username, String action, String targetLogin, String targetId) {
+    public AdminLog logAction(String username, ActionLog action, String targetLogin, String targetId) {
         AdminLog log = new AdminLog(username, action, targetLogin, targetId);
         return logRepository.save(log);
     }

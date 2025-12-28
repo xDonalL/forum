@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.forum.forum.model.ActionLog.BAN_USER;
+import static com.forum.forum.model.ActionLog.UNBAN_USER;
+
 @Controller
 @AllArgsConstructor
 @RequestMapping("/admin")
@@ -56,7 +59,7 @@ public class AdminController {
         User user = userService.getUserById(id);
         AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
         logService.logAction(authorizedUser.getUser().getLogin(),
-                "BAN", user.getLogin(), String.valueOf(id));
+                BAN_USER, user.getLogin(), String.valueOf(id));
         return "redirect:/admin/panel";
     }
 
@@ -69,7 +72,7 @@ public class AdminController {
 
         AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
         logService.logAction(authorizedUser.getUser().getLogin(),
-                "UNBAN", user.getLogin(), String.valueOf(id));
+                UNBAN_USER, user.getLogin(), String.valueOf(id));
         return "redirect:/admin/panel";
     }
 

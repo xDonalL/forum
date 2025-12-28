@@ -2,6 +2,8 @@ package com.forum.forum.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AdminLog extends AbstractBaseEntity {
 
-    public AdminLog(String username, String action, String targetLogin, String targetId) {
+    public AdminLog(String username, ActionLog action, String targetLogin, String targetId) {
         this.username = username;
         this.action = action;
         this.targetLogin = targetLogin;
@@ -22,8 +24,9 @@ public class AdminLog extends AbstractBaseEntity {
     @Column(name = "username", nullable = false, updatable = false)
     private String username;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "action", nullable = false, updatable = false)
-    private String action;
+    private ActionLog action;
 
     @Column(name = "target_login", nullable = false, updatable = false)
     private String targetLogin;
