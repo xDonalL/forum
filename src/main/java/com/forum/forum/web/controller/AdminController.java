@@ -1,9 +1,14 @@
 package com.forum.forum.web.controller;
 
+import com.forum.forum.model.AdminLog;
 import com.forum.forum.model.User;
+import com.forum.forum.security.AuthorizedUser;
+import com.forum.forum.service.AdminLogService;
 import com.forum.forum.service.UserService;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,16 +16,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@AllArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
 
     private static final Logger log = LoggerFactory.getLogger(AdminController.class);
 
     private final UserService userService;
-
-    public AdminController(UserService userService) {
-        this.userService = userService;
-    }
+    private final AdminLogService adminLogService;
+    private final AdminLogService logService;
 
     @GetMapping("/panel")
     public String showUsersPanel(@RequestParam(required = false) String filter,
@@ -45,16 +49,45 @@ public class AdminController {
     }
 
     @PostMapping("/ban/{id}")
-    public String banUser(@PathVariable int id) {
+    public String banUser(@PathVariable int id,
+                          Authentication auth) {
         log.info("Admin banning user: id={}", id);
         userService.banUser(id);
+        User user = userService.getUserById(id);
+        AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
+        logService.logAction(authorizedUser.getUser().getLogin(),
+                "BAN", user.getLogin(), String.valueOf(id));
         return "redirect:/admin/panel";
     }
 
     @PostMapping("/unban/{id}")
-    public String unbanUser(@PathVariable int id) {
+    public String unbanUser(@PathVariable int id,
+                            Authentication auth) {
         log.info("Admin unbanning user: id={}", id);
         userService.unbanUser(id);
+        User user = userService.getUserById(id);
+
+        AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
+        logService.logAction(authorizedUser.getUser().getLogin(),
+                "UNBAN", user.getLogin(), String.valueOf(id));
         return "redirect:/admin/panel";
+    }
+
+    @GetMapping("/log")
+    public String showLogs(@RequestParam(required = false) String username,
+                           Model model) {
+        log.debug("Admin logs request");
+
+        List<AdminLog> logs;
+
+        if (username != null && !username.isBlank()) {
+            log.info("Search log by query: '{}'", username);
+            logs = adminLogService.searchByUsername(username);
+        } else {
+            logs = adminLogService.getAll();
+        }
+
+        model.addAttribute("logs", logs);
+        return "admin/log";
     }
 }
