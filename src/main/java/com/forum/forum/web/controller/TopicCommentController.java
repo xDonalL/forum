@@ -46,7 +46,8 @@ public class TopicCommentController {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute(
-                    "org.springframework.validation.BindingResult.commentTo", bindingResult);
+                    "org.springframework.validation.BindingResult.commentTo",
+                    bindingResult);
             redirectAttributes.addFlashAttribute("commentTo", commentTo);
             return "redirect:/topic/" + topicId;
         }

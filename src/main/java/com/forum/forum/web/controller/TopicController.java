@@ -7,6 +7,8 @@ import com.forum.forum.service.AdminLogService;
 import com.forum.forum.service.TopicService;
 import com.forum.forum.service.UserService;
 import com.forum.forum.to.TopicCommentTo;
+import com.forum.forum.to.TopicTo;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -69,22 +73,27 @@ public class TopicController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/add")
-    public String showCreateTopicPage() {
+    public String showCreateTopicPage(Model model) {
         log.debug("Open create topic page");
+        model.addAttribute("topicTo", new TopicTo());
         return "topic/add";
     }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/add")
-    public String addTopic(@RequestParam String title,
-                           @RequestParam String content) {
+    public String addTopic(@Valid @ModelAttribute("topicTo") TopicTo topicTo,
+                           BindingResult bindingResult) {
 
         User user = userService.getCurrentUser();
 
         log.info("User {} creates topic with title='{}'",
-                user.getId(), title);
+                user.getId(), topicTo.getTitle());
 
-        topicService.create(title, content, user);
+        if (bindingResult.hasErrors()) {
+            return "topic/add";
+        }
+
+        topicService.create(topicTo.getTitle(), topicTo.getContent(), user);
 
         return "redirect:/topic";
     }
@@ -96,7 +105,12 @@ public class TopicController {
         log.info("Open edit topic page: topicId={}", id);
 
         Topic topic = topicService.get(id);
-        model.addAttribute("topic", topic);
+        TopicTo topicTo = new TopicTo(
+                topic.getId(),
+                topic.getTitle(),
+                topic.getContent());
+
+        model.addAttribute("topicTo", topicTo);
 
         return "topic/edit";
     }
@@ -104,12 +118,16 @@ public class TopicController {
     @PreAuthorize("@topicSecurity.isOwner(#id)")
     @PostMapping("/edit/{id}")
     public String editTopic(@PathVariable Integer id,
-                            @RequestParam String title,
-                            @RequestParam String content) {
+                            @Valid @ModelAttribute("topicTo") TopicTo topicTo,
+                            BindingResult bindingResult) {
 
-        log.info("Update topic: id={}, newTitle='{}'", id, title);
+        log.info("Update topic: id={}, newTitle='{}'", id, topicTo.getTitle());
 
-        topicService.update(id, title, content);
+        if (bindingResult.hasErrors()) {
+            return "topic/edit";
+        }
+
+        topicService.update(id, topicTo.getTitle(), topicTo.getContent());
         return "redirect:/topic/" + id;
     }
 
