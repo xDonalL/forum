@@ -111,10 +111,23 @@
         </div>
 
         <div class="comment-form">
-            <form method="post" action="/topic/comment/add">
+            <form method="post" action="/topic/comment/add"
+                  th:object="${commentTo}">
+
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <input type="hidden" name="topicId" th:value="${topic.id}">
-                <textarea name="comment" placeholder="Write comment..."></textarea>
+
+                <div class="form-group">
+                    <label for="comment">Comment</label>
+
+                    <textarea id="comment" th:field="*{comment}" placeholder="Write comment..."></textarea>
+
+                    <div class="field-error"
+                         th:if="${#fields.hasErrors('comment')}"
+                         th:errors="*{comment}">
+                    </div>
+                </div>
+
                 <button type="submit">Отправить</button>
             </form>
         </div>

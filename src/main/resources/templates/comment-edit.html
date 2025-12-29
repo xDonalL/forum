@@ -18,19 +18,26 @@
 
             <h2>Edit Comment</h2>
 
-            <form th:action="@{/topic/comment/edit/{id}(id=${comment.id})}" method="post">
+            <form th:action="@{/topic/comment/edit/{id}(id=${commentTo.id})}"
+                  th:object="${commentTo}" method="post">
+
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                <input type="hidden" name="topicId" th:value="${comment.topic.id}" />
+
+                <input type="hidden" th:field="*{id}">
+                <input type="hidden" th:field="*{topicId}">
 
                 <div class="form-group">
-                    <label>Comment</label>
-                    <textarea name="text" rows="6" required th:text="${comment.comment}"></textarea>
+                    <label for="comment">Comment</label>
+
+                    <textarea id="comment" th:field="*{comment}" rows="6"></textarea>
+
+                    <div class="field-error"
+                         th:if="${#fields.hasErrors('comment')}"
+                         th:errors="*{comment}">
+                    </div>
                 </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary">Save</button>
-                    <a th:href="@{/topic/{id}(id=${comment.topic.id})}" class="btn-secondary">Cancel</a>
-                </div>
+                <button type="submit">Save</button>
             </form>
 
         </div>

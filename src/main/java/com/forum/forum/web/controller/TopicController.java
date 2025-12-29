@@ -6,6 +6,7 @@ import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.service.AdminLogService;
 import com.forum.forum.service.TopicService;
 import com.forum.forum.service.UserService;
+import com.forum.forum.to.TopicCommentTo;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,11 @@ public class TopicController {
         Topic topic = topicService.get(id);
         model.addAttribute("topic", topic);
         model.addAttribute("content", topic.getComments());
+
+        if (!model.containsAttribute("commentTo")) {
+            TopicCommentTo commentTo = new TopicCommentTo();
+            model.addAttribute("commentTo", commentTo);
+        }
 
         return "topic/view";
     }
