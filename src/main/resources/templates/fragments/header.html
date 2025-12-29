@@ -26,7 +26,9 @@
                    class="profile-link"
                    th:text="${#authentication.name}"></a>
                 |
-                <a th:href="@{/logout}">Выход</a>
+                  <form th:action="@{/logout}" method="post" style="display:inline">
+                      <button type="submit">Выйти</button>
+                 </form>
             </span>
 
             <span th:if="${!#authorization.expression('isAuthenticated()')}">

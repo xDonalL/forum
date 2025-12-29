@@ -1,6 +1,7 @@
 package com.forum.forum.web.controller;
 
 import com.forum.forum.service.UserService;
+import com.forum.forum.to.LoginTo;
 import com.forum.forum.to.RegistrationUserTo;
 import com.forum.forum.util.exception.EmailAlreadyExistsException;
 import com.forum.forum.util.exception.LoginAlreadyExistsException;
@@ -11,10 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/")
@@ -68,6 +66,19 @@ public class RootController {
                     "confirmPassword", "password.mismatch", "password mismatch");
         }
         return "register";
+    }
+
+    @GetMapping("/login")
+    public String loginPage(@RequestParam(required = false) String error,
+                            Model model) {
+        log.info("Open login page");
+
+        if (error != null) {
+            model.addAttribute("loginError", "Incorrect email or password");
+        }
+
+        model.addAttribute("loginTo", new LoginTo());
+        return "login";
     }
 }
 
