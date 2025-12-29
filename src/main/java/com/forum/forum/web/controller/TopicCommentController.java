@@ -33,7 +33,6 @@ public class TopicCommentController {
     private final AdminLogService adminLogService;
     private final TopicCommentService topicCommentService;
 
-    @PreAuthorize("hasRole('USER')")
     @PostMapping("/add")
     public String addComment(@RequestParam Integer topicId,
                              @Valid @ModelAttribute("commentTo") TopicCommentTo commentTo,
@@ -56,7 +55,6 @@ public class TopicCommentController {
         return "redirect:/topic/" + topicId;
     }
 
-    @PreAuthorize("@commentSecurity.isOwner(#id)")
     @GetMapping("/edit/{id}")
     public String editCommentPage(@PathVariable Integer id, Model model) {
 
@@ -73,7 +71,6 @@ public class TopicCommentController {
         return "comment-edit";
     }
 
-    @PreAuthorize("@commentSecurity.isOwner(#id)")
     @PostMapping("/edit/{id}")
     public String editComment(@PathVariable Integer id,
                               @RequestParam Integer topicId,
@@ -90,7 +87,6 @@ public class TopicCommentController {
         return "redirect:/topic/" + topicId;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @PostMapping("/delete/{id}")
     public String deleteComment(@PathVariable Integer id,
                                 @RequestParam Integer topicId,
@@ -108,7 +104,6 @@ public class TopicCommentController {
         return "redirect:/topic/" + topicId;
     }
 
-    @PreAuthorize("hasRole('USER')")
     @PostMapping("/like/add")
     public String addLikeComment(@RequestParam Integer id,
                                  @RequestParam Integer topicId) {
@@ -120,7 +115,6 @@ public class TopicCommentController {
         return "redirect:/topic/" + topicId;
     }
 
-    @PreAuthorize("hasRole('USER')")
     @PostMapping("/like/delete")
     public String deleteLikeComment(@RequestParam Integer id,
                                     @RequestParam Integer topicId) {

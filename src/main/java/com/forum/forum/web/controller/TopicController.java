@@ -12,13 +12,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -71,7 +69,6 @@ public class TopicController {
         return "topic/view";
     }
 
-    @PreAuthorize("hasRole('USER')")
     @GetMapping("/add")
     public String showCreateTopicPage(Model model) {
         log.debug("Open create topic page");
@@ -79,7 +76,6 @@ public class TopicController {
         return "topic/add";
     }
 
-    @PreAuthorize("hasRole('USER')")
     @PostMapping("/add")
     public String addTopic(@Valid @ModelAttribute("topicTo") TopicTo topicTo,
                            BindingResult bindingResult) {
@@ -98,7 +94,6 @@ public class TopicController {
         return "redirect:/topic";
     }
 
-    @PreAuthorize("@topicSecurity.isOwner(#id)")
     @GetMapping("/edit/{id}")
     public String showEditTopicPage(@PathVariable Integer id, Model model) {
 
@@ -115,7 +110,6 @@ public class TopicController {
         return "topic/edit";
     }
 
-    @PreAuthorize("@topicSecurity.isOwner(#id)")
     @PostMapping("/edit/{id}")
     public String editTopic(@PathVariable Integer id,
                             @Valid @ModelAttribute("topicTo") TopicTo topicTo,
@@ -131,7 +125,6 @@ public class TopicController {
         return "redirect:/topic/" + id;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @PostMapping("/delete/{id}")
     public String deleteTopic(@PathVariable Integer id,
                               Authentication auth) {
@@ -147,7 +140,6 @@ public class TopicController {
         return "redirect:/topic";
     }
 
-    @PreAuthorize("hasRole('USER')")
     @PostMapping("/like/add")
     public String addLikeTopic(@RequestParam Integer id) {
 
@@ -159,7 +151,6 @@ public class TopicController {
         return "redirect:/topic/" + id;
     }
 
-    @PreAuthorize("hasRole('USER')")
     @PostMapping("/like/delete")
     public String deleteLikeTopic(@RequestParam Integer id) {
 

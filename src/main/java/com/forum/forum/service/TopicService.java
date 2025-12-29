@@ -7,6 +7,7 @@ import com.forum.forum.repository.forum.DataJpaTopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class TopicService {
     private final DataJpaTopicRepository topicRepository;
     private final DataJpaTopicCommentRepository commentRepository;
 
+    @PreAuthorize("isAuthenticated()")
     @Transactional
     public Topic create(String title, String content, User user) {
         log.debug("Creating topic: title='{}', authorId={}", title, user.getId());
@@ -38,6 +40,7 @@ public class TopicService {
         return saved;
     }
 
+    @PreAuthorize("@topicSecurity.isOwner(#id)")
     @Transactional
     public Topic update(Integer id, String title, String content) {
         log.debug("Updating topic: id={}", id);
@@ -60,6 +63,7 @@ public class TopicService {
                 "topic with id=" + id + " not exist");
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @Transactional
     public boolean delete(Integer id) {
         log.debug("Deleting topic: id={}", id);
@@ -74,6 +78,7 @@ public class TopicService {
         return deleted;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Transactional
     public boolean addLike(Integer topicId, User user) {
         log.debug("Adding like: topicId={}, userId={}", topicId, user.getId());
@@ -92,6 +97,7 @@ public class TopicService {
         return added;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Transactional
     public boolean deleteLike(Integer topicId, User user) {
         log.debug("Removing like: topicId={}, userId={}", topicId, user.getId());

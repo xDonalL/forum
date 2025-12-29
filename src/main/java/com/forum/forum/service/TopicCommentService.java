@@ -1,13 +1,14 @@
 package com.forum.forum.service;
 
-import com.forum.forum.model.TopicComment;
 import com.forum.forum.model.Topic;
+import com.forum.forum.model.TopicComment;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
 import com.forum.forum.repository.forum.DataJpaTopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ public class TopicCommentService {
     private final DataJpaTopicCommentRepository commentRepository;
     private final DataJpaTopicRepository topicRepository;
 
+    @PreAuthorize("isAuthenticated()")
     @Transactional
     public TopicComment add(Integer topicId, User author, String content) {
         log.debug("Adding comment: topicId={}, authorId={}", topicId, author.getId());
@@ -42,6 +44,7 @@ public class TopicCommentService {
         return saved;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @Transactional
     public boolean delete(Integer id) {
         log.debug("Deleting comment: commentId={}", id);
@@ -64,6 +67,7 @@ public class TopicCommentService {
                 "comment with id=" + id + " not exist");
     }
 
+    @PreAuthorize("@topicSecurity.isOwner(#id)")
     public TopicComment update(Integer id, String text) {
         log.debug("Updating comment: commentId={}", id);
 
@@ -80,6 +84,7 @@ public class TopicCommentService {
         return updated;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Transactional
     public boolean addLike(Integer commentId, User user) {
         log.debug("Adding like to comment: commentId={}, userId={}",
@@ -98,6 +103,7 @@ public class TopicCommentService {
         return added;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Transactional
     public boolean deleteLike(Integer commentId, User user) {
         log.debug("Removing like from comment: commentId={}, userId={}",

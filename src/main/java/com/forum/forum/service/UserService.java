@@ -12,6 +12,7 @@ import com.forum.forum.util.exception.PasswordMismatchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -101,6 +102,7 @@ public class UserService implements UserDetailsService {
         return users;
     }
 
+    @PreAuthorize("@topicSecurity.isOwner(#user.id)")
     public User update(User user, MultipartFile avatarFile) throws IOException {
         log.debug("Updating user: userId={}", user.getId());
 
@@ -161,6 +163,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @Transactional
     public void banUser(int id) {
         log.debug("Banning user: userId={}", id);
@@ -172,6 +175,7 @@ public class UserService implements UserDetailsService {
         log.info("User banned: userId={}", id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @Transactional
     public void unbanUser(int id) {
         log.debug("Unbanning user: userId={}", id);
