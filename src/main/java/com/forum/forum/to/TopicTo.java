@@ -15,11 +15,11 @@ public class TopicTo {
 
     private Integer id;
 
-    @NotBlank(message = "should not be empty")
-    @Size(min = 4, message = "min 4 character")
+    @NotBlank(message = "{validation.notBlank}")
+    @Size(min = 4, message = "{validation.title.size}")
     private String title;
 
-    @NotBlank(message = "should not be empty")
-    @Size(min = 10, message = "min 10 character")
+    @NotBlank(message = "{validation.notBlank}")
+    @Size(min = 10, message = "{validation.content.size}")
     private String content;
 }

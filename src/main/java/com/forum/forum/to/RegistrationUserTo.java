@@ -3,7 +3,7 @@ package com.forum.forum.to;
 import com.forum.forum.model.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Getter
@@ -20,18 +20,18 @@ public class RegistrationUserTo {
         this.confirmPassword = user.getPassword();
     }
 
-    @NotBlank(message = "should not be empty")
-    @Email(message = "Incorrect email")
+    @NotBlank(message = "{validation.notBlank}")
+    @Email(message = "{validation.email}")
     private String email;
 
-    @NotBlank(message = "should not be empty")
-    @Size(min = 4, max = 20, message = "Login from 4 to 20 character")
+    @NotBlank(message = "{validation.notBlank}")
+    @Size(min = 4, max = 20, message = "{validation.login.size}")
     private String login;
 
-    @NotBlank(message = "should not be empty")
-    @Size(min = 6, message = "Password min 6 character")
+    @NotBlank(message = "{validation.notBlank}")
+    @Size(min = 6, message = "{validation.password.min}")
     private String password;
 
-    @NotBlank(message = "should not be empty")
+    @NotBlank(message = "{validation.notBlank}")
     private String confirmPassword;
 }

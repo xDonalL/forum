@@ -17,7 +17,7 @@ public class TopicCommentTo {
 
     private Integer topicId;
 
-    @NotBlank(message = "should not be empty")
-    @Size(min = 4, message = "min 4 character")
+    @NotBlank(message = "{validation.notBlank}")
+    @Size(min = 4, message = "{validation.comment.size}")
     private String comment;
 }
