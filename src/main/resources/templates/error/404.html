@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Not Found</title>
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+</head>
+<body>
+
+<div class="error-box">
+    <div class="error-code">404</div>
+
+    <div class="error-title"
+         th:text="${errorTitle}">
+        Not Found
+    </div>
+
+    <div class="error-message"
+         th:text="${errorMessage}">
+        Requested resource was not found
+    </div>
+
+    <div class="error-actions">
+        <a th:href="@{/}">Go to home</a>
+    </div>
+</div>
+
+</body>
+</html>

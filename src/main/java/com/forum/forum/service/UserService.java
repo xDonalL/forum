@@ -71,8 +71,7 @@ public class UserService implements UserDetailsService {
 
     public User getUserById(int id) {
         log.debug("Getting user by id: {}", id);
-        return checkNotFound(
-                userRepository.get(id),
+        return checkNotFound(userRepository.get(id),
                 "user with id=" + id + " not exist"
         );
     }
