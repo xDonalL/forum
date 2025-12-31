@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title th:text="#{forum.login}"/>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/base.css}">
@@ -18,7 +18,7 @@
 <main class="content">
 
     <div class="form-container">
-        <h2>Вход</h2>
+        <h2 th:text="#{forum.login}"/>
 
         <div th:if="${loginError}" class="form-error" th:text="${loginError}"></div>
 
@@ -31,7 +31,7 @@
 
             <div class="form-group">
 
-                <label>Email</label>
+                <label th:text="#{user.email}"/>
 
                 <input type="email" th:field="*{email}" required>
 
@@ -39,18 +39,18 @@
 
             <div class="form-group">
 
-                <label>Password</label>
+                <label th:text="#{user.password}"/>
 
                 <input type="password" th:field="*{password}" required>
 
             </div>
 
-            <button type="submit">Войти</button>
+            <button type="submit" th:text="#{button.login}"/>
         </form>
 
         <div class="form-footer" style="text-align:center; margin-top: 15px;">
-            <span>Нет аккаунта?</span>
-            <a th:href="@{/register}">Регистрация</a>
+            <span th:text="#{login.noAccount}"/>
+            <a th:href="@{/register}" th:text="#{forum.register}"/>
         </div>
     </div>
 

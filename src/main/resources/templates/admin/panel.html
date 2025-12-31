@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/panel.css}">
     <meta charset="UTF-8">
-    <title>Users</title>
+    <title>Admin panel</title>
 </head>
 <body>
 <div class="page">
@@ -20,7 +20,7 @@
             <form method="get" th:action="@{/admin/panel}" class="search-form">
                 <input type="text"
                        name="q"
-                       placeholder="Введите логин или email"
+                       th:placeholder="#{admin.search}"
                        th:value="${q}"
                        required>
                 <button type="submit" name="type" value="login">
@@ -32,7 +32,7 @@
                 </button>
             </form>
 
-            <form method="get" th:action="@{/admin/log}" >
+            <form method="get" th:action="@{/admin/log}">
                 <button type="submit">
                     LOG
                 </button>
@@ -50,7 +50,10 @@
                 <div class="user-main">
 
                     <div class="user-info-left">
-                        <div class="user-login" th:text="${user.login}"></div>
+                        <div class="user-email" th:text="${'id: ' + user.id}"/>
+                        <a class="user-login"
+                           th:href="@{/profile/{id}-{login}(id=${user.id}, login=${user.login})}"
+                           th:text="${user.login}"></a>
                         <div class="user-email" th:text="${user.email}"></div>
                     </div>
 

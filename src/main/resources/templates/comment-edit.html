@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/topic-edit.css}">
     <meta charset="UTF-8">
-    <title>Edit Comment</title>
+    <title th:text="#{comment.edit}"/>
 </head>
 <body>
 <div class="page">
@@ -16,7 +16,7 @@
     <main class="content">
         <div class="form-container">
 
-            <h2>Edit Comment</h2>
+            <h2 th:text="#{comment.edit}"/>
 
             <form th:action="@{/topic/comment/edit/{id}(id=${commentTo.id})}"
                   th:object="${commentTo}" method="post">
@@ -27,7 +27,7 @@
                 <input type="hidden" th:field="*{topicId}">
 
                 <div class="form-group">
-                    <label for="comment">Comment</label>
+                    <label for="comment" th:text="#{comment.content}"/>
 
                     <textarea id="comment" th:field="*{comment}" rows="6"></textarea>
 
@@ -37,7 +37,7 @@
                     </div>
                 </div>
 
-                <button type="submit">Save</button>
+                <button type="submit" th:text="#{button.save}" />
             </form>
 
         </div>

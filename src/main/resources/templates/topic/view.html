@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/topic.css}">
     <meta charset="UTF-8">
-    <title>Forum</title>
+    <title th:text="${topic.title}"/>
 </head>
 
 <body>
@@ -38,9 +38,8 @@
                     </a>
                     <a sec:authorize="isAuthenticated()"
                        th:if="${#authentication.principal.id == topic.author.id}"
-                       th:href="@{/topic/edit/{id}(id=${topic.id})}">
-                        ✏ Редактировать
-                    </a>
+                       th:href="@{/topic/edit/{id}(id=${topic.id})}"
+                       th:text="#{target.edit}">✏</a>
                 </div>
                 <span th:text="${#temporals.format(topic.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
             </div>
@@ -59,7 +58,7 @@
             <span th:text="${topic.likedUsers.size()}"></span>
         </div>
 
-        <h3>Комментарии</h3>
+        <h3 th:text="#{topic.comments}"/>
         <div th:each="c : ${content}" class="comment-card">
             <div class="comment-header">
                 <div class="user-info">
@@ -88,26 +87,25 @@
                   method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <input type="hidden" name="topicId" th:value="${topic.id}"/>
-                <button>Удалить</button>
+                <button th:text="#{button.delete}"/>
             </form>
             <a sec:authorize="isAuthenticated()"
                th:if="${#authentication.principal.id == c.author.id}"
-               th:href="@{/topic/comment/edit/{id}(id=${c.id})}">
-                ✏ Редактировать
-            </a>
-            <form method="post" action="/topic/comment/like/add">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                <input type="hidden" name="id" th:value="${c.id}">
-                <input type="hidden" name="topicId" th:value="${c.topic.id}">
-                <button type="submit">LIKE</button>
-            </form>
-            <form method="post" action="/topic/comment/like/delete">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                <input type="hidden" name="id" th:value="${c.id}">
-                <input type="hidden" name="topicId" th:value="${c.topic.id}">
-                <button type="submit">DISLIKE</button>
-            </form>
-            <span th:text="${c.likedUsers.size()}"></span>
+               th:href="@{/topic/comment/edit/{id}(id=${c.id})}"
+               th:text=✏"#{target.edit}"/>
+                <form method="post" action="/topic/comment/like/add">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <input type="hidden" name="id" th:value="${c.id}">
+                    <input type="hidden" name="topicId" th:value="${c.topic.id}">
+                    <button type="submit">LIKE</button>
+                </form>
+                <form method="post" action="/topic/comment/like/delete">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <input type="hidden" name="id" th:value="${c.id}">
+                    <input type="hidden" name="topicId" th:value="${c.topic.id}">
+                    <button type="submit">DISLIKE</button>
+                </form>
+                <span th:text="${c.likedUsers.size()}"></span>
         </div>
 
         <div class="comment-form">
@@ -118,7 +116,7 @@
                 <input type="hidden" name="topicId" th:value="${topic.id}">
 
                 <div class="form-group">
-                    <label for="comment">Comment</label>
+                    <label for="comment" th:text="#{topic.comment}"/>
 
                     <textarea id="comment" th:field="*{comment}" placeholder="Write comment..."></textarea>
 
@@ -128,7 +126,7 @@
                     </div>
                 </div>
 
-                <button type="submit">Отправить</button>
+                <button type="submit" th:text="#{button.send}"/>
             </form>
         </div>
 

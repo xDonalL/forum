@@ -19,16 +19,16 @@
             <h2>Admin Logs</h2>
 
             <form method="get" th:action="@{/admin/log}" class="search-form">
-                <input type="text" name="username" placeholder="Search by username"
+                <input type="text" name="username" th:placeholder="#{admin.searchByLogin}"
                        th:value="${param.username}">
-                <button type="submit" class="btn-primary">Search</button>
+                <button type="submit" class="btn-primary" th:text="#{button.search}"/>
             </form>
 
             <div class="table-wrapper">
                 <table class="logs-table">
                     <thead>
                     <tr>
-                        <th>Username</th>
+                        <th>Login</th>
                         <th>Action</th>
                         <th>Target Login</th>
                         <th>Target Id</th>

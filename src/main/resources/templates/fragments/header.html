@@ -12,9 +12,11 @@
         </div>
 
         <nav class="nav">
-            <a th:href="@{/}" th:classappend="${activePage=='home'} ? 'active'" class="nav-item">Главная</a>
+            <a th:href="@{/}" th:classappend="${activePage=='home'} ? 'active'" class="nav-item"
+               th:text="#{forum.home}"/>
 
-            <a th:href="@{/topic}" th:classappend="${activePage=='forum'} ? 'active'" class="nav-item">Форум</a>
+            <a th:href="@{/topic}" th:classappend="${activePage=='forum'} ? 'active'" class="nav-item"
+               th:text="#{forum.topics}"/>
 
             <a href="/admin/panel" sec:authorize="hasRole('ADMIN')" class="nav-item">Admin panel</a>
         </nav>
@@ -27,13 +29,13 @@
                    th:text="${#authentication.name}"></a>
                 |
                   <form th:action="@{/logout}" method="post" style="display:inline">
-                      <button type="submit">Выйти</button>
+                      <button type="submit" th:text="#{forum.logout}"/>
                  </form>
             </span>
 
             <span th:if="${!#authorization.expression('isAuthenticated()')}">
-                <a th:href="@{/login}">Войти</a> |
-                <a th:href="@{/register}">Регистрация</a>
+                <a th:href="@{/login}" th:text="#{forum.login}"/> |
+                <a th:href="@{/register}" th:text="#{forum.register}"/>
             </span>
         </div>
 

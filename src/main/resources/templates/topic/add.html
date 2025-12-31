@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/topic-edit.css}">
     <meta charset="UTF-8">
-    <title>Add Topic</title>
+    <title th:text="#{topic.add}"/>
 </head>
 
 <body>
@@ -17,7 +17,7 @@
     <main class="content">
         <div class="form-container">
 
-            <h2>Add topic</h2>
+            <h2 th:text="#{topic.add}"/>
 
             <form th:action="@{/topic/add}" method="post"
                   th:object="${topicTo}">
@@ -27,7 +27,7 @@
                        th:value="${_csrf.token}">
 
                 <div class="form-group">
-                    <label>Title</label>
+                    <label th:text="#{topic.add}"/>
                     <input type="text" th:field="*{title}" placeholder="Title" required>
 
                     <div class="field-error"
@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Content</label>
+                    <label th:text="#{topic.add}"/>
                     <textarea th:field="*{content}" placeholder="Content" required></textarea>
 
                     <div class="field-error"
@@ -48,8 +48,8 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary">Save</button>
-                    <a th:href="@{/topic}" class="btn-secondary">Cancel</a>
+                    <button type="submit" class="btn-primary" th:text="#{button.save}"/>
+                    <a th:href="@{/topic}" class="btn-secondary" th:text="#{button.cancel}"/>
                 </div>
 
             </form>

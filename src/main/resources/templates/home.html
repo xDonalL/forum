@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Главная</title>
+    <title th:text="#{forum.home}"/>
 
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
@@ -17,26 +17,23 @@
 
     <main class="content">
 
-<div class="home-wrapper">
-    <div class="home-box">
+        <div class="home-wrapper">
+            <div class="home-box">
 
-        <h1 class="home-title">Forum</h1>
+                <h1 class="home-title">Forum</h1>
 
-        <div class="home-content">
-            <p>
-                Стек:
-            </p>
+                <div class="home-content">
+                    <p th:text="#{forum.stack}"/>
 
-            <p>
-                Описание:
-            </p>
+                    <p th:text="#{forum.description}"/>
+
+                </div>
+
+            </div>
         </div>
+    </main>
 
-    </div>
-</div>
-</main>
-
-<div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="fragments/footer :: footer"></div>
 
 </div>
 

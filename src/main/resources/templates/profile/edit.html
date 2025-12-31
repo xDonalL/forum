@@ -5,9 +5,8 @@
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/profile-edit.css}">
-
     <meta charset="UTF-8">
-    <title>Edit Profile</title>
+    <title th:text="${user.login}"/>
 </head>
 <body>
 <div class="page">
@@ -18,17 +17,17 @@
 
         <div class="form-container">
 
-            <h2>Edit Profile</h2>
+            <h2 th:text="#{profile.edit}"/>
 
             <form th:action="@{/profile/edit}" th:object="${user}" method="post" enctype="multipart/form-data">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <div class="form-group">
-                    <label>Name:</label>
+                    <label th:text="#{user.name}"/>
                     <input type="text" th:field="*{name}" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Avatar:</label>
+                    <label th:text="#{user.avatar}" />
                     <input type="file" name="avatarFile" accept="image/*">
                     <div th:if="${user.avatar != null}">
                         <img th:src="@{/avatars/{filename}(filename=${user.avatar})}"
@@ -36,13 +35,13 @@
                     </div>
                 </div>
 
-                <button type="submit">Save</button>
+                <button type="submit" th:text="#{button.save}"/>
             </form>
 
         </div>
     </main>
 
-<div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="fragments/footer :: footer"></div>
 
 </div>
 

@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/profile.css}">
     <meta charset="UTF-8">
-    <title>User Profile</title>
+    <title th:text="${user.login}"/>
 </head>
 
 <body>
@@ -33,19 +33,19 @@
                 </div>
                 <div class="profile-info">
                     <div class="info-row">
-                        <span class="label">Name:</span>
+                        <span class="label" th:text="#{user.name}"/>
                         <span th:text="${user.name}"></span>
                     </div>
                     <div class="info-row">
-                        <span class="label">Login:</span>
+                        <span class="label" th:text="#{user.login}"/>
                         <span th:text="${user.login}"></span>
                     </div>
                     <div class="info-row">
-                        <span class="label">Email:</span>
+                        <span class="label" th:text="#{user.email}"/>
                         <span th:text="${user.email}"></span>
                     </div>
                     <div class="info-row">
-                        <span class="label">Created at:</span>
+                        <span class="label" th:text="#{user.created}"/>
                         <span th:text="${#temporals.format(user.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
                     </div>
                 </div>
@@ -55,14 +55,13 @@
         <a th:if="${#authorization.expression('isAuthenticated()')
            and #authentication.principal.id == user.id}"
            href="/profile/edit"
-           class="edit-btn">
-            Edit Profile
-        </a>
+           class="edit-btn"
+           th:text="#{profile.edit}"/>
 
 
     </main>
 
-<div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="fragments/footer :: footer"></div>
 
 </div>
 

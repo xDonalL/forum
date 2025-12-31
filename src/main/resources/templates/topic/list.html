@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/forum.css}">
     <meta charset="UTF-8">
-    <title>Forum</title>
+    <title th:text="#{topic.edit}"/>
 </head>
 
 <body>
@@ -16,12 +16,12 @@
     <div th:replace="fragments/header :: header"></div>
 
     <main class="content">
-        <a href="/topic/add" class="btn-create-topic">Создать тему</a>
+        <a href="/topic/add" class="btn-create-topic" th:text="#{topic.create}"/>
         <div class="topics-toolbar">
             <form method="get" th:action="@{/topic}" class="search-form">
                  <input type="text"
                        name="q"
-                       placeholder="Поиск по темам..."
+                       th:placeholder="#{topic.search}"
                        th:value="${q}">
                 <button type="submit">🔍</button>
 
@@ -29,9 +29,9 @@
             </form>
             <div class="sort-links">
                 <form method="get" th:action="@{/topic}">
-                    <button name="sort" value="likes">Популярные</button>
-                    <button name="sort" value="dateDesc">Новые</button>
-                    <button name="sort" value="dateAsc">Старые</button>
+                    <button name="sort" value="likes" th:text="#{button.popular}"/>
+                    <button name="sort" value="dateDesc" th:text="#{button.new}"/>
+                    <button name="sort" value="dateAsc" th:text="#{button.old}"/>
                 </form>
             </div>
         </div>
@@ -46,7 +46,7 @@
                           sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')"
                           method="post">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                        <button>Удалить</button>
+                        <button th:text="#{button.delete}"/>
                     </form>
                 </div>
 
