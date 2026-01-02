@@ -34,9 +34,13 @@
             </span>
 
             <span th:if="${!#authorization.expression('isAuthenticated()')}">
-                <a th:href="@{/login}" th:text="#{forum.login}"/> |
-                <a th:href="@{/register}" th:text="#{forum.register}"/>
+                <a th:href="@{/login}" th:text="#{forum.login}"></a> |
+                <a th:href="@{/register}" th:text="#{forum.register}"></a>
             </span>
+            |
+            <a th:href="@{${currentUrl}(lang='ru')}">RU</a>
+            |
+            <a th:href="@{${currentUrl}(lang='en')}">EN</a>
         </div>
 
     </div>
