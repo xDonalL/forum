@@ -34,7 +34,6 @@ public class DataJpaTopicCommentRepository implements BaseRepository<TopicCommen
         return commentRepository.findById(id).orElse(null);
     }
 
-    @Override
     public List<TopicComment> getAll() {
         return commentRepository.findAll();
     }

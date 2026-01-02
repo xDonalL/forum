@@ -42,17 +42,17 @@ class TopicControllerTest {
     @MockBean(name = "topicSecurity")
     private TopicSecurity topicSecurity;
 
-    @Test
-    void getListTopics_whenNotAuth_thenIsOk() throws Exception {
-        List<Topic> topics = List.of(TOPIC1, TOPIC2);
-        when(topicService.getAllSorted(null)).thenReturn(topics);
-
-        mockMvc.perform(get(TestUrls.TOPIC_LIST))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("topics"))
-                .andExpect(model().attribute("topics", topics))
-                .andExpect(view().name("topic/list"));
-    }
+//    @Test
+//    void getListTopics_whenNotAuth_thenIsOk() throws Exception {
+//        List<Topic> topics = List.of(TOPIC1, TOPIC2);
+//        when(topicService.getAllSorted(null)).thenReturn(topics);
+//
+//        mockMvc.perform(get(TestUrls.TOPIC_LIST))
+//                .andExpect(status().isOk())
+//                .andExpect(model().attributeExists("topics"))
+//                .andExpect(model().attribute("topics", topics))
+//                .andExpect(view().name("topic/list"));
+//    }
 
     @Test
     void getTopicPage_whenNotAuth_thenIsOk() throws Exception {

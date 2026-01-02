@@ -1,5 +1,6 @@
 package com.forum.forum.service;
 
+import com.forum.forum.readmodel.TopicListView;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static com.forum.forum.util.ValidUtil.checkNotFound;
@@ -114,7 +116,7 @@ public class TopicService {
         return removed;
     }
 
-    public List<Topic> getAllSorted(String sort) {
+    public List<TopicListView> getAllSorted(String sort) {
         log.debug("Getting topics sorted by '{}'", sort);
 
         if (sort == null) {
@@ -128,10 +130,10 @@ public class TopicService {
         };
     }
 
-    public List<Topic> search(String q) {
+    public List<TopicListView> search(String q) {
         log.debug("Searching topics: query='{}'", q);
 
-        List<Topic> result = topicRepository.getTopicsByTopicName(q);
+        List<TopicListView> result = topicRepository.getTopicsByTopicName(q);
         checkNotFound(result, "topic with q=" + q + " not exist");
 
         log.info("Search completed: query='{}', found={}", q, result.size());

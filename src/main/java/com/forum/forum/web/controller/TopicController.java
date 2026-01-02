@@ -1,5 +1,6 @@
 package com.forum.forum.web.controller;
 
+import com.forum.forum.readmodel.TopicListView;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
 import com.forum.forum.security.AuthorizedUser;
@@ -40,7 +41,7 @@ public class TopicController {
 
         log.debug("Show topics list: sort={}, query={}", sort, q);
 
-        List<Topic> topics;
+        List<TopicListView> topics;
 
         if (q != null && !q.isBlank()) {
             log.info("Search topics by query: '{}'", q);

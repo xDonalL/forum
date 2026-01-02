@@ -52,12 +52,12 @@
 
                 <div class="topic-footer">
                     <div class="author-info">
-                        <a th:href="@{/profile/{id}-{login}(id=${t.author.id}, login=${t.author.login})}">
-                            <img th:src="@{/avatars/{file}(file=${t.author.avatar})}" class="avatar">
+                        <a th:href="@{/profile/{id}-{login}(id=${t.authorId}, login=${t.authorLogin})}">
+                            <img th:src="@{/avatars/{file}(file=${t.authorAvatar})}" class="avatar">
                         </a>
-                        <a th:href="@{/profile/{id}-{login}(id=${t.author.id}, login=${t.author.login})}"
+                        <a th:href="@{/profile/{id}-{login}(id=${t.authorId}, login=${t.authorLogin})}"
                            class="username">
-                            <span th:text="${t.author.login}" class="username"></span>
+                            <span th:text="${t.authorLogin}" class="username"></span>
                         </a>
                     </div>
                 </div>
@@ -68,12 +68,12 @@
 
                     <span class="topic-comments">
                          <img src="/img/comments.webp" class="icon">
-                          <span th:text="${t.comments.size()}"></span>
+                          <span th:text="${t.commentsCount}"></span>
                          </span>
 
                     <span class="topic-likes">
                             <img src="/img/likes.webp" class="icon">
-                         <span th:text="${t.likedUsers.size()}"></span>
+                         <span th:text="${t.likesCount}"></span>
                             </span>
                 </div>
             </div>

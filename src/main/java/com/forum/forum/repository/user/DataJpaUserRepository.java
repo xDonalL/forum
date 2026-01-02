@@ -40,7 +40,6 @@ public class DataJpaUserRepository implements UserRepository {
         return crudRepository.getByLogin(login);
     }
 
-    @Override
     public List<User> getAll() {
         return crudRepository.findAllByOrderByRegisteredAtDesc();
     }

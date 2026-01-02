@@ -1,7 +1,5 @@
 package com.forum.forum.repository;
 
-import java.util.List;
-
 public interface BaseRepository<T> {
 
     T save(T object);
@@ -10,5 +8,4 @@ public interface BaseRepository<T> {
 
     T get(int id);
 
-    List<T> getAll();
 }
