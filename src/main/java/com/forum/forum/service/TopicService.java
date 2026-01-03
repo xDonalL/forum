@@ -3,9 +3,9 @@ package com.forum.forum.service;
 import com.forum.forum.dto.TopicCommentDto;
 import com.forum.forum.dto.TopicDto;
 import com.forum.forum.dto.TopicPageDto;
-import com.forum.forum.readmodel.TopicListView;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
+import com.forum.forum.readmodel.TopicListView;
 import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
 import com.forum.forum.repository.forum.DataJpaTopicRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.List;
 
 import static com.forum.forum.util.ValidUtil.checkNotFound;

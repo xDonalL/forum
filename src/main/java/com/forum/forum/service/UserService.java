@@ -12,6 +12,8 @@ import com.forum.forum.util.exception.PasswordMismatchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -63,12 +65,14 @@ public class UserService implements UserDetailsService {
         return deleted;
     }
 
+    @Cacheable("profile")
     public User getByEmail(String email) {
         log.debug("Getting user by email: {}", email);
         return checkNotFound(userRepository.getByEmail(email),
                 "user with email=" + email + " not exist");
     }
 
+    @Cacheable("profile")
     public User getUserById(int id) {
         log.debug("Getting user by id: {}", id);
         return checkNotFound(userRepository.get(id),
@@ -101,6 +105,7 @@ public class UserService implements UserDetailsService {
         return users;
     }
 
+    @CacheEvict(value = "profile", allEntries = true)
     @PreAuthorize("@topicSecurity.isOwner(#user.id)")
     public User update(User user, MultipartFile avatarFile) throws IOException {
         log.debug("Updating user: userId={}", user.getId());
