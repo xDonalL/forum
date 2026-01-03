@@ -6,6 +6,8 @@ import com.forum.forum.repository.admin.DataJpaAdminLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,11 +22,13 @@ public class AdminLogService {
 
     private final DataJpaAdminLogRepository logRepository;
 
+    @CacheEvict(value = "logList", allEntries = true)
     public AdminLog logAction(String username, ActionLog action, String targetLogin, Integer targetId) {
         AdminLog log = new AdminLog(username, action, targetLogin, targetId);
         return logRepository.save(log);
     }
 
+    @Cacheable("logList")
     public List<AdminLog> getAll() {
         return logRepository.getAll();
     }
