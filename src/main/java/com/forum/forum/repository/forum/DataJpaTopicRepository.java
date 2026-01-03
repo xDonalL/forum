@@ -1,5 +1,6 @@
 package com.forum.forum.repository.forum;
 
+import com.forum.forum.dto.TopicDto;
 import com.forum.forum.model.Topic;
 import com.forum.forum.readmodel.TopicListView;
 import com.forum.forum.repository.BaseRepository;
@@ -35,6 +36,10 @@ public class DataJpaTopicRepository implements BaseRepository<Topic> {
         return topicRepository.findById(id).orElse(null);
     }
 
+    public TopicDto getDetails(int id) {
+        return topicRepository.findTopicDetails(id);
+    }
+
     public List<TopicListView> getAll() {
         return topicListViewRepository.findAllByOrderByCreatedAtDesc();
     }
@@ -44,7 +49,7 @@ public class DataJpaTopicRepository implements BaseRepository<Topic> {
     }
 
     public List<TopicListView> getTopicsByLikes() {
-        return topicListViewRepository.findAllByOrderByLikesCountAsc();
+        return topicListViewRepository.findAllByOrderByLikesCountDesc();
     }
 
     public List<TopicListView> getTopicsByDateAsc() {

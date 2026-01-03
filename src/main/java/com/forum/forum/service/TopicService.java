@@ -1,5 +1,8 @@
 package com.forum.forum.service;
 
+import com.forum.forum.dto.TopicCommentDto;
+import com.forum.forum.dto.TopicDto;
+import com.forum.forum.dto.TopicPageDto;
 import com.forum.forum.readmodel.TopicListView;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
@@ -63,6 +66,14 @@ public class TopicService {
         log.debug("Getting topic: id={}", id);
         return checkNotFound(topicRepository.get(id),
                 "topic with id=" + id + " not exist");
+    }
+
+    public TopicPageDto getDto(Integer id) {
+        log.debug("Getting topic: id={}", id);
+        TopicDto topicDto = topicRepository.getDetails(id);
+        List<TopicCommentDto> commentDto = commentRepository.getListCommentByTopic(id);
+        checkNotFound(topicDto, "topic with id=" + id + " not exist");
+        return new TopicPageDto(topicDto, commentDto);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")

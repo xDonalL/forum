@@ -1,8 +1,9 @@
 package com.forum.forum.web.controller;
 
-import com.forum.forum.readmodel.TopicListView;
+import com.forum.forum.dto.TopicPageDto;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
+import com.forum.forum.readmodel.TopicListView;
 import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.service.AdminLogService;
 import com.forum.forum.service.TopicService;
@@ -58,9 +59,10 @@ public class TopicController {
     public String showTopicPage(@PathVariable Integer id, Model model) {
         log.info("Open topic page: id={}", id);
 
-        Topic topic = topicService.get(id);
-        model.addAttribute("topic", topic);
-        model.addAttribute("content", topic.getComments());
+        TopicPageDto topicPage = topicService.getDto(id);
+
+        model.addAttribute("topicDto", topicPage.topic());
+        model.addAttribute("commentsDto", topicPage.comments());
 
         if (!model.containsAttribute("commentTo")) {
             TopicCommentTo commentTo = new TopicCommentTo();

@@ -11,7 +11,7 @@ public interface TopicListViewRepository extends JpaRepository<TopicListView, In
 
     List<TopicListView> findAllByOrderByCreatedAtAsc();
 
-    List<TopicListView> findAllByOrderByLikesCountAsc();
+    List<TopicListView> findAllByOrderByLikesCountDesc();
 
     List<TopicListView> findByTitleContainingIgnoreCase(String keyword);
 }

@@ -1,5 +1,6 @@
 package com.forum.forum.repository.forum;
 
+import com.forum.forum.dto.TopicCommentDto;
 import com.forum.forum.model.TopicComment;
 import com.forum.forum.repository.BaseRepository;
 import org.springframework.stereotype.Repository;
@@ -32,6 +33,10 @@ public class DataJpaTopicCommentRepository implements BaseRepository<TopicCommen
     @Override
     public TopicComment get(int id) {
         return commentRepository.findById(id).orElse(null);
+    }
+
+    public List<TopicCommentDto> getListCommentByTopic(int id) {
+        return commentRepository.findCommentsByTopicId(id);
     }
 
     public List<TopicComment> getAll() {
