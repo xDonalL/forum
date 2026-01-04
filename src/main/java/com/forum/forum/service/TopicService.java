@@ -3,14 +3,18 @@ package com.forum.forum.service;
 import com.forum.forum.dto.TopicCommentDto;
 import com.forum.forum.dto.TopicDto;
 import com.forum.forum.dto.TopicPageDto;
+import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
-import com.forum.forum.readmodel.TopicListView;
 import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
 import com.forum.forum.repository.forum.DataJpaTopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -126,27 +130,36 @@ public class TopicService {
         return removed;
     }
 
-    public List<TopicListView> getAllSorted(String sort) {
+    public Page<TopicPagesDto> getAllSorted(int page, int size, String sort) {
         log.debug("Getting topics sorted by '{}'", sort);
 
+        Pageable pageable;
+
         if (sort == null) {
-            return topicRepository.getAll();
+            pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+            return topicRepository.getAllPage(pageable);
         }
 
-        return switch (sort) {
-            case "dateAsc" -> topicRepository.getTopicsByDateAsc();
-            case "likes" -> topicRepository.getTopicsByLikes();
-            default -> topicRepository.getAll();
+        Sort sorting = switch (sort) {
+            case "likes" -> Sort.by(Sort.Direction.DESC, "likesCount");
+            case "dateAsc" -> Sort.by("createdAt").ascending();
+            default -> Sort.by("createdAt").descending();
         };
+
+        pageable = PageRequest.of(page, size, sorting);
+
+        return topicRepository.getAllPage(pageable);
     }
 
-    public List<TopicListView> search(String q) {
+    public Page<TopicPagesDto> search(int page, int size, String q) {
         log.debug("Searching topics: query='{}'", q);
 
-        List<TopicListView> result = topicRepository.getTopicsByTopicName(q);
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<TopicPagesDto> result = topicRepository.getTopicsByTopicName(q, pageable);
         checkNotFound(result, "topic with q=" + q + " not exist");
 
-        log.info("Search completed: query='{}', found={}", q, result.size());
+        log.info("Search completed: query='{}'", q);
         return result;
     }
 }

@@ -38,11 +38,11 @@
         <div class="topics-list">
             <div class="topic-card" th:each="t : ${topics}">
                 <div class="topic-header">
-                    <a th:href="@{'topic/' + ${t.id}}"
+                    <a th:href="@{'topic/' + ${t.id()}}"
                        class="username">
-                        <h2 th:text="${t.title}"></h2>
+                        <h2 th:text="${t.title()}"></h2>
                     </a>
-                    <form th:action="@{/topic/delete/{id}(id=${t.id})}"
+                    <form th:action="@{/topic/delete/{id}(id=${t.id()})}"
                           sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')"
                           method="post">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
@@ -52,32 +52,60 @@
 
                 <div class="topic-footer">
                     <div class="author-info">
-                        <a th:href="@{/profile/{id}-{login}(id=${t.authorId}, login=${t.authorLogin})}">
-                            <img th:src="@{/avatars/{file}(file=${t.authorAvatar})}" class="avatar">
+                        <a th:href="@{/profile/{id}-{login}(id=${t.authorId()}, login=${t.authorLogin()})}">
+<!--                            <img th:src="@{/avatars/{file}(file=${t.)}" class="avatar">-->
                         </a>
-                        <a th:href="@{/profile/{id}-{login}(id=${t.authorId}, login=${t.authorLogin})}"
+                        <a th:href="@{/profile/{id}-{login}(id=${t.authorId()}, login=${t.authorLogin()})}"
                            class="username">
-                            <span th:text="${t.authorLogin}" class="username"></span>
+                            <span th:text="${t.authorLogin()}" class="username"></span>
                         </a>
                     </div>
                 </div>
                 <div class="topic-footer-bar">
                     <span class="topic-date"
-                          th:text="${#temporals.format(t.createdAt, 'yyyy-MM-dd HH:mm')}">
+                          th:text="${#temporals.format(t.createdAt(), 'yyyy-MM-dd HH:mm')}">
                           </span>
 
                     <span class="topic-comments">
                          <img src="/img/comments.webp" class="icon">
-                          <span th:text="${t.commentsCount}"></span>
+                          <span th:text="${t.commentCount()}"></span>
                          </span>
 
                     <span class="topic-likes">
                             <img src="/img/likes.webp" class="icon">
-                         <span th:text="${t.likesCount}"></span>
+                         <span th:text="${t.likesCount()}"></span>
                             </span>
                 </div>
             </div>
         </div>
+
+        <nav class="pagination" th:if="${topics.totalElements > 1}">
+            <ul>
+
+                <li th:classappend="${!topics.hasPrevious()} ? 'disabled'">
+                    <a th:if="${topics.hasPrevious()}"
+                       th:href="@{${baseUrl}(page=${topics.number - 1})}">
+                        ←
+                    </a>
+                    <span th:if="${!topics.hasPrevious()}">←</span>
+                </li>
+
+                <li th:each="i : ${#numbers.sequence(0, topics.totalPages - 1)}"
+                    th:classappend="${i == topics.number} ? 'active'">
+                    <a th:href="@{${baseUrl}(page=${i})}"
+                       th:text="${i + 1}"></a>
+                </li>
+
+                <li th:classappend="${!topics.hasNext()} ? 'disabled'">
+                    <a th:if="${topics.hasNext()}"
+                       th:href="@{${baseUrl}(page=${topics.number + 1})}">
+                        →
+                    </a>
+                    <span th:if="${!topics.hasNext()}">→</span>
+                </li>
+
+            </ul>
+        </nav>
 
     </main>
 

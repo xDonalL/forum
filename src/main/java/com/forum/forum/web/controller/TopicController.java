@@ -1,9 +1,9 @@
 package com.forum.forum.web.controller;
 
 import com.forum.forum.dto.TopicPageDto;
+import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
-import com.forum.forum.readmodel.TopicListView;
 import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.service.AdminLogService;
 import com.forum.forum.service.TopicService;
@@ -14,13 +14,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static com.forum.forum.model.ActionLog.DELETE_TOPIC;
 
@@ -38,20 +37,23 @@ public class TopicController {
     @GetMapping
     public String showTopics(@RequestParam(required = false) String sort,
                              @RequestParam(required = false) String q,
+                             @RequestParam(defaultValue = "0") int page,
                              Model model) {
 
         log.debug("Show topics list: sort={}, query={}", sort, q);
 
-        List<TopicListView> topics;
+        Page<TopicPagesDto> topics;
 
         if (q != null && !q.isBlank()) {
             log.info("Search topics by query: '{}'", q);
-            topics = topicService.search(q);
+            topics = topicService.search(page, 10, q);
         } else {
-            topics = topicService.getAllSorted(sort);
+            topics = topicService.getAllSorted(page, 10, sort);
         }
 
         model.addAttribute("topics", topics);
+        model.addAttribute("baseUrl", "/topic");
+
         return "topic/list";
     }
 

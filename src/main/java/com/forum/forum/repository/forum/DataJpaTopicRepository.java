@@ -1,9 +1,12 @@
 package com.forum.forum.repository.forum;
 
 import com.forum.forum.dto.TopicDto;
+import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
 import com.forum.forum.readmodel.TopicListView;
 import com.forum.forum.repository.BaseRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -44,19 +47,11 @@ public class DataJpaTopicRepository implements BaseRepository<Topic> {
         return topicListViewRepository.findAllByOrderByCreatedAtDesc();
     }
 
-    public List<TopicListView> getList() {
-        return topicListViewRepository.findAllByOrderByCreatedAtDesc();
+    public Page<TopicPagesDto> getAllPage(Pageable pageable) {
+        return topicRepository.findAllForPage(pageable);
     }
 
-    public List<TopicListView> getTopicsByLikes() {
-        return topicListViewRepository.findAllByOrderByLikesCountDesc();
-    }
-
-    public List<TopicListView> getTopicsByDateAsc() {
-        return topicListViewRepository.findAllByOrderByCreatedAtAsc();
-    }
-
-    public List<TopicListView> getTopicsByTopicName(String topicName) {
-        return topicListViewRepository.findByTitleContainingIgnoreCase(topicName);
+    public Page<TopicPagesDto> getTopicsByTopicName(String topicName, Pageable pageable) {
+        return topicRepository.findByTitleForPage(topicName, pageable);
     }
 }
