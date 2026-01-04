@@ -76,5 +76,25 @@ public interface CrudTopicRepository extends JpaRepository<Topic, Integer> {
                 group by t.id, t.title, t.createdAt, a.id, a.login, a.avatar
             """)
     Page<TopicPagesDto> findByTitleForPage(String q, Pageable pageable);
+
+    @Query("""
+    select new com.forum.forum.dto.TopicPagesDto(
+        t.id,
+        t.title,
+        t.createdAt,
+        a.id,
+        a.login,
+        a.avatar,
+        count(distinct c.id),
+        count(distinct u.id)
+    )
+    from Topic t
+    join t.author a
+    left join t.comments c
+    left join t.likedUsers u
+    group by t.id, t.title, t.createdAt, a.id, a.login, a.avatar
+    order by count(distinct u.id) desc
+""")
+    Page<TopicPagesDto> findAllOrderByLikes(Pageable pageable);
 }
 

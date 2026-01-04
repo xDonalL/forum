@@ -140,15 +140,17 @@ public class TopicService {
             return topicRepository.getAllPage(pageable);
         }
 
-        Sort sorting = switch (sort) {
-            case "likes" -> Sort.by(Sort.Direction.DESC, "likesCount");
-            case "dateAsc" -> Sort.by("createdAt").ascending();
-            default -> Sort.by("createdAt").descending();
-        };
-
-        pageable = PageRequest.of(page, size, sorting);
-
-        return topicRepository.getAllPage(pageable);
+        switch (sort) {
+            case "likes":
+                pageable = PageRequest.of(page, size);
+                return topicRepository.getTopicSortByLikes(pageable);
+            case "dateAsc":
+                pageable = PageRequest.of(page, size, Sort.by("createdAt").ascending());
+                return topicRepository.getAllPage(pageable);
+            default:
+                pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+                return topicRepository.getAllPage(pageable);
+        }
     }
 
     public Page<TopicPagesDto> search(int page, int size, String q) {
@@ -156,7 +158,7 @@ public class TopicService {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<TopicPagesDto> result = topicRepository.getTopicsByTopicName(q, pageable);
+        Page<TopicPagesDto> result = topicRepository.getTopicsByTitle(q, pageable);
         checkNotFound(result, "topic with q=" + q + " not exist");
 
         log.info("Search completed: query='{}'", q);

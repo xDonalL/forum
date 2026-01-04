@@ -51,7 +51,11 @@ public class DataJpaTopicRepository implements BaseRepository<Topic> {
         return topicRepository.findAllForPage(pageable);
     }
 
-    public Page<TopicPagesDto> getTopicsByTopicName(String topicName, Pageable pageable) {
+    public Page<TopicPagesDto> getTopicsByTitle(String topicName, Pageable pageable) {
         return topicRepository.findByTitleForPage(topicName, pageable);
+    }
+
+    public Page<TopicPagesDto> getTopicSortByLikes(Pageable pageable) {
+        return topicRepository.findAllOrderByLikes(pageable);
     }
 }
