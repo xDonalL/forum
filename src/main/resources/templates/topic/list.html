@@ -53,7 +53,7 @@
                 <div class="topic-footer">
                     <div class="author-info">
                         <a th:href="@{/profile/{id}-{login}(id=${t.authorId()}, login=${t.authorLogin()})}">
-<!--                            <img th:src="@{/avatars/{file}(file=${t.)}" class="avatar">-->
+                            <img th:src="@{/avatars/{file}(file=${t.avatar()})}" class="avatar">
                         </a>
                         <a th:href="@{/profile/{id}-{login}(id=${t.authorId()}, login=${t.authorLogin()})}"
                            class="username">
@@ -84,7 +84,7 @@
 
                 <li th:classappend="${!topics.hasPrevious()} ? 'disabled'">
                     <a th:if="${topics.hasPrevious()}"
-                       th:href="@{${baseUrl}(page=${topics.number - 1})}">
+                       th:href="@{${baseUrl}(page=${topics.number - 1}, sort=${sort})}">
                         ←
                     </a>
                     <span th:if="${!topics.hasPrevious()}">←</span>
@@ -92,13 +92,13 @@
 
                 <li th:each="i : ${#numbers.sequence(0, topics.totalPages - 1)}"
                     th:classappend="${i == topics.number} ? 'active'">
-                    <a th:href="@{${baseUrl}(page=${i})}"
-                       th:text="${i + 1}"></a>
+                    <a th:href="@{${baseUrl}(page=${i}, sort=${sort})}"
+                    th:text="${i + 1}"></a>
                 </li>
 
                 <li th:classappend="${!topics.hasNext()} ? 'disabled'">
                     <a th:if="${topics.hasNext()}"
-                       th:href="@{${baseUrl}(page=${topics.number + 1})}">
+                       th:href="@{${baseUrl}(page=${topics.number + 1}, sort=${sort})}">
                         →
                     </a>
                     <span th:if="${!topics.hasNext()}">→</span>

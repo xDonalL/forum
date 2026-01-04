@@ -53,6 +53,7 @@ public class TopicController {
 
         model.addAttribute("topics", topics);
         model.addAttribute("baseUrl", "/topic");
+        model.addAttribute("sort", sort);
 
         return "topic/list";
     }
