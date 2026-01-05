@@ -2,6 +2,8 @@ package com.forum.forum.repository.user;
 
 import com.forum.forum.model.Role;
 import com.forum.forum.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,21 +21,21 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
     @Query("DELETE FROM User u WHERE u.id=:id")
     int delete(@Param("id") int id);
 
-    List<User> findByRoles(Role role);
+    Page<User> findByRoles(Pageable pageable, Role role);
 
     User getByEmail(String email);
 
     User getByLogin(String login);
 
     @EntityGraph(attributePaths = "roles")
-    List<User> findAllByOrderByRegisteredAtDesc();
+    Page<User> findAllByOrderByRegisteredAtDesc(Pageable pageable);
 
     @EntityGraph(attributePaths = "roles")
-    List<User> findByEnabledFalse();
+    Page<User> findByEnabledFalse(Pageable pageable);
 
     @EntityGraph(attributePaths = "roles")
-    List<User> findByLoginContainingIgnoreCase(String q);
+    Page<User> findByLoginContainingIgnoreCase(Pageable pageable, String q);
 
     @EntityGraph(attributePaths = "roles")
-    List<User> findByEmailContainingIgnoreCase(String q);
+    Page<User> findByEmailContainingIgnoreCase(Pageable pageable, String q);
 }

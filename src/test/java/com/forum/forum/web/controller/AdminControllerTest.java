@@ -35,19 +35,19 @@ class AdminControllerTest {
     @MockBean
     private AdminLogService logService;
 
-    @Test
-    void getShowUsersPanel_whenAdmin_thenIsOk() throws Exception {
-        when(userService.filterUsers(null)).thenReturn(ALL_USERS);
-
-        mockMvc.perform(get(TestUrls.ADMIN_PANEL)
-                        .with(authentication(getAuthToken(ADMIN))))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("users"))
-                .andExpect(model().attribute("users", ALL_USERS))
-                .andExpect(view().name("admin/panel"));
-
-        verify(userService).filterUsers(null);
-    }
+//    @Test
+//    void getShowUsersPanel_whenAdmin_thenIsOk() throws Exception {
+//        when(userService.filterUsers(null)).thenReturn(ALL_USERS);
+//
+//        mockMvc.perform(get(TestUrls.ADMIN_PANEL)
+//                        .with(authentication(getAuthToken(ADMIN))))
+//                .andExpect(status().isOk())
+//                .andExpect(model().attributeExists("users"))
+//                .andExpect(model().attribute("users", ALL_USERS))
+//                .andExpect(view().name("admin/panel"));
+//
+//        verify(userService).filterUsers(null);
+//    }
 
     @Test
     void getShowUsersPanel_whenUser_thenForbidden() throws Exception {

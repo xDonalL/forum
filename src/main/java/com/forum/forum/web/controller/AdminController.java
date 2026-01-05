@@ -9,6 +9,7 @@ import com.forum.forum.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,21 +36,27 @@ public class AdminController {
     public String showUsersPanel(@RequestParam(required = false) String filter,
                                  @RequestParam(required = false) String type,
                                  @RequestParam(required = false) String q,
+                                 @RequestParam(defaultValue = "0") int page,
                                  Model model) {
 
         log.debug("Admin panel request: filter={}, type={}, q={}",
                 filter, type, q);
 
-        List<User> users;
+        Page<User> pageUsers;
         if (q != null && !q.isBlank()) {
-            users = userService.search(q, type);
+            pageUsers = userService.search(page, 10, q, type);
             log.info("Admin searched users: query='{}', type='{}'", q, type);
         } else {
-            users = userService.filterUsers(filter);
+            pageUsers = userService.filterUsers(page, 10, filter);
             log.info("Admin filtered users: filter='{}'", filter);
         }
 
-        model.addAttribute("users", users);
+        model.addAttribute("pageUsers", pageUsers);
+        model.addAttribute("baseUrl", "/admin/panel");
+        model.addAttribute("filter", filter);
+        model.addAttribute("type", type);
+        model.addAttribute("q", q);
+
         return "admin/panel";
     }
 

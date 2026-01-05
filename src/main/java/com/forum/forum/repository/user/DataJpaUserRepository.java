@@ -2,6 +2,8 @@ package com.forum.forum.repository.user;
 
 import com.forum.forum.model.Role;
 import com.forum.forum.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -40,23 +42,23 @@ public class DataJpaUserRepository implements UserRepository {
         return crudRepository.getByLogin(login);
     }
 
-    public List<User> getAll() {
-        return crudRepository.findAllByOrderByRegisteredAtDesc();
+    public Page<User> getAll(Pageable pageable) {
+        return crudRepository.findAllByOrderByRegisteredAtDesc(pageable);
     }
 
-    public List<User> getByRole(String role) {
-        return crudRepository.findByRoles(Role.valueOf(role.toUpperCase()));
+    public Page<User> getByRole(Pageable pageable, String role) {
+        return crudRepository.findByRoles(pageable, Role.valueOf(role.toUpperCase()));
     }
 
-    public List<User> getBanned() {
-        return crudRepository.findByEnabledFalse();
+    public Page<User> getBanned(Pageable pageable) {
+        return crudRepository.findByEnabledFalse(pageable);
     }
 
-    public List<User> getByContainingEmail(String email) {
-        return crudRepository.findByEmailContainingIgnoreCase(email);
+    public Page<User> getByContainingEmail(Pageable pageable, String email) {
+        return crudRepository.findByEmailContainingIgnoreCase(pageable, email);
     }
 
-    public List<User> getByContainingLogin(String login) {
-        return crudRepository.findByLoginContainingIgnoreCase(login);
+    public Page<User> getByContainingLogin(Pageable pageable, String login) {
+        return crudRepository.findByLoginContainingIgnoreCase(pageable, login);
     }
 }

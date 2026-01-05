@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,7 +30,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.UUID;
 
 import static com.forum.forum.util.ValidUtil.checkNotFound;
@@ -80,28 +82,32 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    public List<User> filterUsers(String filter) {
+    public Page<User> filterUsers(int page, int size, String filter) {
         log.debug("Filtering users by '{}'", filter);
 
+        Pageable pageable = PageRequest.of(page, size);
+
         if (filter == null) {
-            return userRepository.getAll();
+            return userRepository.getAll(pageable);
         }
 
         return switch (filter) {
-            case "banned" -> userRepository.getBanned();
-            case "admin", "moderator" -> userRepository.getByRole(filter);
-            default -> userRepository.getAll();
+            case "banned" -> userRepository.getBanned(pageable);
+            case "admin", "moderator" -> userRepository.getByRole(pageable, filter);
+            default -> userRepository.getAll(pageable);
         };
     }
 
-    public List<User> search(String q, String type) {
+    public Page<User> search(int page, int size, String q, String type) {
         log.debug("Searching users: query='{}', type={}", q, type);
 
-        List<User> users = type.equals("email")
-                ? userRepository.getByContainingEmail(q)
-                : userRepository.getByContainingLogin(q);
+        Pageable pageable = PageRequest.of(page, size);
 
-        log.info("User search completed: query='{}', found={}", q, users.size());
+        Page<User> users = type.equals("email")
+                ? userRepository.getByContainingEmail(pageable, q)
+                : userRepository.getByContainingLogin(pageable, q);
+
+        log.info("User search completed: query='{}', found={}", q, users.getTotalElements());
         return users;
     }
 

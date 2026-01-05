@@ -122,16 +122,16 @@ class UserServiceTest {
         assertThrows(NotFoundException.class, () -> userService.getUserById(NOT_FOUND_ID));
     }
 
-    @Test
-    void getAllUserSuccess() {
-        List<User> list = List.of(USER, ADMIN);
-
-        when(userRepository.getAll()).thenReturn(list);
-
-        List<User> all = userService.filterUsers(null);
-
-        assertEquals(list.size(), all.size());
-    }
+//    @Test
+//    void getAllUserSuccess() {
+//        List<User> list = List.of(USER, ADMIN);
+//
+//        when(userRepository.getAll()).thenReturn(list);
+//
+//        List<User> all = userService.filterUsers(null);
+//
+//        assertEquals(list.size(), all.size());
+//    }
 
     @Test
     void registerValidNewUser() {

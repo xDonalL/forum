@@ -46,7 +46,7 @@
                     <button name="filter" value="user">User</button>
                 </form>
             </div>
-            <div class="user-card" th:each="user : ${users}">
+            <div class="user-card" th:each="user : ${pageUsers}">
                 <div class="user-main">
 
                     <div class="user-info-left">
@@ -82,6 +82,37 @@
                 </div>
                 <span th:text="${#temporals.format(user.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
             </div>
+
+            <nav class="pagination" th:if="${pageUsers.totalElements > 1}">
+                <ul>
+
+                    <li th:classappend="${!pageUsers.hasPrevious()} ? 'disabled'">
+                        <a th:if="${pageUsers.hasPrevious()}"
+                           th:href="@{${baseUrl}(page=${pageUsers.number - 1},
+                           filter=${filter}, type=${type}, q=${q})}">
+                            ←
+                        </a>
+                        <span th:if="${!pageUsers.hasPrevious()}">←</span>
+                    </li>
+
+                    <li th:each="i : ${#numbers.sequence(0, pageUsers.totalPages - 1)}"
+                        th:classappend="${i == pageUsers.number} ? 'active'">
+                        <a th:href="@{${baseUrl}(page=${i},
+                        filter=${filter}, type=${type}, q=${q})}"
+                           th:text="${i + 1}"></a>
+                    </li>
+
+                    <li th:classappend="${!pageUsers.hasNext()} ? 'disabled'">
+                        <a th:if="${pageUsers.hasNext()}"
+                           th:href="@{${baseUrl}(page=${pageUsers.number + 1},
+                           filter=${filter}, type=${type}, q=${q})}">
+                            →
+                        </a>
+                        <span th:if="${!pageUsers.hasNext()}">→</span>
+                    </li>
+
+                </ul>
+            </nav>
 
         </div>
     </main>

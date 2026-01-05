@@ -139,14 +139,11 @@ public class TopicService {
             return topicRepository.getAllTopics(pageable);
         }
 
-        switch (sort) {
-            case TopicSort.LIKES_DESC:
-                return topicRepository.getTopicsSortByLikes(pageable);
-            case TopicSort.DATE_ASC:
-                return topicRepository.getAllTopics(pageable);
-            default:
-                return topicRepository.getAllTopics(pageable);
-        }
+        return switch (sort) {
+            case TopicSort.LIKES_DESC -> topicRepository.getTopicsSortByLikes(pageable);
+            case TopicSort.DATE_ASC -> topicRepository.getAllTopics(pageable);
+            default -> topicRepository.getAllTopics(pageable);
+        };
     }
 
     public Page<TopicPagesDto> search(int page, int size, String q) {

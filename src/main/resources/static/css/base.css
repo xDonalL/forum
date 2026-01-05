@@ -97,3 +97,32 @@ button:hover {
     margin-bottom: 15px;
     border-radius: 6px;
 }
+
+.pagination ul {
+    display: flex;
+    list-style: none;
+    gap: 6px;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.pagination li {
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: #f3f3f3;
+}
+
+.pagination li.active {
+    background: #4a6cf7;
+    color: white;
+}
+
+.pagination li.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: inherit;
+}
