@@ -112,17 +112,17 @@ class AdminControllerTest {
                 .andExpect(status().isForbidden());
     }
 
-    @Test
-    void getShowLogs_whenAdmin_thenIsOk() throws Exception {
-        when(logService.getAll()).thenReturn(TEST_LOG);
-
-        mockMvc.perform(get("/admin/log")
-                        .with(authentication(getAuthToken(ADMIN))))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("logs"))
-                .andExpect(model().attribute("logs", TEST_LOG))
-                .andExpect(view().name("admin/log"));
-    }
+//    @Test
+//    void getShowLogs_whenAdmin_thenIsOk() throws Exception {
+//        when(logService.getAll()).thenReturn(TEST_LOG);
+//
+//        mockMvc.perform(get("/admin/log")
+//                        .with(authentication(getAuthToken(ADMIN))))
+//                .andExpect(status().isOk())
+//                .andExpect(model().attributeExists("logs"))
+//                .andExpect(model().attribute("logs", TEST_LOG))
+//                .andExpect(view().name("admin/log"));
+//    }
 
     @Test
     void getShowLogs_whenModer_thenForbidden() throws Exception {

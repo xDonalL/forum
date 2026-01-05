@@ -8,9 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import static com.forum.forum.util.ValidUtil.checkNotFound;
 
@@ -29,17 +30,20 @@ public class AdminLogService {
     }
 
     @Cacheable("logList")
-    public List<AdminLog> getAll() {
-        return logRepository.getAll();
+    public Page<AdminLog> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return logRepository.getAll(pageable);
     }
 
-    public List<AdminLog> searchByUsername(String username) {
+    public Page<AdminLog> searchByUsername(int page, int size, String username) {
         log.debug("Searching log: username='{}'", username);
 
-        List<AdminLog> result = logRepository.getTopicsByTopicName(username);
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<AdminLog> result = logRepository.getLogByLogin(pageable, username);
         checkNotFound(result, "log with username=" + username + " not exist");
 
-        log.info("Search completed: username='{}', found={}", username, result.size());
+        log.info("Search completed: username='{}', found={}", username, result.getTotalElements());
         return result;
     }
 }

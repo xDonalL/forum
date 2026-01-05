@@ -1,9 +1,9 @@
 package com.forum.forum.repository.admin;
 
 import com.forum.forum.model.AdminLog;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public class DataJpaAdminLogRepository {
@@ -18,11 +18,11 @@ public class DataJpaAdminLogRepository {
         return logRepository.save(adminLog);
     }
 
-    public List<AdminLog> getAll() {
-        return logRepository.findAllByOrderByPerformedAtDesc();
+    public Page<AdminLog> getAll(Pageable pageable) {
+        return logRepository.findAllByOrderByPerformedAtDesc(pageable);
     }
 
-    public List<AdminLog> getTopicsByTopicName(String username) {
-        return logRepository.findByUsernameContainingIgnoreCase(username);
+    public Page<AdminLog> getLogByLogin(Pageable pageable, String username) {
+        return logRepository.findByUsernameContainingIgnoreCase(pageable, username);
     }
 }

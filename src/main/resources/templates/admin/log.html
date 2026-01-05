@@ -19,8 +19,8 @@
             <h2>Admin Logs</h2>
 
             <form method="get" th:action="@{/admin/log}" class="search-form">
-                <input type="text" name="username" th:placeholder="#{admin.searchByLogin}"
-                       th:value="${param.username}">
+                <input type="text" name="q" th:placeholder="#{admin.searchByLogin}"
+                       th:value="${q}">
                 <button type="submit" class="btn-primary" th:text="#{button.search}"/>
             </form>
 
@@ -36,7 +36,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="log : ${logs}">
+                    <tr th:each="log : ${pageLogs}">
                         <td th:text="${log.username}"></td>
                         <td th:text="${log.action}"></td>
                         <td th:text="${log.targetLogin}"></td>
@@ -46,6 +46,34 @@
                     </tbody>
                 </table>
             </div>
+
+            <nav class="pagination" th:if="${pageLogs.totalElements > 1}">
+                <ul>
+
+                    <li th:classappend="${!pageLogs.hasPrevious()} ? 'disabled'">
+                        <a th:if="${pageLogs.hasPrevious()}"
+                           th:href="@{${baseUrl}(page=${pageLogs.number - 1}, q=${q})}">
+                            ←
+                        </a>
+                        <span th:if="${!pageLogs.hasPrevious()}">←</span>
+                    </li>
+
+                    <li th:each="i : ${#numbers.sequence(0, pageLogs.totalPages - 1)}"
+                        th:classappend="${i == pageLogs.number} ? 'active'">
+                        <a th:href="@{${baseUrl}(page=${i}, q=${q})}"
+                           th:text="${i + 1}"></a>
+                    </li>
+
+                    <li th:classappend="${!pageLogs.hasNext()} ? 'disabled'">
+                        <a th:if="${pageLogs.hasNext()}"
+                           th:href="@{${baseUrl}(page=${pageLogs.number + 1}, q=${q})}">
+                            →
+                        </a>
+                        <span th:if="${!pageLogs.hasNext()}">→</span>
+                    </li>
+
+                </ul>
+            </nav>
 
         </div>
     </main>

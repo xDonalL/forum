@@ -15,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 import static com.forum.forum.model.ActionLog.BAN_USER;
 import static com.forum.forum.model.ActionLog.UNBAN_USER;
 
@@ -92,20 +90,24 @@ public class AdminController {
     }
 
     @GetMapping("/log")
-    public String showLogs(@RequestParam(required = false) String username,
+    public String showLogs(@RequestParam(required = false) String q,
+                           @RequestParam(defaultValue = "0") int page,
                            Model model) {
         log.debug("Admin logs request");
 
-        List<AdminLog> logs;
+        Page<AdminLog> pageLogs;
 
-        if (username != null && !username.isBlank()) {
-            log.info("Search log by query: '{}'", username);
-            logs = adminLogService.searchByUsername(username);
+        if (q != null && !q.isBlank()) {
+            log.info("Search log by query: '{}'", q);
+            pageLogs = adminLogService.searchByUsername(page, 2, q);
         } else {
-            logs = adminLogService.getAll();
+            pageLogs = adminLogService.getAll(page, 2);
         }
 
-        model.addAttribute("logs", logs);
+        model.addAttribute("pageLogs", pageLogs);
+        model.addAttribute("q", q);
+        model.addAttribute("baseUrl", "/admin/log");
+
         return "admin/log";
     }
 }
