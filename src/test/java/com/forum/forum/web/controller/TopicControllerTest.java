@@ -1,7 +1,6 @@
 package com.forum.forum.web.controller;
 
 import com.forum.forum.TestUrls;
-import com.forum.forum.model.Topic;
 import com.forum.forum.security.SecurityConfig;
 import com.forum.forum.security.TopicSecurity;
 import com.forum.forum.service.TopicService;
@@ -12,8 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
 
 import static com.forum.forum.AuthTestData.getAuthToken;
 import static com.forum.forum.TopicTestData.*;
@@ -56,7 +53,7 @@ class TopicControllerTest {
 
     @Test
     void getTopicPage_whenNotAuth_thenIsOk() throws Exception {
-        when(topicService.get(TOPIC1_ID)).thenReturn(TOPIC1);
+        when(topicService.getTo(TOPIC1_ID)).thenReturn(TOPIC1);
 
         mockMvc.perform(get(TestUrls.topicView(TOPIC1_ID)))
                 .andExpect(status().isOk())
@@ -92,7 +89,7 @@ class TopicControllerTest {
     @Test
     void getEditTopic_whenIsOwner_thenIsOk() throws Exception {
         when(topicSecurity.isOwner(USER_ID)).thenReturn(true);
-        when(topicService.get(TOPIC1_ID)).thenReturn(TOPIC1);
+        when(topicService.getTo(TOPIC1_ID)).thenReturn(TOPIC1);
 
         mockMvc.perform(get(TestUrls.topicEdit(TOPIC1_ID)))
                 .andExpect(status().isOk())
@@ -100,7 +97,7 @@ class TopicControllerTest {
                 .andExpect(model().attribute("topic", TOPIC1))
                 .andExpect(view().name("topic/edit"));
 
-        verify(topicService).get(TOPIC1_ID);
+        verify(topicService).getTo(TOPIC1_ID);
     }
 
     @Test

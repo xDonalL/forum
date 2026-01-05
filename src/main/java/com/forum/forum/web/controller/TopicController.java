@@ -60,13 +60,16 @@ public class TopicController {
     }
 
     @GetMapping("/{id}")
-    public String showTopicPage(@PathVariable Integer id, Model model) {
+    public String showTopicPage(@PathVariable Integer id,
+                                @RequestParam(defaultValue = "0") int page,
+                                Model model) {
         log.info("Open topic page: id={}", id);
 
-        TopicPageDto topicPage = topicService.getDto(id);
+        TopicPageDto topicPage = topicService.getDto(page, 10, id);
 
         model.addAttribute("topicDto", topicPage.topic());
         model.addAttribute("commentsDto", topicPage.comments());
+        model.addAttribute("baseUrl", "/topic/" + id);
 
         if (!model.containsAttribute("commentTo")) {
             TopicCommentTo commentTo = new TopicCommentTo();
@@ -106,7 +109,7 @@ public class TopicController {
 
         log.info("Open edit topic page: topicId={}", id);
 
-        Topic topic = topicService.get(id);
+        Topic topic = topicService.getTo(id);
         TopicTo topicTo = new TopicTo(
                 topic.getId(),
                 topic.getTitle(),
@@ -137,7 +140,7 @@ public class TopicController {
                               Authentication auth) {
         log.warn("Topic deleted: id={}", id);
 
-        String authorLogin = topicService.get(id).getAuthor().getLogin();
+        String authorLogin = topicService.getTo(id).getAuthor().getLogin();
 
         topicService.delete(id);
 

@@ -2,6 +2,8 @@ package com.forum.forum.repository.forum;
 
 import com.forum.forum.dto.TopicCommentDto;
 import com.forum.forum.model.TopicComment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -45,6 +47,6 @@ public interface CrudTopicCommentRepository extends JpaRepository<TopicComment, 
                         a.avatar
                 order by c.dateCreated asc
             """)
-    List<TopicCommentDto> findCommentsByTopicId(@Param("topicId") int topicId);
+    Page<TopicCommentDto> findCommentsByTopicId(Pageable pageable, @Param("topicId") int topicId);
 }
 

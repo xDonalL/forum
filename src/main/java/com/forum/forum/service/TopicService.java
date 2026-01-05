@@ -19,8 +19,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 import static com.forum.forum.util.ValidUtil.checkNotFound;
 
 @Service
@@ -65,16 +63,17 @@ public class TopicService {
         return updated;
     }
 
-    public Topic get(Integer id) {
+    public Topic getTo(Integer id) {
         log.debug("Getting topic: id={}", id);
         return checkNotFound(topicRepository.get(id),
                 "topic with id=" + id + " not exist");
     }
 
-    public TopicPageDto getDto(Integer id) {
+    public TopicPageDto getDto(int page, int size, Integer id) {
         log.debug("Getting topic: id={}", id);
+        Pageable pageable = PageRequest.of(page, size);
         TopicDto topicDto = topicRepository.getDetails(id);
-        List<TopicCommentDto> commentDto = commentRepository.getListCommentByTopic(id);
+        Page<TopicCommentDto> commentDto = commentRepository.getPageCommentByTopic(pageable, id);
         checkNotFound(topicDto, "topic with id=" + id + " not exist");
         return new TopicPageDto(topicDto, commentDto);
     }

@@ -108,6 +108,34 @@
                 <span th:text="${c.likesCount()}"></span>
         </div>
 
+        <nav class="pagination" th:if="${commentsDto.totalElements > 1}">
+            <ul>
+
+                <li th:classappend="${!commentsDto.hasPrevious()} ? 'disabled'">
+                    <a th:if="${commentsDto.hasPrevious()}"
+                       th:href="@{${baseUrl}(page=${commentsDto.number - 1})}">
+                        ←
+                    </a>
+                    <span th:if="${!commentsDto.hasPrevious()}">←</span>
+                </li>
+
+                <li th:each="i : ${#numbers.sequence(0, commentsDto.totalPages - 1)}"
+                    th:classappend="${i == commentsDto.number} ? 'active'">
+                    <a th:href="@{${baseUrl}(page=${i})}"
+                       th:text="${i + 1}"></a>
+                </li>
+
+                <li th:classappend="${!commentsDto.hasNext()} ? 'disabled'">
+                    <a th:if="${commentsDto.hasNext()}"
+                       th:href="@{${baseUrl}(page=${commentsDto.number + 1})}">
+                        →
+                    </a>
+                    <span th:if="${!commentsDto.hasNext()}">→</span>
+                </li>
+
+            </ul>
+        </nav>
+
         <div class="comment-form">
             <form method="post" action="/topic/comment/add"
                   th:object="${commentTo}">

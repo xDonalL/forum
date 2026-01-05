@@ -3,9 +3,9 @@ package com.forum.forum.repository.forum;
 import com.forum.forum.dto.TopicCommentDto;
 import com.forum.forum.model.TopicComment;
 import com.forum.forum.repository.BaseRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public class DataJpaTopicCommentRepository implements BaseRepository<TopicComment> {
@@ -35,11 +35,7 @@ public class DataJpaTopicCommentRepository implements BaseRepository<TopicCommen
         return commentRepository.findById(id).orElse(null);
     }
 
-    public List<TopicCommentDto> getListCommentByTopic(int id) {
-        return commentRepository.findCommentsByTopicId(id);
-    }
-
-    public List<TopicComment> getAll() {
-        return commentRepository.findAll();
+    public Page<TopicCommentDto> getPageCommentByTopic(Pageable pageable, int id) {
+        return commentRepository.findCommentsByTopicId(pageable, id);
     }
 }

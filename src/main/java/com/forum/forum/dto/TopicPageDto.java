@@ -1,9 +1,9 @@
 package com.forum.forum.dto;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public record TopicPageDto(
         TopicDto topic,
-        List<TopicCommentDto> comments
+        Page<TopicCommentDto> comments
 ) {
 }
