@@ -3,6 +3,7 @@ package com.forum.forum.web.controller;
 import com.forum.forum.dto.TopicPageDto;
 import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
+import com.forum.forum.model.TopicSort;
 import com.forum.forum.model.User;
 import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.service.AdminLogService;
@@ -35,7 +36,7 @@ public class TopicController {
     private final AdminLogService adminLogService;
 
     @GetMapping
-    public String showTopics(@RequestParam(required = false) String sort,
+    public String showTopics(@RequestParam(required = false) TopicSort sort,
                              @RequestParam(required = false) String q,
                              @RequestParam(defaultValue = "0") int page,
                              Model model) {

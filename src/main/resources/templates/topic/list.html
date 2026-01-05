@@ -29,9 +29,15 @@
             </form>
             <div class="sort-links">
                 <form method="get" th:action="@{/topic}">
-                    <button name="sort" value="likes" th:text="#{button.popular}"/>
-                    <button name="sort" value="dateDesc" th:text="#{button.new}"/>
-                    <button name="sort" value="dateAsc" th:text="#{button.old}"/>
+                    <button name="sort"
+                            th:value="${T(com.forum.forum.model.TopicSort).LIKES_DESC}"
+                            th:text="#{button.popular}"/>
+                    <button name="sort" t
+                            th:value="${T(com.forum.forum.model.TopicSort).DATE_DESC}"
+                            th:text="#{button.new}"/>
+                    <button name="sort"
+                            th:value="${T(com.forum.forum.model.TopicSort).DATE_ASC}"
+                            th:text="#{button.old}"/>
                 </form>
             </div>
         </div>

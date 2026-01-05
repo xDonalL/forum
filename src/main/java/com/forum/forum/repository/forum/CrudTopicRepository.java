@@ -1,7 +1,6 @@
 package com.forum.forum.repository.forum;
 
 import com.forum.forum.dto.TopicDto;
-import com.forum.forum.dto.TopicPageDto;
 import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
 import org.springframework.data.domain.Page;
@@ -54,8 +53,29 @@ public interface CrudTopicRepository extends JpaRepository<Topic, Integer> {
                 left join t.comments c
                 left join t.likedUsers u
                 group by t.id, t.title, t.createdAt, a.id, a.login, a.avatar
+                order by t.createdAt desc
             """)
-    Page<TopicPagesDto> findAllForPage(Pageable pageable);
+    Page<TopicPagesDto> findAllDecs(Pageable pageable);
+
+    @Query("""
+                select new com.forum.forum.dto.TopicPagesDto(
+                    t.id,
+                    t.title,
+                    t.createdAt,
+                    a.id,
+                    a.login,
+                    a.avatar,
+                    count(distinct c.id),
+                    count(distinct u.id)
+                )
+                from Topic t
+                join t.author a
+                left join t.comments c
+                left join t.likedUsers u
+                group by t.id, t.title, t.createdAt, a.id, a.login, a.avatar
+                order by t.createdAt asc
+            """)
+    Page<TopicPagesDto> findAllAsc(Pageable pageable);
 
     @Query("""
                 select new com.forum.forum.dto.TopicPagesDto(
@@ -75,7 +95,7 @@ public interface CrudTopicRepository extends JpaRepository<Topic, Integer> {
                 where lower(t.title) like lower(concat('%', :q, '%'))
                 group by t.id, t.title, t.createdAt, a.id, a.login, a.avatar
             """)
-    Page<TopicPagesDto> findByTitleForPage(String q, Pageable pageable);
+    Page<TopicPagesDto> findByTitle(String q, Pageable pageable);
 
     @Query("""
     select new com.forum.forum.dto.TopicPagesDto(
@@ -93,8 +113,8 @@ public interface CrudTopicRepository extends JpaRepository<Topic, Integer> {
     left join t.comments c
     left join t.likedUsers u
     group by t.id, t.title, t.createdAt, a.id, a.login, a.avatar
-    order by count(distinct u.id) desc
+    order by count(distinct u.id) desc, t.createdAt desc
 """)
-    Page<TopicPagesDto> findAllOrderByLikes(Pageable pageable);
+    Page<TopicPagesDto> findByLikes(Pageable pageable);
 }
 

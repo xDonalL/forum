@@ -5,6 +5,7 @@ import com.forum.forum.dto.TopicDto;
 import com.forum.forum.dto.TopicPageDto;
 import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
+import com.forum.forum.model.TopicSort;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
 import com.forum.forum.repository.forum.DataJpaTopicRepository;
@@ -14,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -130,26 +130,22 @@ public class TopicService {
         return removed;
     }
 
-    public Page<TopicPagesDto> getAllSorted(int page, int size, String sort) {
+    public Page<TopicPagesDto> getAllSorted(int page, int size, TopicSort sort) {
         log.debug("Getting topics sorted by '{}'", sort);
 
-        Pageable pageable;
+        Pageable pageable = PageRequest.of(page, size);
 
         if (sort == null) {
-            pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-            return topicRepository.getAllPage(pageable);
+            return topicRepository.getAllTopics(pageable);
         }
 
         switch (sort) {
-            case "likes":
-                pageable = PageRequest.of(page, size);
-                return topicRepository.getTopicSortByLikes(pageable);
-            case "dateAsc":
-                pageable = PageRequest.of(page, size, Sort.by("createdAt").ascending());
-                return topicRepository.getAllPage(pageable);
+            case TopicSort.LIKES_DESC:
+                return topicRepository.getTopicsSortByLikes(pageable);
+            case TopicSort.DATE_ASC:
+                return topicRepository.getAllTopics(pageable);
             default:
-                pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-                return topicRepository.getAllPage(pageable);
+                return topicRepository.getAllTopics(pageable);
         }
     }
 
