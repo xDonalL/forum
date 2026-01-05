@@ -7,6 +7,7 @@ public record TopicDto(
         String title,
         String content,
         LocalDateTime createdAt,
+        LocalDateTime updatedAt,
         Integer authorId,
         String authorLogin,
         String authorAvatar,

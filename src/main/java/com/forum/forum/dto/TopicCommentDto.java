@@ -6,6 +6,7 @@ public record TopicCommentDto(
         Integer commentId,
         String comment,
         LocalDateTime dateCreated,
+        LocalDateTime updatedAt,
         Integer authorId,
         String authorLogin,
         String authorAvatar,

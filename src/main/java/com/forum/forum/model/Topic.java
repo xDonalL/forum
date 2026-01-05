@@ -42,6 +42,9 @@ public class Topic extends AbstractBaseEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private final LocalDateTime createdAt = LocalDateTime.now();
 
+    @Column(name = "updated_at")
+    protected LocalDateTime updatedAt;
+
     @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<TopicComment> comments = new ArrayList<>();
 
@@ -50,4 +53,9 @@ public class Topic extends AbstractBaseEntity {
             joinColumns = @JoinColumn(name = "topic_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private final Set<User> likedUsers = new HashSet<>();
+
+    @PreUpdate
+    private void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

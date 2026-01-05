@@ -6,6 +6,7 @@ public record TopicPagesDto(
         Integer id,
         String title,
         LocalDateTime createdAt,
+        LocalDateTime updatedAt,
         Integer authorId,
         String authorLogin,
         String avatar,

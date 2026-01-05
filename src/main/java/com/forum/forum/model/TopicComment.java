@@ -33,6 +33,9 @@ public class TopicComment extends AbstractBaseEntity {
     @Column(name = "date_created", nullable = false, updatable = false)
     private final LocalDateTime dateCreated = LocalDateTime.now();
 
+    @Column(name = "updated_at")
+    protected LocalDateTime updatedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private User author;
@@ -46,4 +49,9 @@ public class TopicComment extends AbstractBaseEntity {
             joinColumns = @JoinColumn(name = "comment_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private final Set<User> likedUsers = new HashSet<>();
+
+    @PreUpdate
+    private void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

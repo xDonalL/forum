@@ -19,7 +19,7 @@
         <a href="/topic/add" class="btn-create-topic" th:text="#{topic.create}"/>
         <div class="topics-toolbar">
             <form method="get" th:action="@{/topic}" class="search-form">
-                 <input type="text"
+                <input type="text"
                        name="q"
                        th:placeholder="#{topic.search}"
                        th:value="${q}">
@@ -66,6 +66,10 @@
                             <span th:text="${t.authorLogin()}" class="username"></span>
                         </a>
                     </div>
+                    <span th:if="${t.updatedAt() != null}">
+                        (edited at
+                         <span th:text="${#temporals.format(t.updatedAt(), 'dd.MM.yyyy HH:mm')}"></span>)
+                    </span>
                 </div>
                 <div class="topic-footer-bar">
                     <span class="topic-date"
@@ -99,7 +103,7 @@
                 <li th:each="i : ${#numbers.sequence(0, topics.totalPages - 1)}"
                     th:classappend="${i == topics.number} ? 'active'">
                     <a th:href="@{${baseUrl}(page=${i}, sort=${sort})}"
-                    th:text="${i + 1}"></a>
+                       th:text="${i + 1}"></a>
                 </li>
 
                 <li th:classappend="${!topics.hasNext()} ? 'disabled'">
