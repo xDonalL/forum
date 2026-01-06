@@ -28,15 +28,21 @@ public interface CrudTopicRepository extends JpaRepository<Topic, Integer> {
                     a.id,
                     a.login,
                     a.avatar,
-                    count(distinct u.id)
+                    count(distinct u.id),
+                    case
+                    when count(distinct u.id) > 0 then true
+                    else false
+                    end
                 )
                 from Topic t
                 join t.author a
                 left join t.likedUsers u
+                left join t.likedUsers mu on mu.id= :userId
                 where t.id = :topicId
                 group by t.id, t.title, t.content, t.createdAt, t.updatedAt, a.id, a.login, a.avatar
             """)
-    TopicDto findTopicDetails(@Param("topicId") int topicId);
+    TopicDto findTopicDetails(@Param("topicId") int topicId,
+                              @Param("userId") int userId);
 
     @Query("""
                 select new com.forum.forum.dto.TopicPagesDto(
@@ -57,7 +63,7 @@ public interface CrudTopicRepository extends JpaRepository<Topic, Integer> {
                 group by t.id, t.title, t.createdAt, t.updatedAt, a.id, a.login, a.avatar
                 order by t.createdAt desc
             """)
-    Page<TopicPagesDto> findAllDecs(Pageable pageable);
+    Page<TopicPagesDto> findAllDesc(Pageable pageable);
 
     @Query("""
                 select new com.forum.forum.dto.TopicPagesDto(

@@ -10,6 +10,7 @@ public record TopicCommentDto(
         Integer authorId,
         String authorLogin,
         String authorAvatar,
-        Long likesCount
+        Long likesCount,
+        boolean likedByMe
 ) {
 }

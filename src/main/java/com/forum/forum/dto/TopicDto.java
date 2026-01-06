@@ -11,6 +11,7 @@ public record TopicDto(
         Integer authorId,
         String authorLogin,
         String authorAvatar,
-        long likesCount
+        Long likesCount,
+        boolean likedByMe
 ) {
 }

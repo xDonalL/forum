@@ -35,7 +35,7 @@ public class DataJpaTopicCommentRepository implements BaseRepository<TopicCommen
         return commentRepository.findById(id).orElse(null);
     }
 
-    public Page<TopicCommentDto> getPageCommentByTopic(Pageable pageable, int id) {
-        return commentRepository.findCommentsByTopicId(pageable, id);
+    public Page<TopicCommentDto> getPageCommentByTopic(Pageable pageable, int id, int userId) {
+        return commentRepository.findCommentsByTopicId(pageable, id, userId);
     }
 }

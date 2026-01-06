@@ -10,8 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 public interface CrudTopicCommentRepository extends JpaRepository<TopicComment, Integer> {
 
     @Transactional
@@ -33,11 +31,16 @@ public interface CrudTopicCommentRepository extends JpaRepository<TopicComment, 
                     a.id,
                     a.login,
                     a.avatar,
-                    count(distinct u.id)
+                    count(distinct u.id),
+                             case
+                            when count(distinct mu.id) > 0 then true
+                            else false
+                        end
                 )
                 from TopicComment c
                 join c.author a
                 left join c.likedUsers u
+                left join c.likedUsers mu on mu.id = :userId
                 where c.topic.id = :topicId
                 group by
                         c.id,
@@ -49,6 +52,8 @@ public interface CrudTopicCommentRepository extends JpaRepository<TopicComment, 
                         a.avatar
                 order by c.dateCreated asc
             """)
-    Page<TopicCommentDto> findCommentsByTopicId(Pageable pageable, @Param("topicId") int topicId);
+    Page<TopicCommentDto> findCommentsByTopicId(Pageable pageable,
+                                                @Param("topicId") int topicId,
+                                                @Param("userId") int userId);
 }
 

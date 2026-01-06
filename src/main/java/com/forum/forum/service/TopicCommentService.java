@@ -22,6 +22,7 @@ public class TopicCommentService {
 
     private final DataJpaTopicCommentRepository commentRepository;
     private final DataJpaTopicRepository topicRepository;
+    private final UserService userService;
 
     @PreAuthorize("isAuthenticated()")
     @Transactional
@@ -86,39 +87,21 @@ public class TopicCommentService {
 
     @PreAuthorize("isAuthenticated()")
     @Transactional
-    public boolean addLike(Integer commentId, User user) {
-        log.debug("Adding like to comment: commentId={}, userId={}",
-                commentId, user.getId());
+    public boolean toggleLike(int commentId) {
+        User currentUser = userService.getCurrentUser();
+        log.debug("Toggle like to comment: commentId={}, userId={}",
+                commentId, currentUser.getId());
 
         TopicComment comment = commentRepository.get(commentId);
-        checkNotFound(comment, "comment with id=" + commentId + " not exist");
 
-        boolean added = comment.getLikedUsers().add(user);
-
-        if (added) {
-            log.info("Comment liked: commentId={}, userId={}",
-                    commentId, user.getId());
-        }
-
-        return added;
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @Transactional
-    public boolean deleteLike(Integer commentId, User user) {
-        log.debug("Removing like from comment: commentId={}, userId={}",
-                commentId, user.getId());
-
-        TopicComment comment = commentRepository.get(commentId);
-        checkNotFound(comment, "comment with id=" + commentId + " not exist");
-
-        boolean removed = comment.getLikedUsers().remove(user);
-
-        if (removed) {
+        if (comment.getLikedUsers().contains(currentUser)) {
             log.info("Comment like removed: commentId={}, userId={}",
-                    commentId, user.getId());
+                    commentId, currentUser.getId());
+            return comment.getLikedUsers().remove(currentUser);
+        } else {
+            log.info("Comment like added: commentId={}, userId={}",
+                    commentId, currentUser.getId());
+            return comment.getLikedUsers().add(currentUser);
         }
-
-        return removed;
     }
 }

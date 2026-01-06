@@ -52,3 +52,28 @@ textarea {
     flex-direction: column;
     align-items: center;
 }
+
+.like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.like-icon {
+    width: 22px;
+    height: 22px;
+    transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+.like-icon.unliked {
+    opacity: 0.3;
+    filter: grayscale(100%);
+}
+
+.like-icon.liked {
+    opacity: 1;
+    filter: grayscale(0%);
+}

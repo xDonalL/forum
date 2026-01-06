@@ -32,12 +32,12 @@ public class DataJpaTopicRepository implements BaseRepository<Topic> {
         return topicRepository.findById(id).orElse(null);
     }
 
-    public TopicDto getDetails(int id) {
-        return topicRepository.findTopicDetails(id);
+    public TopicDto getDetails(int id, Integer userId) {
+        return topicRepository.findTopicDetails(id, userId);
     }
 
     public Page<TopicPagesDto> getAllTopics(Pageable pageable) {
-        return topicRepository.findAllDecs(pageable);
+        return topicRepository.findAllDesc(pageable);
     }
 
     public Page<TopicPagesDto> getAllTopicsAsc(Pageable pageable) {

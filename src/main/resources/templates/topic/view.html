@@ -49,17 +49,18 @@
                         (edited at
                          <span th:text="${#temporals.format(topicDto.updatedAt(), 'dd.MM.yyyy HH:mm')}"></span>)
                     </span>
-            <form method="post" action="/topic/like/add">
+
+            <form method="post" action="/topic/like">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                <input type="hidden" name="id" th:value="${topicDto.id}">
-                <button type="submit">LIKE</button>
+                <input type="hidden" name="topicId" th:value="${topicDto.id()}">
+
+                <button type="submit" class="like-button">
+                    <img src="/img/likes.webp"
+                         class="like-icon"
+                         th:classappend="${topicDto.likedByMe()} ? 'liked' : 'unliked'">
+                    <span th:text="${topicDto.likesCount()}"></span>
+                </button>
             </form>
-            <form method="post" action="/topic/like/delete">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                <input type="hidden" name="id" th:value="${topicDto.id}">
-                <button type="submit">DISLIKE</button>
-            </form>
-            <span th:text="${topicDto.likesCount}"></span>
         </div>
 
         <h3 th:text="#{topic.comments}"/>
@@ -101,19 +102,19 @@
                th:if="${#authentication.principal.id == c.authorId()}"
                th:href="@{/topic/comment/edit/{id}(id=${c.commentId()})}"
                th:text="#{target.edit}"/>
-                <form method="post" action="/topic/comment/like/add">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                    <input type="hidden" name="id" th:value="${c.commentId()}">
-                    <input type="hidden" name="topicId" th:value="${topicDto.id}">
-                    <button type="submit">LIKE</button>
-                </form>
-                <form method="post" action="/topic/comment/like/delete">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                    <input type="hidden" name="id" th:value="${c.commentId()}">
-                    <input type="hidden" name="topicId" th:value="${topicDto.id}">
-                    <button type="submit">DISLIKE</button>
-                </form>
-                <span th:text="${c.likesCount()}"></span>
+
+            <form method="post" action="/topic/comment/like">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <input type="hidden" name="commentId" th:value="${c.commentId()}">
+                <input type="hidden" name="topicId" th:value="${topicDto.id}">
+
+                <button type="submit" class="like-button">
+                    <img src="/img/likes.webp"
+                         class="like-icon"
+                         th:classappend="${c.likedByMe()} ? 'liked' : 'unliked'">
+                    <span th:text="${c.likesCount()}"></span>
+                </button>
+            </form>
         </div>
 
         <nav class="pagination" th:if="${commentsDto.totalElements > 1}">

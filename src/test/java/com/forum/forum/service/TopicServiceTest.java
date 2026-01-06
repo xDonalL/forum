@@ -65,20 +65,20 @@ class TopicServiceTest {
 //    }
 
     @Test
-    void getToTopicSuccess() {
+    void getTopicSuccess() {
         when(topicRepository.get(TOPIC1_ID)).thenReturn(TOPIC1);
 
-        Topic topic = topicService.getTo(TOPIC1_ID);
+        Topic topic = topicService.get(TOPIC1_ID);
         assertNotNull(topic);
         assertEquals(TOPIC1.getId(), topic.getId());
     }
 
     @Test
-    void getToTopicNotFound() {
+    void getTopicNotFound() {
         when(topicRepository.get(anyInt())).thenReturn(null);
 
         assertThrows(NotFoundException.class,
-                () -> topicService.getTo(TOPIC1_ID));
+                () -> topicService.get(TOPIC1_ID));
     }
 
     @Test

@@ -109,7 +109,7 @@ public class TopicController {
 
         log.info("Open edit topic page: topicId={}", id);
 
-        Topic topic = topicService.getTo(id);
+        Topic topic = topicService.get(id);
         TopicTo topicTo = new TopicTo(
                 topic.getId(),
                 topic.getTitle(),
@@ -140,7 +140,7 @@ public class TopicController {
                               Authentication auth) {
         log.warn("Topic deleted: id={}", id);
 
-        String authorLogin = topicService.getTo(id).getAuthor().getLogin();
+        String authorLogin = topicService.get(id).getAuthor().getLogin();
 
         topicService.delete(id);
 
@@ -150,25 +150,11 @@ public class TopicController {
         return "redirect:/topic";
     }
 
-    @PostMapping("/like/add")
-    public String addLikeTopic(@RequestParam Integer id) {
+    @PostMapping("/like")
+    private String toggleLikeComment(@RequestParam Integer topicId) {
+        log.info("likes comment {}", topicId);
 
-        User user = userService.getCurrentUser();
-
-        log.info("User {} liked topic {}", user.getId(), id);
-
-        topicService.addLike(id, user);
-        return "redirect:/topic/" + id;
-    }
-
-    @PostMapping("/like/delete")
-    public String deleteLikeTopic(@RequestParam Integer id) {
-
-        User user = userService.getCurrentUser();
-
-        log.info("User {} removed like from topic {}", user.getId(), id);
-
-        topicService.deleteLike(id, user);
-        return "redirect:/topic/" + id;
+        topicService.toggleLike(topicId);
+        return "redirect:/topic/" + topicId;
     }
 }

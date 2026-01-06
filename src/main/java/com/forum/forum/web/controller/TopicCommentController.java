@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -104,25 +103,12 @@ public class TopicCommentController {
         return "redirect:/topic/" + topicId;
     }
 
-    @PostMapping("/like/add")
-    public String addLikeComment(@RequestParam Integer id,
-                                 @RequestParam Integer topicId) {
+    @PostMapping("/like")
+    private String toggleLikeComment(@RequestParam Integer commentId,
+                                     @RequestParam Integer topicId) {
+        log.info("likes comment {}", commentId);
 
-        User user = userService.getCurrentUser();
-        log.info("User {} likes comment {}", user.getLogin(), id);
-
-        commentService.addLike(id, user);
-        return "redirect:/topic/" + topicId;
-    }
-
-    @PostMapping("/like/delete")
-    public String deleteLikeComment(@RequestParam Integer id,
-                                    @RequestParam Integer topicId) {
-
-        User user = userService.getCurrentUser();
-        log.info("User {} removes like from comment {}", user.getLogin(), id);
-
-        commentService.deleteLike(id, user);
+        commentService.toggleLike(commentId);
         return "redirect:/topic/" + topicId;
     }
 }
