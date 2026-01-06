@@ -4,8 +4,8 @@ import com.forum.forum.model.AdminLog;
 import com.forum.forum.model.User;
 import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.service.AdminLogService;
+import com.forum.forum.service.AdminService;
 import com.forum.forum.service.TopicCommentService;
-import com.forum.forum.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +25,7 @@ public class AdminController {
 
     private static final Logger log = LoggerFactory.getLogger(AdminController.class);
 
-    private final UserService userService;
-    private final AdminLogService adminLogService;
+    private final AdminService adminService;
     private final AdminLogService logService;
     private final TopicCommentService topicCommentService;
 
@@ -42,10 +41,10 @@ public class AdminController {
 
         Page<User> pageUsers;
         if (q != null && !q.isBlank()) {
-            pageUsers = userService.search(page, 10, q, type);
+            pageUsers = adminService.search(page, 10, q, type);
             log.info("Admin searched users: query='{}', type='{}'", q, type);
         } else {
-            pageUsers = userService.filterUsers(page, 10, filter);
+            pageUsers = adminService.filterUsers(page, 10, filter);
             log.info("Admin filtered users: filter='{}'", filter);
         }
 
@@ -66,7 +65,7 @@ public class AdminController {
 
         String authorLogin = topicCommentService.get(id).getAuthor().getLogin();
 
-        userService.banUser(id);
+        adminService.banUser(id);
 
         AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
         logService.logAction(authorizedUser.getUser().getLogin(),
@@ -81,7 +80,7 @@ public class AdminController {
 
         String authorLogin = topicCommentService.get(id).getAuthor().getLogin();
 
-        userService.unbanUser(id);
+        adminService.unbanUser(id);
 
         AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
         logService.logAction(authorizedUser.getUser().getLogin(),
@@ -99,9 +98,9 @@ public class AdminController {
 
         if (q != null && !q.isBlank()) {
             log.info("Search log by query: '{}'", q);
-            pageLogs = adminLogService.searchByUsername(page, 2, q);
+            pageLogs = logService.searchByUsername(page, 2, q);
         } else {
-            pageLogs = adminLogService.getAll(page, 2);
+            pageLogs = logService.getAll(page, 2);
         }
 
         model.addAttribute("pageLogs", pageLogs);

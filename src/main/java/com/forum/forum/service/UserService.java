@@ -14,16 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -78,37 +74,7 @@ public class UserService implements UserDetailsService {
     public User getUserById(int id) {
         log.debug("Getting user by id: {}", id);
         return checkNotFound(userRepository.get(id),
-                "user with id=" + id + " not exist"
-        );
-    }
-
-    public Page<User> filterUsers(int page, int size, String filter) {
-        log.debug("Filtering users by '{}'", filter);
-
-        Pageable pageable = PageRequest.of(page, size);
-
-        if (filter == null) {
-            return userRepository.getAll(pageable);
-        }
-
-        return switch (filter) {
-            case "banned" -> userRepository.getBanned(pageable);
-            case "admin", "moderator" -> userRepository.getByRole(pageable, filter);
-            default -> userRepository.getAll(pageable);
-        };
-    }
-
-    public Page<User> search(int page, int size, String q, String type) {
-        log.debug("Searching users: query='{}', type={}", q, type);
-
-        Pageable pageable = PageRequest.of(page, size);
-
-        Page<User> users = type.equals("email")
-                ? userRepository.getByContainingEmail(pageable, q)
-                : userRepository.getByContainingLogin(pageable, q);
-
-        log.info("User search completed: query='{}', found={}", q, users.getTotalElements());
-        return users;
+                "user with id=" + id + " not exist");
     }
 
     @CacheEvict(value = "profile", allEntries = true)
@@ -131,36 +97,11 @@ public class UserService implements UserDetailsService {
         return updated;
     }
 
-    private void saveAvatar(User user, MultipartFile avatarFile) throws IOException {
-        String filename = UUID.randomUUID() + "_" + avatarFile.getOriginalFilename();
-        Path uploadPath = Paths.get("uploads/avatars");
-
-        Files.createDirectories(uploadPath);
-        avatarFile.transferTo(uploadPath.resolve(filename));
-
-        user.setAvatar(filename);
-
-        log.info("Avatar saved: userId={}, file={}", user.getId(), filename);
-    }
-
     public User register(RegistrationUserTo registrationTo) {
         log.debug("Registering user: email={}, login={}",
                 registrationTo.getEmail(), registrationTo.getLogin());
 
-        if (!registrationTo.getPassword().equals(registrationTo.getConfirmPassword())) {
-            log.warn("Password mismatch during registration: email={}", registrationTo.getEmail());
-            throw new PasswordMismatchException();
-        }
-
-        if (userRepository.getByEmail(registrationTo.getEmail()) != null) {
-            log.warn("Email already exists: {}", registrationTo.getEmail());
-            throw new EmailAlreadyExistsException(registrationTo.getEmail());
-        }
-
-        if (userRepository.getByLogin(registrationTo.getLogin()) != null) {
-            log.warn("Login already exists: {}", registrationTo.getLogin());
-            throw new LoginAlreadyExistsException(registrationTo.getLogin());
-        }
+        validateRegistration(registrationTo);
 
         User user = create(new User(
                 registrationTo.getEmail(),
@@ -171,30 +112,6 @@ public class UserService implements UserDetailsService {
 
         log.info("User registered: userId={}, email={}", user.getId(), user.getEmail());
         return user;
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
-    @Transactional
-    public void banUser(int id) {
-        log.debug("Banning user: userId={}", id);
-
-        User user = userRepository.get(id);
-        checkNotFound(user, "user with id=" + id + " not exist");
-
-        user.setEnabled(false);
-        log.info("User banned: userId={}", id);
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
-    @Transactional
-    public void unbanUser(int id) {
-        log.debug("Unbanning user: userId={}", id);
-
-        User user = userRepository.get(id);
-        checkNotFound(user, "user with id=" + id + " not exist");
-
-        user.setEnabled(true);
-        log.info("User unbanned: userId={}", id);
     }
 
     @Override
@@ -219,5 +136,34 @@ public class UserService implements UserDetailsService {
 
         log.debug("Current user resolved: userId={}", user.getId());
         return user;
+    }
+
+    private void validateRegistration(RegistrationUserTo registrationTo) {
+        if (!registrationTo.getPassword().equals(registrationTo.getConfirmPassword())) {
+            log.warn("Password mismatch during registration: email={}", registrationTo.getEmail());
+            throw new PasswordMismatchException();
+        }
+
+        if (userRepository.getByEmail(registrationTo.getEmail()) != null) {
+            log.warn("Email already exists: {}", registrationTo.getEmail());
+            throw new EmailAlreadyExistsException(registrationTo.getEmail());
+        }
+
+        if (userRepository.getByLogin(registrationTo.getLogin()) != null) {
+            log.warn("Login already exists: {}", registrationTo.getLogin());
+            throw new LoginAlreadyExistsException(registrationTo.getLogin());
+        }
+    }
+
+    private void saveAvatar(User user, MultipartFile avatarFile) throws IOException {
+        String filename = UUID.randomUUID() + "_" + avatarFile.getOriginalFilename();
+        Path uploadPath = Paths.get("uploads/avatars");
+
+        Files.createDirectories(uploadPath);
+        avatarFile.transferTo(uploadPath.resolve(filename));
+
+        user.setAvatar(filename);
+
+        log.info("Avatar saved: userId={}, file={}", user.getId(), filename);
     }
 }

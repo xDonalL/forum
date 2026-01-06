@@ -5,7 +5,6 @@ import com.forum.forum.dto.TopicDto;
 import com.forum.forum.dto.TopicPageDto;
 import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
-import com.forum.forum.model.TopicComment;
 import com.forum.forum.model.TopicSort;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
@@ -118,42 +117,6 @@ public class TopicService {
             return topic.getLikedUsers().add(currentUser);
         }
     }
-
-//    @PreAuthorize("isAuthenticated()")
-//    @Transactional
-//    public boolean addLike(Integer topicId, User user) {
-//        log.debug("Adding like: topicId={}, userId={}", topicId, user.getId());
-//
-//        Topic topic = topicRepository.get(topicId);
-//        checkNotFound(topic, "topic with id=" + topicId + " not exist");
-//
-//        boolean added = topic.getLikedUsers().add(user);
-//
-//        if (added) {
-//            log.info("Topic liked: topicId={}, userId={}", topicId, user.getId());
-//        } else {
-//            log.debug("Like already exists: topicId={}, userId={}", topicId, user.getId());
-//        }
-//
-//        return added;
-//    }
-//
-//    @PreAuthorize("isAuthenticated()")
-//    @Transactional
-//    public boolean deleteLike(Integer topicId, User user) {
-//        log.debug("Removing like: topicId={}, userId={}", topicId, user.getId());
-//
-//        Topic topic = topicRepository.get(topicId);
-//        checkNotFound(topic, "topic with id=" + topicId + " not exist");
-//
-//        boolean removed = topic.getLikedUsers().remove(user);
-//
-//        if (removed) {
-//            log.info("Like removed: topicId={}, userId={}", topicId, user.getId());
-//        }
-//
-//        return removed;
-//    }
 
     public Page<TopicPagesDto> getAllSorted(int page, int size, TopicSort sort) {
         log.debug("Getting topics sorted by '{}'", sort);
