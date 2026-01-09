@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.forum.forum.TopicCommentTestData.*;
-import static com.forum.forum.UserTestData.USER;
+import static com.forum.forum.UserTestData.NOT_FOUND_ID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -31,6 +31,22 @@ class TopicCommentServiceTest {
 
     @InjectMocks
     private TopicCommentService commentService;
+
+    @Test
+    void getTopicCommentSuccess() {
+        when(commentRepository.get(COMMENT1_ID)).thenReturn(COMMENT1);
+        TopicComment verifyComment = commentService.get(COMMENT1_ID);
+
+        assertEquals(COMMENT1, verifyComment);
+    }
+
+    @Test
+    void getTopicCommentNotFoundException() {
+        when(commentRepository.get(NOT_FOUND_ID)).thenReturn(null);
+
+        assertThrows(NotFoundException.class,
+                () -> commentService.get(NOT_FOUND_ID));
+    }
 
     @Test
     void addCommentSuccess() {
@@ -92,36 +108,5 @@ class TopicCommentServiceTest {
 
         assertThrows(NotFoundException.class,
                 () -> commentService.update(COMMENT1_ID, COMMENT1.getComment()));
-    }
-
-    @Test
-    void addLikeSuccess() {
-        when(commentRepository.get(COMMENT1_ID)).thenReturn(COMMENT1);
-
-        assertTrue(commentService.addLike(COMMENT1_ID, USER));
-    }
-
-    @Test
-    void addLikeNotFoundException() {
-        when(commentRepository.get(COMMENT1_ID)).thenReturn(null);
-
-        assertThrows(NotFoundException.class,
-                () -> commentService.addLike(COMMENT1_ID, USER));
-    }
-
-    @Test
-    void deleteLikeSuccess() {
-        when(commentRepository.get(COMMENT1_ID)).thenReturn(COMMENT1);
-        commentService.addLike(COMMENT1_ID, USER);
-
-        assertTrue(commentService.deleteLike(COMMENT1_ID, USER));
-    }
-
-    @Test
-    void deleteLikeNotFoundException() {
-        when(commentRepository.get(COMMENT1_ID)).thenReturn(null);
-
-        assertThrows(NotFoundException.class,
-                () -> commentService.deleteLike(COMMENT1_ID, USER));
     }
 }

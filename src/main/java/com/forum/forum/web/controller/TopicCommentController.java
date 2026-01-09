@@ -88,8 +88,7 @@ public class TopicCommentController {
 
     @PostMapping("/delete/{id}")
     public String deleteComment(@PathVariable Integer id,
-                                @RequestParam Integer topicId,
-                                Authentication auth) {
+                                @RequestParam Integer topicId) {
         log.warn("Moderator/Admin deletes comment {}, topic {}",
                 id, topicId);
 
@@ -97,8 +96,9 @@ public class TopicCommentController {
 
         commentService.delete(id);
 
-        AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
-        adminLogService.logAction(authorizedUser.getUser().getLogin(),
+        User user = userService.getCurrentUser();
+
+        adminLogService.logAction(user.getLogin(),
                 DELETE_TOPIC, authorLogin, id);
         return "redirect:/topic/" + topicId;
     }

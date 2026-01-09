@@ -7,10 +7,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
-
-import static com.forum.forum.AdminLogTestData.*;
+import static com.forum.forum.AdminLogTestData.LOG_DELETE_COMMENT;
+import static com.forum.forum.AdminLogTestData.TEST_LOG;
+import static com.forum.forum.PageTestData.*;
 import static com.forum.forum.UserTestData.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -40,24 +41,24 @@ class AdminLogServiceTest {
         verify(logRepository).save(any(AdminLog.class));
     }
 
-//    @Test
-//    void getAllLogSuccess() {
-//        when(logRepository.getAll()).thenReturn(TEST_LOG);
-//
-//        List<AdminLog> logs = logService.getAll();
-//
-//        assertEquals(TEST_LOG.size(), logs.size());
-//    }
-//
-//    @Test
-//    void searchLogByUsernameSuccess() {
-//        List<AdminLog> logs = List.of(LOG_BAN, LOG_UNBAN);
-//        when(logRepository.getLogByLogin(USER.getLogin())).thenReturn(List.of(LOG_BAN, LOG_UNBAN));
-//
-//        List<AdminLog> verifiableLogs = logService.searchByUsername(USER.getLogin());
-//
-//        assertEquals(logs.size(), verifiableLogs.size());
-//
-//        verify(logRepository).getLogByLogin(USER.getLogin());
-//    }
+    @Test
+    void getAllLogSuccess() {
+        when(logRepository.getAll(PAGE)).thenReturn(TEST_LOG);
+
+        Page<AdminLog> logs = logService.getAll(PAGE_NUMBER, PAGE_SIZE);
+
+        assertEquals(TEST_LOG.getTotalElements(), logs.getTotalElements());
+    }
+
+    @Test
+    void searchLogByUsernameSuccess() {
+        Page<AdminLog> logs = TEST_LOG;
+        when(logRepository.getLogByLogin(PAGE, USER.getLogin())).thenReturn(logs);
+
+        Page<AdminLog> verifiableLogs = logService.searchByUsername(PAGE_NUMBER, PAGE_SIZE, USER.getLogin());
+
+        assertEquals(logs.getTotalElements(), verifiableLogs.getTotalElements());
+
+        verify(logRepository).getLogByLogin(PAGE, USER.getLogin());
+    }
 }

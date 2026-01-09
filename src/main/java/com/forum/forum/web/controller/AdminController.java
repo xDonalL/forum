@@ -6,6 +6,7 @@ import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.service.AdminLogService;
 import com.forum.forum.service.AdminService;
 import com.forum.forum.service.TopicCommentService;
+import com.forum.forum.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final AdminLogService logService;
-    private final TopicCommentService topicCommentService;
+    private final UserService userService;
 
     @GetMapping("/panel")
     public String showUsersPanel(@RequestParam(required = false) String filter,
@@ -63,7 +64,7 @@ public class AdminController {
 
         log.info("Admin banning user: id={}", id);
 
-        String authorLogin = topicCommentService.get(id).getAuthor().getLogin();
+        String authorLogin = userService.getUserById(id).getLogin();
 
         adminService.banUser(id);
 
@@ -78,7 +79,7 @@ public class AdminController {
                             Authentication auth) {
         log.info("Admin unbanning user: id={}", id);
 
-        String authorLogin = topicCommentService.get(id).getAuthor().getLogin();
+        String authorLogin = userService.getUserById(id).getLogin();
 
         adminService.unbanUser(id);
 
@@ -98,9 +99,9 @@ public class AdminController {
 
         if (q != null && !q.isBlank()) {
             log.info("Search log by query: '{}'", q);
-            pageLogs = logService.searchByUsername(page, 2, q);
+            pageLogs = logService.searchByUsername(page, 10, q);
         } else {
-            pageLogs = logService.getAll(page, 2);
+            pageLogs = logService.getAll(page, 10);
         }
 
         model.addAttribute("pageLogs", pageLogs);

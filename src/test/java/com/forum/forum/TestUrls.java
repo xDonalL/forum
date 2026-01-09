@@ -1,5 +1,7 @@
 package com.forum.forum;
 
+import java.net.URI;
+
 public class TestUrls {
 
     public static final String LOGIN_VIEW = "**/login";
@@ -8,13 +10,9 @@ public class TestUrls {
 
     public static final String TOPIC_LIST = "/topic";
     public static final String TOPIC_ADD = "/topic/add";
-    public static final String TOPIC_LIKE_ADD = "/topic/like/add";
-    public static final String TOPIC_LIKE_DELETE = "/topic/like/delete";
-
     public static final String COMMENT_ADD = "/topic/comment/add";
-    public static final String COMMENT_LIKE_ADD = "/topic/comment/like/add";
-    public static final String COMMENT_LIKE_DELETE = "/topic/comment/like/delete";
-
+    public static final String TOPIC_LIKE = "/topic/like";
+    public static final String COMMENT_LIKE = "/topic/comment/like";
 
     public static String topicView(Integer id) {
         return "/topic/" + id;

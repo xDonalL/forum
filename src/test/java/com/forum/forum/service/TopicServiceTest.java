@@ -1,5 +1,6 @@
 package com.forum.forum.service;
 
+import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
@@ -11,7 +12,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
+import java.util.List;
+
+import static com.forum.forum.PageTestData.*;
 import static com.forum.forum.TopicTestData.*;
 import static com.forum.forum.UserTestData.USER;
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,7 +38,7 @@ class TopicServiceTest {
 
     @Test
     void createSuccess() {
-        User author = TOPIC1.getAuthor();
+        User author = TOPIC.getAuthor();
         Topic newTopic = getNewTopic(author);
 
         when(topicRepository.save(any(Topic.class)))
@@ -53,24 +59,24 @@ class TopicServiceTest {
         assertEquals(savedTopic.getTitle(), captor.getValue().getTitle());
     }
 
-//    @Test
-//    void getAllTopicSuccess() {
-//        when(topicRepository.getAll()).thenReturn(ALL_TOPIC);
-//
-//        List<Topic> topics = topicService.getAllSorted(null);
-//
-//        assertEquals(ALL_TOPIC.size(), topics.size());
-//        assertTrue(topics.contains(TOPIC1));
-//        assertTrue(topics.contains(TOPIC2));
-//    }
+    @Test
+    void getAllTopicSuccess() {
+        when(topicRepository.getAllTopics(PAGE)).thenReturn(ALL_TOPIC_PAGE);
+
+        Page<TopicPagesDto> verifyTopics = topicService.getAllSorted(PAGE_NUMBER, PAGE_SIZE, null);
+
+        assertEquals(ALL_TOPIC_PAGE.getTotalElements(), verifyTopics.getTotalElements());
+        assertTrue(verifyTopics.getContent().contains(PAGES_TOPIC_DTO1));
+        assertTrue(verifyTopics.getContent().contains(PAGES_TOPIC_DTO2));
+    }
 
     @Test
     void getTopicSuccess() {
-        when(topicRepository.get(TOPIC1_ID)).thenReturn(TOPIC1);
+        when(topicRepository.get(TOPIC1_ID)).thenReturn(TOPIC);
 
         Topic topic = topicService.get(TOPIC1_ID);
         assertNotNull(topic);
-        assertEquals(TOPIC1.getId(), topic.getId());
+        assertEquals(TOPIC.getId(), topic.getId());
     }
 
     @Test
@@ -83,7 +89,7 @@ class TopicServiceTest {
 
     @Test
     void deleteTopicSuccess() {
-        when(topicRepository.get(TOPIC1_ID)).thenReturn(TOPIC1);
+        when(topicRepository.get(TOPIC1_ID)).thenReturn(TOPIC);
         when(topicRepository.delete(TOPIC1_ID)).thenReturn(true);
 
         boolean deleted = topicService.delete(TOPIC1_ID);
@@ -102,58 +108,26 @@ class TopicServiceTest {
                 () -> topicService.delete(TOPIC1_ID));
     }
 
-//    @Test
-//    void searchTopicSuccess() {
-//        String topicTitle = TOPIC1.getTitle();
-//        when(topicRepository.getTopicsByTopicName(topicTitle)).thenReturn((List.of(TOPIC1)));
-//
-//        List<Topic> topics = topicService.search(topicTitle);
-//
-//        assertEquals(TOPIC1.getId(), topics.getFirst().getId());
-//        verify(topicRepository).getTopicsByTopicName(topicTitle);
-//    }
-//
-//    @Test
-//    void searchTopicNotFoundException() {
-//        String topicTitle = TOPIC1.getTitle();
-//        when(topicRepository.getTopicsByTopicName(topicTitle)).thenReturn(null);
-//
-//        assertThrows(NotFoundException.class,
-//                () -> topicService.search(topicTitle));
-//    }
-
     @Test
-    void addLikeSuccess() {
-        Integer topicId = TOPIC1.getId();
-        when(topicRepository.get(topicId)).thenReturn(TOPIC1);
+    void searchTopicSuccess() {
+        String topicTitle = PAGES_TOPIC_DTO1.title();
 
-        assertTrue(topicService.addLike(topicId, USER));
+        when(topicRepository.getTopicsByTitle(topicTitle, PAGE))
+                .thenReturn(new PageImpl<>(List.of(PAGES_TOPIC_DTO1)));
+
+        Page<TopicPagesDto> verifyTopics = topicService.search(PAGE_NUMBER, PAGE_SIZE, topicTitle);
+
+        assertEquals(PAGES_TOPIC_DTO1.id(), verifyTopics.get().findFirst().get().id());
+        verify(topicRepository).getTopicsByTitle(topicTitle, PAGE);
     }
 
     @Test
-    void addLikeTopicNotFoundException() {
-        Integer topicId = TOPIC1.getId();
-        when(topicRepository.get(topicId)).thenReturn(null);
+    void searchTopicNotFoundException() {
+        String topicTitle = PAGES_TOPIC_DTO1.title();
 
+        when(topicRepository.getTopicsByTitle(topicTitle, PAGE))
+                .thenReturn(null);
         assertThrows(NotFoundException.class,
-                () -> topicService.addLike(topicId, USER));
-    }
-
-    @Test
-    void deleteLikeSuccess() {
-        Integer topicId = TOPIC1.getId();
-        when(topicRepository.get(topicId)).thenReturn(TOPIC1);
-        topicService.addLike(topicId, USER);
-
-        assertTrue(topicService.deleteLike(topicId, USER));
-    }
-
-    @Test
-    void deleteLikeTopicNotFoundException() {
-        Integer topicId = TOPIC1.getId();
-        when(topicRepository.get(topicId)).thenReturn(null);
-
-        assertThrows(NotFoundException.class,
-                () -> topicService.deleteLike(topicId, USER));
+                () -> topicService.search(PAGE_NUMBER, PAGE_SIZE, topicTitle));
     }
 }

@@ -144,9 +144,8 @@ public class TopicController {
 
         topicService.delete(id);
 
-        AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
-        adminLogService.logAction(authorizedUser.getUser().getLogin(),
-                DELETE_TOPIC, authorLogin, id);
+        User user = userService.getCurrentUser();
+        adminLogService.logAction(user.getLogin(), DELETE_TOPIC, authorLogin, id);
         return "redirect:/topic";
     }
 

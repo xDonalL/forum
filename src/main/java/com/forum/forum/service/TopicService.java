@@ -129,7 +129,7 @@ public class TopicService {
 
         return switch (sort) {
             case TopicSort.LIKES_DESC -> topicRepository.getTopicsSortByLikes(pageable);
-            case TopicSort.DATE_ASC -> topicRepository.getAllTopics(pageable);
+            case TopicSort.DATE_ASC -> topicRepository.getAllTopicsAsc(pageable);
             default -> topicRepository.getAllTopics(pageable);
         };
     }

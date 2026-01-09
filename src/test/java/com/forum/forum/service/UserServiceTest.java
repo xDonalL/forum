@@ -15,7 +15,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
-import java.util.List;
 
 import static com.forum.forum.UserTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -121,17 +120,6 @@ class UserServiceTest {
 
         assertThrows(NotFoundException.class, () -> userService.getUserById(NOT_FOUND_ID));
     }
-
-//    @Test
-//    void getAllUserSuccess() {
-//        List<User> list = List.of(USER, ADMIN);
-//
-//        when(userRepository.getAll()).thenReturn(list);
-//
-//        List<User> all = userService.filterUsers(null);
-//
-//        assertEquals(list.size(), all.size());
-//    }
 
     @Test
     void registerValidNewUser() {
