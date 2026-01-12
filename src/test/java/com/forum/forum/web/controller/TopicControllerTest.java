@@ -58,9 +58,8 @@ class TopicControllerTest {
 
         mockMvc.perform(get(TestUrls.topicView(TOPIC1_ID)))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("topicDto"))
-                .andExpect(model().attributeExists("commentsDto"))
-                .andExpect(model().attributeExists("commentTo"))
+                .andExpect(model().attributeExists("topic"))
+                .andExpect(model().attributeExists("comments"))
                 .andExpect(view().name("topic/view"));
     }
 
@@ -69,7 +68,7 @@ class TopicControllerTest {
         mockMvc.perform(get(TestUrls.TOPIC_ADD))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("topicTo"))
-                .andExpect(view().name("topic/add"));
+                .andExpect(view().name("topic/form"));
     }
 
     @Test
@@ -95,7 +94,7 @@ class TopicControllerTest {
                         .param("title", "")
                         .param("content", ""))
                 .andExpect(status().isOk())
-                .andExpect(view().name("topic/add"));
+                .andExpect(view().name("topic/form"));
 
         verify(topicService, never()).create(any(), any(), any());
     }
@@ -106,7 +105,7 @@ class TopicControllerTest {
 
         mockMvc.perform(get(TestUrls.topicEdit(TOPIC1_ID)))
                 .andExpect(status().isOk())
-                .andExpect(view().name("topic/edit"))
+                .andExpect(view().name("topic/form"))
                 .andExpect(model().attributeExists("topicTo"));
     }
 
@@ -129,7 +128,7 @@ class TopicControllerTest {
                         .param("title", "")
                         .param("content", ""))
                 .andExpect(status().isOk())
-                .andExpect(view().name("topic/edit"));
+                .andExpect(view().name("topic/form"));
 
         verify(topicService, never()).update(any(), any(), any());
     }

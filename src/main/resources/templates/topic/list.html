@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
 <head>
-    <link rel="stylesheet" th:href="@{/css/header.css}">
-    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
     <link rel="stylesheet" th:href="@{/css/base.css}">
-    <link rel="stylesheet" th:href="@{/css/forum.css}">
+    <link rel="stylesheet" th:href="@{/css/topic/list.css}">
     <meta charset="UTF-8">
     <title th:text="#{topic.edit}"/>
 </head>
@@ -16,7 +16,7 @@
     <div th:replace="fragments/header :: header"></div>
 
     <main class="content">
-        <a href="/topic/add" class="btn-create-topic" th:text="#{topic.create}"/>
+        <a href="/topic/add" class="btn btn-primary" th:text="#{topic.create}"/>
         <div class="topics-toolbar">
             <form method="get" th:action="@{/topic}" class="search-form">
                 <input type="text"
@@ -52,7 +52,8 @@
                           sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')"
                           method="post">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                        <button th:text="#{button.delete}"/>
+                        <button class="btn btn-danger"
+                                th:text="#{button.delete}"/>
                     </form>
                 </div>
 
@@ -66,25 +67,26 @@
                             <span th:text="${t.authorLogin()}" class="username"></span>
                         </a>
                     </div>
-                    <span th:if="${t.updatedAt() != null}">
-                        (edited at
-                         <span th:text="${#temporals.format(t.updatedAt(), 'dd.MM.yyyy HH:mm')}"></span>)
-                    </span>
+
+                    <span class="topic-date"
+                          th:if="${t.updatedAt() != null}"
+                          th:text="#{app.edit} + ' ' + ${#temporals.format(t.updatedAt(), 'dd.MM.yyyy HH:mm')}"/>
+
                 </div>
                 <div class="topic-footer-bar">
-                    <span class="topic-date"
-                          th:text="${#temporals.format(t.createdAt(), 'yyyy-MM-dd HH:mm')}">
-                          </span>
+                    <span class="topic-create"
+                          th:text="${#temporals.format(t.createdAt(), 'yyyy-MM-dd HH:mm')}"/>
 
                     <span class="topic-comments">
-                         <img src="/img/comments.webp" class="icon">
-                          <span th:text="${t.commentCount()}"></span>
-                         </span>
+                         <img src="/img/comments.webp" class="icon"
+                              th:text="${t.commentCount()}"/>
+                    </span>
 
                     <span class="topic-likes">
-                            <img src="/img/likes.webp" class="icon">
-                         <span th:text="${t.likesCount()}"></span>
-                            </span>
+                    <img src="/img/likes.webp" class="icon"
+                         th:text="${t.likesCount()}"/>
+                    </span>
+
                 </div>
             </div>
         </div>

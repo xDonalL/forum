@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
-    <link rel="stylesheet" th:href="@{/css/header.css}">
-    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
     <link rel="stylesheet" th:href="@{/css/base.css}">
-    <link rel="stylesheet" th:href="@{/css/topic.css}">
+    <link rel="stylesheet" th:href="@{/css/topic/view.css}">
     <meta charset="UTF-8">
-    <title th:text="${topicDto.title}"/>
+    <title th:text="${topic.title}"/>
 </head>
 
 <body>
@@ -29,42 +29,47 @@
                             MODERATOR
                         </div>
 
-                        <a th:href="@{/profile/{id}-{login}(id=${topicDto.authorId}, login=${topicDto.authorLogin})}">
-                            <img th:src="@{/avatars/{file}(file=${topicDto.authorAvatar})}" class="avatar">
+                        <a th:href="@{/profile/{id}-{login}(id=${topic.authorId}, login=${topic.authorLogin})}">
+                            <img th:src="@{/avatars/{file}(file=${topic.authorAvatar})}" class="avatar">
                         </a>
                     </div>
-                    <a th:href="@{/profile/{id}-{login}(id=${topicDto.authorId}, login=${topicDto.authorLogin})}">
-                        <span th:text="${topicDto.authorLogin}"></span>
+                    <a th:href="@{/profile/{id}-{login}(id=${topic.authorId}, login=${topic.authorLogin})}">
+                        <span th:text="${topic.authorLogin}"></span>
                     </a>
                     <a sec:authorize="isAuthenticated()"
-                       th:if="${#authentication.principal.id == topicDto.authorId}"
-                       th:href="@{/topic/edit/{id}(id=${topicDto.id})}"
-                       th:text="#{target.edit}">✏</a>
+                       th:if="${#authentication.principal.id == topic.authorId}"
+                       th:href="@{/topic/edit/{id}(id=${topic.id})}"
+                       th:text="#{target.edit}"/>
                 </div>
-                <span th:text="${#temporals.format(topicDto.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+                <span class="topic-date"
+                      th:if="${topic.updatedAt() != null}"
+                      th:text="#{app.edit} + ' ' + ${#temporals.format(topic.updatedAt(), 'dd.MM.yyyy HH:mm')}"/>
+
             </div>
-            <h2 th:text="${topicDto.title}"></h2>
-            <p th:text="${topicDto.content}"></p>
-            <span th:if="${topicDto.updatedAt() != null}">
-                        (edited at
-                         <span th:text="${#temporals.format(topicDto.updatedAt(), 'dd.MM.yyyy HH:mm')}"></span>)
-                    </span>
 
-            <form method="post" action="/topic/like">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                <input type="hidden" name="topicId" th:value="${topicDto.id()}">
+            <h2 th:text="${topic.title}"></h2>
+            <p th:text="${topic.content}"></p>
 
-                <button type="submit" class="like-button">
-                    <img src="/img/likes.webp"
-                         class="like-icon"
-                         th:classappend="${topicDto.likedByMe()} ? 'liked' : 'unliked'">
-                    <span th:text="${topicDto.likesCount()}"></span>
-                </button>
-            </form>
+            <div class="topic-footer">
+
+        <span class="topic-date"
+              th:text="${#temporals.format(topic.createdAt, 'yyyy-MM-dd HH:mm')}"/>
+
+                <form method="post" action="/topic/like">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <input type="hidden" name="topicId" th:value="${topic.id()}">
+                    <button type="submit" class="like-button">
+                        <img src="/img/likes.png"
+                             class="like-icon"
+                             th:classappend="${topic.likedByMe()} ? 'liked' : 'unliked'">
+                        <span th:text="${topic.likesCount()}"></span>
+                    </button>
+                </form>
+            </div>
         </div>
 
         <h3 th:text="#{topic.comments}"/>
-        <div th:each="c : ${commentsDto}" class="comment-card">
+        <div th:each="c : ${comments}" class="comment-card">
             <div class="comment-header">
                 <div class="user-info">
                     <div class="avatar-wrapper">
@@ -83,63 +88,70 @@
                     <a th:href="@{/profile/{id}-{login}(id=${c.authorId()}, login=${c.authorLogin()})}">
                         <span th:text="${c.authorLogin()}"></span>
                     </a>
+
+                    <a sec:authorize="isAuthenticated()"
+                       th:if="${#authentication.principal.id == c.authorId}"
+                       th:href="@{/topic/comment/edit/{id}(id=${c.commentId()})}"
+                       th:text="#{target.edit}"/>
+
                 </div>
-                <span th:text="${#temporals.format(c.dateCreated(), 'yyyy-MM-dd HH:mm')}"></span>
-                <span th:if="${c.updatedAt() != null}">
-                        (edited at
-                         <span th:text="${#temporals.format(c.updatedAt(), 'dd.MM.yyyy HH:mm')}"></span>)
-                    </span>
+
+                <span th:if="${c.updatedAt() != null}"
+                      class="comment-date"
+                      th:text="#{app.edit} + ' ' + ${#temporals.format(c.updatedAt(), 'dd.MM.yyyy HH:mm')}"/>
+
             </div>
             <p th:text="${c.comment()}"></p>
             <form th:action="@{/topic/comment/delete/{id}(id=${c.commentId()})}"
                   sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')"
                   method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                <input type="hidden" name="topicId" th:value="${topicDto.id}"/>
-                <button th:text="#{button.delete}"/>
+                <input type="hidden" name="topicId" th:value="${topic.id}"/>
+                <button class="btn-danger" th:text="#{button.delete}"/>
             </form>
-            <a sec:authorize="isAuthenticated()"
-               th:if="${#authentication.principal.id == c.authorId()}"
-               th:href="@{/topic/comment/edit/{id}(id=${c.commentId()})}"
-               th:text="#{target.edit}"/>
+            <div class="comment-footer">
 
-            <form method="post" action="/topic/comment/like">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                <input type="hidden" name="commentId" th:value="${c.commentId()}">
-                <input type="hidden" name="topicId" th:value="${topicDto.id}">
+                    <span class="comment-date"
+                          th:text="${#temporals.format(c.dateCreated(), 'yyyy-MM-dd HH:mm')}"/>
 
-                <button type="submit" class="like-button">
-                    <img src="/img/likes.webp"
-                         class="like-icon"
-                         th:classappend="${c.likedByMe()} ? 'liked' : 'unliked'">
-                    <span th:text="${c.likesCount()}"></span>
-                </button>
-            </form>
+                <form method="post" action="/topic/comment/like">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <input type="hidden" name="commentId" th:value="${c.commentId()}">
+                    <input type="hidden" name="topicId" th:value="${topic.id}">
+
+                    <button type="submit" class="like-button">
+                        <img src="/img/likes.png"
+                             class="like-icon"
+                             th:classappend="${c.likedByMe()} ? 'liked' : 'unliked'">
+                        <span th:text="${c.likesCount()}"></span>
+                    </button>
+                </form>
+            </div>
         </div>
 
-        <nav class="pagination" th:if="${commentsDto.totalElements > 1}">
+        <nav class="pagination" th:if="${comments.totalElements > 1}">
             <ul>
 
-                <li th:classappend="${!commentsDto.hasPrevious()} ? 'disabled'">
-                    <a th:if="${commentsDto.hasPrevious()}"
-                       th:href="@{${baseUrl}(page=${commentsDto.number - 1})}">
+                <li th:classappend="${!comments.hasPrevious()} ? 'disabled'">
+                    <a th:if="${comments.hasPrevious()}"
+                       th:href="@{${baseUrl}(page=${comments.number - 1})}">
                         ←
                     </a>
-                    <span th:if="${!commentsDto.hasPrevious()}">←</span>
+                    <span th:if="${!comments.hasPrevious()}">←</span>
                 </li>
 
-                <li th:each="i : ${#numbers.sequence(0, commentsDto.totalPages - 1)}"
-                    th:classappend="${i == commentsDto.number} ? 'active'">
+                <li th:each="i : ${#numbers.sequence(0, comments.totalPages - 1)}"
+                    th:classappend="${i == comments.number} ? 'active'">
                     <a th:href="@{${baseUrl}(page=${i})}"
                        th:text="${i + 1}"></a>
                 </li>
 
-                <li th:classappend="${!commentsDto.hasNext()} ? 'disabled'">
-                    <a th:if="${commentsDto.hasNext()}"
-                       th:href="@{${baseUrl}(page=${commentsDto.number + 1})}">
+                <li th:classappend="${!comments.hasNext()} ? 'disabled'">
+                    <a th:if="${comments.hasNext()}"
+                       th:href="@{${baseUrl}(page=${comments.number + 1})}">
                         →
                     </a>
-                    <span th:if="${!commentsDto.hasNext()}">→</span>
+                    <span th:if="${!comments.hasNext()}">→</span>
                 </li>
 
             </ul>
@@ -150,12 +162,13 @@
                   th:object="${commentTo}">
 
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                <input type="hidden" name="topicId" th:value="${topicDto.id}">
+                <input type="hidden" name="topicId" th:value="${topic.id}">
 
                 <div class="form-group">
                     <label for="comment" th:text="#{topic.comment}"/>
 
-                    <textarea id="comment" th:field="*{comment}" placeholder="Write comment..."></textarea>
+                    <textarea id="comment" th:field="*{comment}"
+                              th:placeholder="#{comment.write}"></textarea>
 
                     <div class="field-error"
                          th:if="${#fields.hasErrors('comment')}"

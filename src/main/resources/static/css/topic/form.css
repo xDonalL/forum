@@ -1,3 +1,10 @@
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
 .form-container h2 {
     margin-bottom: 20px;
     text-align: center;
@@ -34,43 +41,6 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
-}
-
-.btn-primary {
-    background: #4aa3ff;
-    color: #fff;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.btn-primary:hover {
-    background: #2f8cff;
-}
-
-.btn-secondary {
-    text-decoration: none;
-    color: #555;
-    font-size: 14px;
-}
-
-.btn-secondary:hover {
-    text-decoration: underline;
-}
-
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
-.content {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
 }
 
 .form-container {

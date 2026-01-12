@@ -1,0 +1,39 @@
+.btn {
+    display: inline-flex;
+    /*display: flex;*/
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #4aa3df;
+    margin: 20px auto;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-primary {
+    background-color: #4aa3df;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #3b8ac1;
+}
+
+.btn-danger {
+    background-color: #e53935;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c62828;
+}

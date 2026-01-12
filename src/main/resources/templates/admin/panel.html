@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" th:href="@{/css/header.css}">
-    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
     <link rel="stylesheet" th:href="@{/css/base.css}">
-    <link rel="stylesheet" th:href="@{/css/panel.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/panel.css}">
     <meta charset="UTF-8">
     <title>Admin panel</title>
 </head>
@@ -16,7 +16,15 @@
     <h1 class="page-title">Admin panel</h1>
 
     <main class="content">
+
         <div class="admin-users">
+            <form method="get" th:action="@{/admin/log}">
+                <button class="btn btn-primary"
+                        type="submit">
+                    LOG LIST
+                </button>
+            </form>
+
             <form method="get" th:action="@{/admin/panel}" class="search-form">
                 <input type="text"
                        name="q"
@@ -29,12 +37,6 @@
 
                 <button type="submit" name="type" value="email">
                     🔍 email
-                </button>
-            </form>
-
-            <form method="get" th:action="@{/admin/log}">
-                <button type="submit">
-                    LOG
                 </button>
             </form>
 

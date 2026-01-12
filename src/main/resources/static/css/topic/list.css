@@ -1,7 +1,5 @@
 .content {
-    max-width: 900px;
     margin: 0 auto;
-    padding: 20px;
 }
 
 .topics-list {
@@ -41,6 +39,9 @@
     justify-content: space-between;
     align-items: flex-end;
     margin-top: 20px;
+
+    /*font-size: 13px;*/
+    /*color: #666;*/
 }
 
 .author-info {
@@ -61,33 +62,6 @@
     font-weight: bold;
 }
 
-.created-date {
-    font-size: 0.9em;
-    color: #555;
-}
-
-.btn-create-topic {
-    display: flex;
-    justify-content: center;
-    padding: 10px 20px;
-    background-color: #4aa3df;
-    margin: 20px auto;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.btn-create-topic:hover {
-    background-color: #3b8ac1;
-    transform: translateY(-2px);
-}
-
-.btn-create-topic:active {
-    transform: translateY(1px);
-}
-
 .topics-toolbar {
     display: flex;
     justify-content: space-between;
@@ -96,7 +70,6 @@
     margin-bottom: 16px;
     gap: 12px;
 }
-
 
 .topic-footer-bar {
     display: flex;
@@ -112,9 +85,12 @@
     color: #666;
 }
 
-.topic-date {
+.topic-create {
     flex: 1;
-    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4px;
 }
 
 .topic-comments {

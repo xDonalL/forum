@@ -5,7 +5,6 @@ import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.TopicSort;
 import com.forum.forum.model.User;
-import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.service.AdminLogService;
 import com.forum.forum.service.TopicService;
 import com.forum.forum.service.UserService;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -67,8 +65,8 @@ public class TopicController {
 
         TopicPageDto topicPage = topicService.getDto(page, 10, id);
 
-        model.addAttribute("topicDto", topicPage.topic());
-        model.addAttribute("commentsDto", topicPage.comments());
+        model.addAttribute("topic", topicPage.topic());
+        model.addAttribute("comments", topicPage.comments());
         model.addAttribute("baseUrl", "/topic/" + id);
 
         if (!model.containsAttribute("commentTo")) {
@@ -83,12 +81,14 @@ public class TopicController {
     public String showCreateTopicPage(Model model) {
         log.debug("Open create topic page");
         model.addAttribute("topicTo", new TopicTo());
-        return "topic/add";
+        model.addAttribute("mode", "create");
+        return "topic/form";
     }
 
     @PostMapping("/add")
     public String addTopic(@Valid @ModelAttribute("topicTo") TopicTo topicTo,
-                           BindingResult bindingResult) {
+                           BindingResult bindingResult,
+                           Model model) {
 
         User user = userService.getCurrentUser();
 
@@ -96,7 +96,8 @@ public class TopicController {
                 user.getId(), topicTo.getTitle());
 
         if (bindingResult.hasErrors()) {
-            return "topic/add";
+            model.addAttribute("mode", "create");
+            return "topic/form";
         }
 
         topicService.create(topicTo.getTitle(), topicTo.getContent(), user);
@@ -116,19 +117,22 @@ public class TopicController {
                 topic.getContent());
 
         model.addAttribute("topicTo", topicTo);
+        model.addAttribute("mode", "update");
 
-        return "topic/edit";
+        return "topic/form";
     }
 
     @PostMapping("/edit/{id}")
     public String editTopic(@PathVariable Integer id,
                             @Valid @ModelAttribute("topicTo") TopicTo topicTo,
-                            BindingResult bindingResult) {
+                            BindingResult bindingResult,
+                            Model model) {
 
         log.info("Update topic: id={}, newTitle='{}'", id, topicTo.getTitle());
 
         if (bindingResult.hasErrors()) {
-            return "topic/edit";
+            model.addAttribute("mode", "update");
+            return "topic/form";
         }
 
         topicService.update(id, topicTo.getTitle(), topicTo.getContent());
@@ -136,8 +140,7 @@ public class TopicController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteTopic(@PathVariable Integer id,
-                              Authentication auth) {
+    public String deleteTopic(@PathVariable Integer id) {
         log.warn("Topic deleted: id={}", id);
 
         String authorLogin = topicService.get(id).getAuthor().getLogin();

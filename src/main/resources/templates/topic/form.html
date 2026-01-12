@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" th:href="@{/css/header.css}">
-    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
     <link rel="stylesheet" th:href="@{/css/base.css}">
-    <link rel="stylesheet" th:href="@{/css/topic-edit.css}">
+    <link rel="stylesheet" th:href="@{/css/topic/form.css}">
     <meta charset="UTF-8">
-    <title th:text="#{topic.create}"/>
+    <title th:text="${mode == 'create'
+        ? #messages.msg('topic.create')
+        : #messages.msg('topic.edit')}"/>
 </head>
 
 <body>
@@ -17,7 +19,9 @@
     <main class="content">
         <div class="form-container">
 
-            <h2 th:text="#{topic.create}"/>
+            <h2 th:text="${mode == 'create'
+                          ? #messages.msg('topic.create')
+                          : #messages.msg('topic.edit')}"/>
 
             <form th:action="@{/topic/add}" method="post"
                   th:object="${topicTo}">
@@ -48,8 +52,12 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary" th:text="#{button.create}"/>
-                    <a th:href="@{/topic}" class="btn-secondary" th:text="#{button.cancel}"/>
+                    <button type="submit" class="btn btn-primary"
+                            th:text="${mode == 'create'
+                               ? #messages.msg('topic.create')
+                               : #messages.msg('topic.edit')}"/>
+
+                    <a th:href="@{/topic}" class="btn btn-danger" th:text="#{button.cancel}"/>
                 </div>
 
             </form>

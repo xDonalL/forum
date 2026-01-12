@@ -1,0 +1,23 @@
+.search-form {
+    display: flex;
+    gap: 6px;
+}
+
+.field-error {
+    color: #d32f2f;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.input-error {
+    border: 2px solid #d32f2f;
+    background-color: #fff6f6;
+}
+
+.form-error {
+    background: #ffecec;
+    color: #d32f2f;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+}

@@ -15,7 +15,8 @@
             <a th:href="@{/}" th:classappend="${activePage=='home'} ? 'active'" class="nav-item"
                th:text="#{forum.home}"/>
 
-            <a th:href="@{/topic}" th:classappend="${activePage=='forum'} ? 'active'" class="nav-item"
+            <a th:href="@{/topic(sort='DATE_DESC')}"
+               th:classappend="${activePage=='forum'} ? 'active'" class="nav-item"
                th:text="#{forum.topics}"/>
 
             <a href="/admin/panel" sec:authorize="hasRole('ADMIN')" class="nav-item">Admin panel</a>

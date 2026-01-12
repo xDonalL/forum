@@ -12,6 +12,8 @@ import com.forum.forum.repository.forum.DataJpaTopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,7 @@ public class TopicService {
     private final UserService userService;
 
     @PreAuthorize("isAuthenticated()")
+    @CacheEvict(value = "topicsPage", allEntries = true)
     @Transactional
     public Topic create(String title, String content, User user) {
         log.debug("Creating topic: title='{}', authorId={}", title, user.getId());
@@ -71,7 +74,7 @@ public class TopicService {
     }
 
     public TopicPageDto getDto(int page, int size, Integer id) {
-        log.debug("Getting topic: id={}", id);
+        log.debug("Getting topicDto: id={}", id);
 
         User currentUser = userService.getCurrentUser();
 
@@ -84,6 +87,7 @@ public class TopicService {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
+    @CacheEvict(value = "topicsPage", allEntries = true)
     @Transactional
     public boolean delete(Integer id) {
         log.debug("Deleting topic: id={}", id);
@@ -118,6 +122,7 @@ public class TopicService {
         }
     }
 
+    @Cacheable("topicsPage")
     public Page<TopicPagesDto> getAllSorted(int page, int size, TopicSort sort) {
         log.debug("Getting topics sorted by '{}'", sort);
 
