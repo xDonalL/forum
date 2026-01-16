@@ -26,7 +26,8 @@
                           ? #messages.msg('topic.create')
                           : #messages.msg('topic.edit')}"/>
 
-            <form th:action="@{/topic/add}" method="post"
+            <form th:action="${mode == 'create'} ? '/topic/add' : '/topic/edit/' + ${topicTo.id}"
+                  method="post"
                   th:object="${topicTo}">
 
                 <input type="hidden"
