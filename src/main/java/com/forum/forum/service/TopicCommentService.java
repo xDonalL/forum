@@ -25,7 +25,7 @@ public class TopicCommentService {
 
     private final DataJpaTopicCommentRepository commentRepository;
     private final DataJpaTopicRepository topicRepository;
-    private final MarkdownService markdownService;
+    private final SafeMarkdownService markdownService;
     private final UserService userService;
 
     @PreAuthorize("isAuthenticated()")
@@ -119,7 +119,7 @@ public class TopicCommentService {
         return commentPage.map(dto ->
                 new TopicCommentDto(
                         dto.commentId(),
-                        markdownService.toHtml(dto.comment()),
+                        markdownService.toSafeHtml(dto.comment()),
                         dto.dateCreated(),
                         dto.updatedAt(),
                         dto.authorId(),

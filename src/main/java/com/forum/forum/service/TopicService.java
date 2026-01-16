@@ -33,7 +33,7 @@ public class TopicService {
     private final DataJpaTopicCommentRepository commentRepository;
     private final UserService userService;
     private final TopicCommentService commentService;
-    private final MarkdownService markdownService;
+    private final SafeMarkdownService markdownService;
 
     @PreAuthorize("isAuthenticated()")
     @CacheEvict(value = "topicsPage", allEntries = true)
@@ -157,7 +157,7 @@ public class TopicService {
         return new TopicDto(
                 topic.id(),
                 topic.title(),
-                markdownService.toHtml(topic.content()),
+                markdownService.toSafeHtml(topic.content()),
                 topic.createdAt(),
                 topic.updatedAt(),
                 topic.authorId(),
