@@ -31,21 +31,21 @@
                        th:placeholder="#{admin.search}"
                        th:value="${q}"
                        required>
-                <button type="submit" name="type" value="login">
+                <button class="btn btn-primary" type="submit" name="type" value="login">
                     🔍 login
                 </button>
 
-                <button type="submit" name="type" value="email">
+                <button class="btn-primary" type="submit" name="type" value="email">
                     🔍 email
                 </button>
             </form>
 
             <div class="sort-links">
                 <form method="get" th:action="@{/admin/panel}">
-                    <button name="filter" value="banned">Banned</button>
-                    <button name="filter" value="admin">Admin</button>
-                    <button name="filter" value="moderator">Moder</button>
-                    <button name="filter" value="user">User</button>
+                    <button class="btn btn-primary" name="filter" value="banned">Banned</button>
+                    <button class="btn btn-primary" name="filter" value="admin">Admin</button>
+                    <button class="btn btn-primary" name="filter" value="moderator">Moder</button>
+                    <button class="btn btn-primary" name="filter" value="user">User</button>
                 </form>
             </div>
             <div class="user-card" th:each="user : ${pageUsers}">

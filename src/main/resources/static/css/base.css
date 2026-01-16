@@ -11,21 +11,6 @@ body {
     color: #202122;
 }
 
-button {
-    margin-top: 8px;
-    padding: 8px 15px;
-    border-radius: 6px;
-    background-color: #4aa3df;
-    color: white;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #3b8ac1;
-}
-
 a {
     color: #3366cc;
     text-decoration: none;

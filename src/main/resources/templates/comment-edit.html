@@ -5,6 +5,9 @@
     <link rel="stylesheet" th:href="@{/css/components.css}">
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/comment-edit.css}">
+    <link rel="stylesheet" th:href="@{/css/easymde.min.css}">
+
+    <script th:src="@{/js/easymde.min.js}"></script>
     <meta charset="UTF-8">
     <title th:text="#{comment.edit}"/>
 </head>
@@ -31,13 +34,18 @@
 
                     <textarea id="comment" th:field="*{comment}" rows="6"></textarea>
 
+                    <script>
+                        var easyMDE = new EasyMDE({
+                            element: document.getElementById("comment")});
+                    </script>
+
                     <div class="field-error"
                          th:if="${#fields.hasErrors('comment')}"
                          th:errors="*{comment}">
                     </div>
                 </div>
 
-                <button type="submit" th:text="#{button.save}" />
+                <button class="btn-primary" type="submit" th:text="#{button.save}"/>
             </form>
 
         </div>

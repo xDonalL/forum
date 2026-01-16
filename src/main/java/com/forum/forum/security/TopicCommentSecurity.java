@@ -17,7 +17,7 @@ public class TopicCommentSecurity {
     private final DataJpaTopicCommentRepository commentRepository;
     private final UserService userService;
 
-    public boolean isOwner(Integer commentId) throws Exception{
+    public boolean isOwner(Integer commentId) throws Exception {
         User user = userService.getCurrentUser();
         if (user == null) {
             throw new AuthenticationException("User is not authenticated");

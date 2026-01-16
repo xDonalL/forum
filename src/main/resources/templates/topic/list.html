@@ -23,19 +23,19 @@
                        name="q"
                        th:placeholder="#{topic.search}"
                        th:value="${q}">
-                <button type="submit">🔍</button>
+                <button class="btn-primary" type="submit">🔍</button>
 
                 <input type="hidden" name="sort" th:value="${currentSort}">
             </form>
             <div class="sort-links">
                 <form method="get" th:action="@{/topic}">
-                    <button name="sort"
+                    <button class="btn btn-primary" name="sort"
                             th:value="${T(com.forum.forum.model.TopicSort).LIKES_DESC}"
                             th:text="#{button.popular}"/>
-                    <button name="sort" t
+                    <button class="btn btn-primary" name="sort" t
                             th:value="${T(com.forum.forum.model.TopicSort).DATE_DESC}"
                             th:text="#{button.new}"/>
-                    <button name="sort"
+                    <button class="btn btn-primary" name="sort"
                             th:value="${T(com.forum.forum.model.TopicSort).DATE_ASC}"
                             th:text="#{button.old}"/>
                 </form>

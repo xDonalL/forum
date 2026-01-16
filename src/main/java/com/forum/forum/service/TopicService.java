@@ -32,6 +32,8 @@ public class TopicService {
     private final DataJpaTopicRepository topicRepository;
     private final DataJpaTopicCommentRepository commentRepository;
     private final UserService userService;
+    private final TopicCommentService commentService;
+    private final MarkdownService markdownService;
 
     @PreAuthorize("isAuthenticated()")
     @CacheEvict(value = "topicsPage", allEntries = true)
@@ -76,12 +78,12 @@ public class TopicService {
     public TopicPageDto getDto(int page, int size, Integer id) {
         log.debug("Getting topicDto: id={}", id);
 
-        User currentUser = userService.getCurrentUser();
+        Integer currentUserId = userService.getCurrentUser().getId();
 
         Pageable pageable = PageRequest.of(page, size);
-        TopicDto topicDto = topicRepository.getDetails(id, currentUser.getId());
-        Page<TopicCommentDto> commentDto =
-                commentRepository.getPageCommentByTopic(pageable, id, currentUser.getId());
+        TopicDto topicDto = htmlTopicRender(topicRepository.getDetails(id, currentUserId));
+        Page<TopicCommentDto> commentDto = commentService.getPageForTopic(pageable, id, currentUserId);
+
         checkNotFound(topicDto, "topic with id=" + id + " not exist");
         return new TopicPageDto(topicDto, commentDto);
     }
@@ -149,5 +151,19 @@ public class TopicService {
 
         log.info("Search completed: query='{}'", q);
         return result;
+    }
+
+    private TopicDto htmlTopicRender(TopicDto topic) {
+        return new TopicDto(
+                topic.id(),
+                topic.title(),
+                markdownService.toHtml(topic.content()),
+                topic.createdAt(),
+                topic.updatedAt(),
+                topic.authorId(),
+                topic.authorLogin(),
+                topic.authorAvatar(),
+                topic.likesCount(),
+                topic.likedByMe());
     }
 }

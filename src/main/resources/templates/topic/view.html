@@ -6,6 +6,10 @@
     <link rel="stylesheet" th:href="@{/css/components.css}">
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/topic/view.css}">
+    <link rel="stylesheet" th:href="@{/css/easymde.min.css}">
+
+    <script th:src="@{/js/easymde.min.js}"></script>
+
     <meta charset="UTF-8">
     <title th:text="${topic.title}"/>
 </head>
@@ -48,7 +52,7 @@
             </div>
 
             <h2 th:text="${topic.title}"></h2>
-            <p th:text="${topic.content}"></p>
+            <p th:utext="${topic.content}"></p>
 
             <div class="topic-footer">
 
@@ -101,13 +105,13 @@
                       th:text="#{app.edit} + ' ' + ${#temporals.format(c.updatedAt(), 'dd.MM.yyyy HH:mm')}"/>
 
             </div>
-            <p th:text="${c.comment()}"></p>
+            <p th:utext="${c.comment()}"></p>
             <form th:action="@{/topic/comment/delete/{id}(id=${c.commentId()})}"
                   sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')"
                   method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <input type="hidden" name="topicId" th:value="${topic.id}"/>
-                <button class="btn-danger" th:text="#{button.delete}"/>
+                <button class="btn   btn-danger" th:text="#{button.delete}"/>
             </form>
             <div class="comment-footer">
 
@@ -167,8 +171,12 @@
                 <div class="form-group">
                     <label for="comment" th:text="#{topic.comment}"/>
 
-                    <textarea id="comment" th:field="*{comment}"
-                              th:placeholder="#{comment.write}"></textarea>
+                    <textarea id="comment" th:field="*{comment}"></textarea>
+
+                    <script>
+                        var easyMDE = new EasyMDE({
+                            element: document.getElementById("comment")});
+                    </script>
 
                     <div class="field-error"
                          th:if="${#fields.hasErrors('comment')}"
@@ -176,7 +184,7 @@
                     </div>
                 </div>
 
-                <button type="submit" th:text="#{button.send}"/>
+                <button class="btn btn-primary" type="submit" th:text="#{button.send}"/>
             </form>
         </div>
 

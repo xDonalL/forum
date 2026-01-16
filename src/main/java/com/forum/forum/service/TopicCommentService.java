@@ -1,5 +1,6 @@
 package com.forum.forum.service;
 
+import com.forum.forum.dto.TopicCommentDto;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.TopicComment;
 import com.forum.forum.model.User;
@@ -8,6 +9,8 @@ import com.forum.forum.repository.forum.DataJpaTopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +25,7 @@ public class TopicCommentService {
 
     private final DataJpaTopicCommentRepository commentRepository;
     private final DataJpaTopicRepository topicRepository;
+    private final MarkdownService markdownService;
     private final UserService userService;
 
     @PreAuthorize("isAuthenticated()")
@@ -68,7 +72,13 @@ public class TopicCommentService {
                 "comment with id=" + id + " not exist");
     }
 
-    @PreAuthorize("@topicSecurity.isOwner(#id)")
+    public Page<TopicCommentDto> getPageForTopic(Pageable pageable, Integer topicId, Integer authorId) {
+        Page<TopicCommentDto> commentDto =
+                commentRepository.getPageCommentByTopic(pageable, topicId, authorId);
+        return htmlPageCommentRender(commentDto);
+    }
+
+    @PreAuthorize("@commentSecurity.isOwner(#id)")
     public TopicComment update(Integer id, String text) {
         log.debug("Updating comment: commentId={}", id);
 
@@ -103,5 +113,19 @@ public class TopicCommentService {
                     commentId, currentUser.getId());
             return comment.getLikedUsers().add(currentUser);
         }
+    }
+
+    private Page<TopicCommentDto> htmlPageCommentRender(Page<TopicCommentDto> commentPage) {
+        return commentPage.map(dto ->
+                new TopicCommentDto(
+                        dto.commentId(),
+                        markdownService.toHtml(dto.comment()),
+                        dto.dateCreated(),
+                        dto.updatedAt(),
+                        dto.authorId(),
+                        dto.authorLogin(),
+                        dto.authorAvatar(),
+                        dto.likesCount(),
+                        dto.likedByMe()));
     }
 }
