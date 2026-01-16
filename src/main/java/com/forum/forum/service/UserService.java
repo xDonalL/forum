@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -78,7 +77,6 @@ public class UserService implements UserDetailsService {
     }
 
     @CacheEvict(value = "profile", allEntries = true)
-    @PreAuthorize("@topicSecurity.isOwner(#user.id)")
     public User update(User user, MultipartFile avatarFile) throws IOException {
         log.debug("Updating user: userId={}", user.getId());
 
