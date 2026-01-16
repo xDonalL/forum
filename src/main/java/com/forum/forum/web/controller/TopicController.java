@@ -63,7 +63,7 @@ public class TopicController {
                                 Model model) {
         log.info("Open topic page: id={}", id);
 
-        TopicPageDto topicPage = topicService.getDto(page, 10, id);
+        TopicPageDto topicPage = topicService.getTopicView(page, 10, id);
 
         model.addAttribute("topic", topicPage.topic());
         model.addAttribute("comments", topicPage.comments());

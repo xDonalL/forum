@@ -75,7 +75,7 @@ public class TopicService {
                 "topic with id=" + id + " not exist");
     }
 
-    public TopicPageDto getDto(int page, int size, Integer id) {
+    public TopicPageDto getTopicView(int page, int size, Integer id) {
         log.debug("Getting topicDto: id={}", id);
 
         Integer currentUserId = userService.getCurrentUser().getId();

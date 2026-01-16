@@ -54,7 +54,7 @@ class TopicControllerTest {
     @Test
     void getTopicPage_thenOkAndModel() throws Exception {
         TopicPageDto dto = new TopicPageDto(TOPIC_DTO, Page.empty());
-        when(topicService.getDto(0, 10, TOPIC1_ID)).thenReturn(dto);
+        when(topicService.getTopicView(0, 10, TOPIC1_ID)).thenReturn(dto);
 
         mockMvc.perform(get(TestUrls.topicView(TOPIC1_ID)))
                 .andExpect(status().isOk())

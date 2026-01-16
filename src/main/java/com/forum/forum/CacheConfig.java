@@ -41,18 +41,10 @@ public class CacheConfig {
                         .maximumSize(100)
                         .build());
 
-        CaffeineCache topicPage = new CaffeineCache(
-                "topicPage",
-                Caffeine.newBuilder()
-                        .expireAfterWrite(120, TimeUnit.SECONDS)
-                        .maximumSize(200)
-                        .build());
-
         manager.setCaches(List.of(
                 profileCache,
                 logListCache,
                 topicsPageCache));
-
 
 
         return manager;
