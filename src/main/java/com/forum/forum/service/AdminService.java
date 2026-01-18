@@ -2,9 +2,9 @@ package com.forum.forum.service;
 
 import com.forum.forum.model.User;
 import com.forum.forum.repository.user.DataJpaUserRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.forum.forum.util.ValidUtil.checkNotFound;
 
 @Service
+@RequiredArgsConstructor
 public class AdminService {
 
     private static final Logger log = LoggerFactory.getLogger(AdminService.class);
 
-    @Autowired
-    private DataJpaUserRepository userRepository;
+    private final DataJpaUserRepository userRepository;
 
     public Page<User> filterUsers(int page, int size, String filter) {
         log.debug("Filtering users by '{}'", filter);

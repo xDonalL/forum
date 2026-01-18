@@ -5,9 +5,8 @@ import com.forum.forum.model.User;
 import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.service.AdminLogService;
 import com.forum.forum.service.AdminService;
-import com.forum.forum.service.TopicCommentService;
 import com.forum.forum.service.UserService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,7 @@ import static com.forum.forum.model.ActionLog.BAN_USER;
 import static com.forum.forum.model.ActionLog.UNBAN_USER;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
 

@@ -1,10 +1,10 @@
-package com.forum.forum.service;
+package com.forum.forum.service.content;
 
 import org.owasp.html.PolicyFactory;
 import org.owasp.html.Sanitizers;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class HtmlSanitizerService {
 
     private static final PolicyFactory POLICY = Sanitizers.FORMATTING

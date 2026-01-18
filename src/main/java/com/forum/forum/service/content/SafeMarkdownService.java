@@ -1,4 +1,4 @@
-package com.forum.forum.service;
+package com.forum.forum.service.content;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

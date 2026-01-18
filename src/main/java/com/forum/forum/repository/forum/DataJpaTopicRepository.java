@@ -4,16 +4,14 @@ import com.forum.forum.dto.TopicDto;
 import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
 import com.forum.forum.repository.BaseRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class DataJpaTopicRepository implements BaseRepository<Topic> {
-
-    public DataJpaTopicRepository(CrudTopicRepository topicRepository) {
-        this.topicRepository = topicRepository;
-    }
 
     private final CrudTopicRepository topicRepository;
 

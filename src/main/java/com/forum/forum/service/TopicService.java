@@ -9,6 +9,7 @@ import com.forum.forum.model.TopicSort;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
 import com.forum.forum.repository.forum.DataJpaTopicRepository;
+import com.forum.forum.service.content.SafeMarkdownService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

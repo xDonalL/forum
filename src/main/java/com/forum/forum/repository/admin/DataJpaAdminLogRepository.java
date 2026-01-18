@@ -1,16 +1,14 @@
 package com.forum.forum.repository.admin;
 
 import com.forum.forum.model.AdminLog;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class DataJpaAdminLogRepository {
-
-    public DataJpaAdminLogRepository(CrudAdminLogRepository logRepository) {
-        this.logRepository = logRepository;
-    }
 
     private final CrudAdminLogRepository logRepository;
 

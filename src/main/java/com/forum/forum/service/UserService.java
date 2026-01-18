@@ -9,9 +9,9 @@ import com.forum.forum.util.ValidUtil;
 import com.forum.forum.util.exception.EmailAlreadyExistsException;
 import com.forum.forum.util.exception.LoginAlreadyExistsException;
 import com.forum.forum.util.exception.PasswordMismatchException;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,15 +30,13 @@ import java.util.UUID;
 import static com.forum.forum.util.ValidUtil.checkNotFound;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    @Autowired
-    private DataJpaUserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final DataJpaUserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public User create(User user) {
         log.debug("Creating user: email={}, login={}", user.getEmail(), user.getLogin());

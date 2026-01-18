@@ -47,7 +47,7 @@
                 </div>
                 <span class="topic-date"
                       th:if="${topic.updatedAt() != null}"
-                      th:text="#{app.edit} + ' ' + ${#temporals.format(topic.updatedAt(), 'dd.MM.yyyy HH:mm')}"/>
+                      th:text="#{forum.edit} + ' ' + ${#temporals.format(topic.updatedAt(), 'dd.MM.yyyy HH:mm')}"/>
 
             </div>
 
@@ -102,7 +102,7 @@
 
                 <span th:if="${c.updatedAt() != null}"
                       class="comment-date"
-                      th:text="#{app.edit} + ' ' + ${#temporals.format(c.updatedAt(), 'dd.MM.yyyy HH:mm')}"/>
+                      th:text="#{forum.edit} + ' ' + ${#temporals.format(c.updatedAt(), 'dd.MM.yyyy HH:mm')}"/>
 
             </div>
             <p th:utext="${c.comment()}"></p>

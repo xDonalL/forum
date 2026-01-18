@@ -1,5 +1,6 @@
 package com.forum.forum.service;
 
+import com.forum.forum.service.content.HtmlSanitizerService;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

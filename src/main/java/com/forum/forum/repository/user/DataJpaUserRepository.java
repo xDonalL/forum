@@ -2,20 +2,16 @@ package com.forum.forum.repository.user;
 
 import com.forum.forum.model.Role;
 import com.forum.forum.model.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
+@RequiredArgsConstructor
 public class DataJpaUserRepository implements UserRepository {
 
     private final CrudUserRepository crudRepository;
-
-    public DataJpaUserRepository(CrudUserRepository crudRepository) {
-        this.crudRepository = crudRepository;
-    }
 
     @Override
     public User save(User user) {

@@ -7,6 +7,7 @@ import com.forum.forum.util.exception.EmailAlreadyExistsException;
 import com.forum.forum.util.exception.LoginAlreadyExistsException;
 import com.forum.forum.util.exception.PasswordMismatchException;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -15,16 +16,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/")
 public class RootController {
 
     private static final Logger log = LoggerFactory.getLogger(RootController.class);
 
     private final UserService userService;
-
-    public RootController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping("/")
     public String homePage() {

@@ -1,4 +1,4 @@
-package com.forum.forum.service;
+package com.forum.forum.service.content;
 
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;

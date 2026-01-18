@@ -3,16 +3,14 @@ package com.forum.forum.repository.forum;
 import com.forum.forum.dto.TopicCommentDto;
 import com.forum.forum.model.TopicComment;
 import com.forum.forum.repository.BaseRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class DataJpaTopicCommentRepository implements BaseRepository<TopicComment> {
-
-    public DataJpaTopicCommentRepository(CrudTopicCommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
-    }
 
     private final CrudTopicCommentRepository commentRepository;
 
