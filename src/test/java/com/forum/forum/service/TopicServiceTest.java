@@ -3,8 +3,8 @@ package com.forum.forum.service;
 import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.User;
-import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
-import com.forum.forum.repository.forum.DataJpaTopicRepository;
+import com.forum.forum.repository.forum.TopicCommentRepository;
+import com.forum.forum.repository.forum.TopicRepository;
 import com.forum.forum.util.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,10 +28,10 @@ import static org.mockito.Mockito.*;
 class TopicServiceTest {
 
     @Mock
-    private DataJpaTopicRepository topicRepository;
+    private TopicRepository topicRepository;
 
     @Mock
-    private DataJpaTopicCommentRepository commentRepository;
+    private TopicCommentRepository commentRepository;
 
     @InjectMocks
     private TopicService topicService;

@@ -1,7 +1,7 @@
 package com.forum.forum.service;
 
 import com.forum.forum.model.User;
-import com.forum.forum.repository.user.DataJpaUserRepository;
+import com.forum.forum.repository.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 class AdminServiceTest {
 
     @Mock
-    private DataJpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @InjectMocks
     private AdminService adminService;

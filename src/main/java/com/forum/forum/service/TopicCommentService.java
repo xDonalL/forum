@@ -4,8 +4,8 @@ import com.forum.forum.dto.TopicCommentDto;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.TopicComment;
 import com.forum.forum.model.User;
-import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
-import com.forum.forum.repository.forum.DataJpaTopicRepository;
+import com.forum.forum.repository.forum.TopicCommentRepository;
+import com.forum.forum.repository.forum.TopicRepository;
 import com.forum.forum.service.content.SafeMarkdownService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -24,8 +24,8 @@ public class TopicCommentService {
 
     private static final Logger log = LoggerFactory.getLogger(TopicCommentService.class);
 
-    private final DataJpaTopicCommentRepository commentRepository;
-    private final DataJpaTopicRepository topicRepository;
+    private final TopicCommentRepository commentRepository;
+    private final TopicRepository topicRepository;
     private final SafeMarkdownService markdownService;
     private final UserService userService;
 

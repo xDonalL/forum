@@ -1,7 +1,7 @@
 package com.forum.forum.service;
 
 import com.forum.forum.model.AdminLog;
-import com.forum.forum.repository.admin.DataJpaAdminLogRepository;
+import com.forum.forum.repository.admin.AdminLogRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 class AdminLogServiceTest {
 
     @Mock
-    private DataJpaAdminLogRepository logRepository;
+    private AdminLogRepository logRepository;
 
     @InjectMocks
     private AdminLogService logService;

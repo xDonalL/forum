@@ -1,7 +1,7 @@
 package com.forum.forum.service;
 
 import com.forum.forum.model.User;
-import com.forum.forum.repository.user.DataJpaUserRepository;
+import com.forum.forum.repository.user.UserRepository;
 import com.forum.forum.to.RegistrationUserTo;
 import com.forum.forum.util.exception.EmailAlreadyExistsException;
 import com.forum.forum.util.exception.LoginAlreadyExistsException;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 class UserServiceTest {
 
     @Mock
-    private DataJpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;

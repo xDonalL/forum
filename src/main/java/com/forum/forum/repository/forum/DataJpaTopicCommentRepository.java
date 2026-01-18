@@ -2,7 +2,6 @@ package com.forum.forum.repository.forum;
 
 import com.forum.forum.dto.TopicCommentDto;
 import com.forum.forum.model.TopicComment;
-import com.forum.forum.repository.BaseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class DataJpaTopicCommentRepository implements BaseRepository<TopicComment> {
+public class DataJpaTopicCommentRepository implements TopicCommentRepository {
 
     private final CrudTopicCommentRepository commentRepository;
 
@@ -24,6 +23,7 @@ public class DataJpaTopicCommentRepository implements BaseRepository<TopicCommen
         return commentRepository.delete(id) != 0;
     }
 
+    @Override
     public int deleteByTopicId(int topicId) {
         return commentRepository.deleteByTopicId(topicId);
     }
@@ -33,6 +33,7 @@ public class DataJpaTopicCommentRepository implements BaseRepository<TopicCommen
         return commentRepository.findById(id).orElse(null);
     }
 
+    @Override
     public Page<TopicCommentDto> getPageCommentByTopic(Pageable pageable, int id, int userId) {
         return commentRepository.findCommentsByTopicId(pageable, id, userId);
     }

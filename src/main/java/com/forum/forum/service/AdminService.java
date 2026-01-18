@@ -1,7 +1,7 @@
 package com.forum.forum.service;
 
 import com.forum.forum.model.User;
-import com.forum.forum.repository.user.DataJpaUserRepository;
+import com.forum.forum.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class AdminService {
 
     private static final Logger log = LoggerFactory.getLogger(AdminService.class);
 
-    private final DataJpaUserRepository userRepository;
+    private final UserRepository userRepository;
 
     public Page<User> filterUsers(int page, int size, String filter) {
         log.debug("Filtering users by '{}'", filter);

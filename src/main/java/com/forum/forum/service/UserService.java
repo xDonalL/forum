@@ -2,7 +2,7 @@ package com.forum.forum.service;
 
 import com.forum.forum.model.Role;
 import com.forum.forum.model.User;
-import com.forum.forum.repository.user.DataJpaUserRepository;
+import com.forum.forum.repository.user.UserRepository;
 import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.to.RegistrationUserTo;
 import com.forum.forum.util.ValidUtil;
@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    private final DataJpaUserRepository userRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     public User create(User user) {

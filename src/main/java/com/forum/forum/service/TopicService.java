@@ -7,8 +7,8 @@ import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
 import com.forum.forum.model.TopicSort;
 import com.forum.forum.model.User;
-import com.forum.forum.repository.forum.DataJpaTopicCommentRepository;
-import com.forum.forum.repository.forum.DataJpaTopicRepository;
+import com.forum.forum.repository.forum.TopicCommentRepository;
+import com.forum.forum.repository.forum.TopicRepository;
 import com.forum.forum.service.content.SafeMarkdownService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -30,8 +30,8 @@ public class TopicService {
 
     private static final Logger log = LoggerFactory.getLogger(TopicService.class);
 
-    private final DataJpaTopicRepository topicRepository;
-    private final DataJpaTopicCommentRepository commentRepository;
+    private final TopicRepository topicRepository;
+    private final TopicCommentRepository commentRepository;
     private final UserService userService;
     private final TopicCommentService commentService;
     private final SafeMarkdownService markdownService;

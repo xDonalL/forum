@@ -38,22 +38,27 @@ public class DataJpaUserRepository implements UserRepository {
         return crudRepository.getByLogin(login);
     }
 
+    @Override
     public Page<User> getAll(Pageable pageable) {
         return crudRepository.findAllByOrderByRegisteredAtDesc(pageable);
     }
 
+    @Override
     public Page<User> getByRole(Pageable pageable, String role) {
         return crudRepository.findByRoles(pageable, Role.valueOf(role.toUpperCase()));
     }
 
+    @Override
     public Page<User> getBanned(Pageable pageable) {
         return crudRepository.findByEnabledFalse(pageable);
     }
 
+    @Override
     public Page<User> getByContainingEmail(Pageable pageable, String email) {
         return crudRepository.findByEmailContainingIgnoreCase(pageable, email);
     }
 
+    @Override
     public Page<User> getByContainingLogin(Pageable pageable, String login) {
         return crudRepository.findByLoginContainingIgnoreCase(pageable, login);
     }

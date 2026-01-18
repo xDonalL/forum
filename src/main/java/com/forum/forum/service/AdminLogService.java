@@ -2,7 +2,7 @@ package com.forum.forum.service;
 
 import com.forum.forum.model.ActionLog;
 import com.forum.forum.model.AdminLog;
-import com.forum.forum.repository.admin.DataJpaAdminLogRepository;
+import com.forum.forum.repository.admin.AdminLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class AdminLogService {
 
     private static final Logger log = LoggerFactory.getLogger(AdminLogService.class);
 
-    private final DataJpaAdminLogRepository logRepository;
+    private final AdminLogRepository logRepository;
 
     @CacheEvict(value = "logList", allEntries = true)
     public AdminLog logAction(String username, ActionLog action, String targetLogin, Integer targetId) {
