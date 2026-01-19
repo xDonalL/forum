@@ -128,6 +128,32 @@ class AdminControllerTest {
     }
 
     @Test
+    void postSetModer_whenAdmin_thenSuccess() throws Exception {
+        when(userService.getUserById(USER_ID)).thenReturn(USER);
+
+        mockMvc.perform(post(TestUrls.setModerator(USER_ID))
+                        .with(authentication(getAuthToken(ADMIN)))
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(TestUrls.ADMIN_PANEL));
+
+        verify(adminService).setModerator(USER_ID);
+    }
+
+    @Test
+    void postRemoveModer_whenAdmin_thenSuccess() throws Exception {
+        when(userService.getUserById(USER_ID)).thenReturn(USER);
+
+        mockMvc.perform(post(TestUrls.removeModerator(USER_ID))
+                        .with(authentication(getAuthToken(ADMIN)))
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(TestUrls.ADMIN_PANEL));
+
+        verify(adminService).removeModerator(USER_ID);
+    }
+
+    @Test
     void getShowLogs_whenAdmin_thenIsOk() throws Exception {
         when(logService.getAll(PAGE_NUMBER, PAGE_SIZE)).thenReturn(TEST_LOG);
 

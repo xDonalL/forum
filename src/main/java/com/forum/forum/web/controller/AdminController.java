@@ -15,8 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import static com.forum.forum.model.ActionLog.BAN_USER;
-import static com.forum.forum.model.ActionLog.UNBAN_USER;
+import static com.forum.forum.model.ActionLog.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -85,6 +84,36 @@ public class AdminController {
         AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
         logService.logAction(authorizedUser.getUser().getLogin(),
                 UNBAN_USER, authorLogin, id);
+        return "redirect:/admin/panel";
+    }
+
+    @PostMapping("/moder/set/{id}")
+    public String setModerator(@PathVariable int id,
+                            Authentication auth) {
+        log.info("Admin set moderator user: id={}", id);
+
+        String authorLogin = userService.getUserById(id).getLogin();
+
+        adminService.setModerator(id);
+
+        AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
+        logService.logAction(authorizedUser.getUser().getLogin(),
+                SET_MODERATOR, authorLogin, id);
+        return "redirect:/admin/panel";
+    }
+
+    @PostMapping("/moder/remove/{id}")
+    public String removeModerator(@PathVariable int id,
+                            Authentication auth) {
+        log.info("Admin remove moderator user: id={}", id);
+
+        String authorLogin = userService.getUserById(id).getLogin();
+
+        adminService.removeModerator(id);
+
+        AuthorizedUser authorizedUser = (AuthorizedUser) auth.getPrincipal();
+        logService.logAction(authorizedUser.getUser().getLogin(),
+                REMOVE_MODERATOR, authorLogin, id);
         return "redirect:/admin/panel";
     }
 

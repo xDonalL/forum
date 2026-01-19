@@ -14,6 +14,7 @@ import java.util.List;
 
 import static com.forum.forum.PageTestData.*;
 import static com.forum.forum.UserTestData.*;
+import static com.forum.forum.model.Role.MODERATOR;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -110,5 +111,19 @@ class AdminServiceTest {
         when(userRepository.get(USER_ID)).thenReturn(USER);
         adminService.unbanUser(USER_ID);
         assertTrue(USER.isEnabled());
+    }
+
+    @Test
+    void setModeratorSuccess() {
+        when(userRepository.get(USER_ID)).thenReturn(USER);
+        adminService.setModerator(USER_ID);
+        assertTrue(USER.getRoles().contains(MODERATOR));
+    }
+
+    @Test
+    void removeModeratorSuccess() {
+        when(userRepository.get(USER_ID)).thenReturn(USER);
+        adminService.removeModerator(USER_ID);
+        assertFalse(USER.getRoles().contains(MODERATOR));
     }
 }

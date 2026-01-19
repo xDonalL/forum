@@ -1,5 +1,6 @@
 package com.forum.forum.service;
 
+import com.forum.forum.model.Role;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -73,5 +74,29 @@ public class AdminService {
 
         user.setEnabled(true);
         log.info("User unbanned: userId={}", id);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public void setModerator(int id) {
+        log.debug("set moderator: userId={}", id);
+
+        User user = userRepository.get(id);
+        checkNotFound(user, "user with id=" + id + " not exist");
+
+        user.getRoles().add(Role.MODERATOR);
+        log.info("Set role moderator: userId={}", id);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public void removeModerator(int id) {
+        log.debug("remove moderator: userId={}", id);
+
+        User user = userRepository.get(id);
+        checkNotFound(user, "user with id=" + id + " not exist");
+
+        user.getRoles().remove(Role.MODERATOR);
+        log.info("Remove role moderator: userId={}", id);
     }
 }

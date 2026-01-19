@@ -41,4 +41,12 @@ public class TestUrls {
     public static String adminUnban(Integer userId) {
         return "/admin/unban/" + userId;
     }
+
+    public static String setModerator(Integer userId) {
+        return "/admin/moder/set/" + userId;
+    }
+
+    public static String removeModerator(Integer userId) {
+        return "/admin/moder/remove/" + userId;
+    }
 }

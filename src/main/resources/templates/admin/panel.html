@@ -81,6 +81,18 @@
                           method="post">
                         <button class="btn-success">Unban</button>
                     </form>
+
+                    <form th:if="${!user.isModerator()}"
+                          th:action="@{/admin/moder/set/{id}(id=${user.id})}"
+                          method="post">
+                        <button class="btn-success">Set Moder</button>
+                    </form>
+
+                    <form th:if="${user.isModerator()}"
+                          th:action="@{/admin/moder/remove/{id}(id=${user.id})}"
+                          method="post">
+                        <button class="btn-danger">Remove Moder</button>
+                    </form>
                 </div>
                 <span th:text="${#temporals.format(user.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
             </div>
