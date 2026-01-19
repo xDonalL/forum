@@ -36,12 +36,7 @@ public class DataJpaTopicRepository implements TopicRepository {
 
     @Override
     public Page<TopicPagesDto> getAllTopics(Pageable pageable) {
-        return topicRepository.findAllDesc(pageable);
-    }
-
-    @Override
-    public Page<TopicPagesDto> getAllTopicsAsc(Pageable pageable) {
-        return topicRepository.findAllAsc(pageable);
+        return topicRepository.findAllPage(pageable);
     }
 
     @Override

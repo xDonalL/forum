@@ -18,10 +18,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.forum.forum.model.TopicSort.LIKES_DESC;
 import static com.forum.forum.util.ValidUtil.checkNotFound;
 
 @Service
@@ -129,16 +131,22 @@ public class TopicService {
     public Page<TopicPagesDto> getAllSorted(int page, int size, TopicSort sort) {
         log.debug("Getting topics sorted by '{}'", sort);
 
-        Pageable pageable = PageRequest.of(page, size);
+        Sort topicsSort = toSort(sort);
 
-        if (sort == null) {
-            return topicRepository.getAllTopics(pageable);
+        Pageable pageable = PageRequest.of(page, size, topicsSort);
+
+        if (sort == LIKES_DESC) {
+            return topicRepository.getTopicsSortByLikes(pageable);
         }
 
+        return topicRepository.getAllTopics(pageable);
+    }
+
+    private Sort toSort(TopicSort sort) {
         return switch (sort) {
-            case TopicSort.LIKES_DESC -> topicRepository.getTopicsSortByLikes(pageable);
-            case TopicSort.DATE_ASC -> topicRepository.getAllTopicsAsc(pageable);
-            default -> topicRepository.getAllTopics(pageable);
+            case DATE_DESC -> Sort.by(Sort.Order.desc("createdAt"));
+            case DATE_ASC -> Sort.by(Sort.Order.asc("createdAt"));
+            case LIKES_DESC -> Sort.unsorted();
         };
     }
 

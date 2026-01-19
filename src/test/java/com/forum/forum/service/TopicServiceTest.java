@@ -2,6 +2,7 @@ package com.forum.forum.service;
 
 import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
+import com.forum.forum.model.TopicSort;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.TopicCommentRepository;
 import com.forum.forum.repository.forum.TopicRepository;
@@ -14,12 +15,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
 import static com.forum.forum.PageTestData.*;
 import static com.forum.forum.TopicTestData.*;
 import static com.forum.forum.UserTestData.USER;
+import static com.forum.forum.model.TopicSort.DATE_DESC;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -61,9 +64,9 @@ class TopicServiceTest {
 
     @Test
     void getAllTopicSuccess() {
-        when(topicRepository.getAllTopics(PAGE)).thenReturn(ALL_TOPIC_PAGE);
+        when(topicRepository.getAllTopics(PAGE_DATE_DESC)).thenReturn(ALL_TOPIC_PAGE);
 
-        Page<TopicPagesDto> verifyTopics = topicService.getAllSorted(PAGE_NUMBER, PAGE_SIZE, null);
+        Page<TopicPagesDto> verifyTopics = topicService.getAllSorted(PAGE_NUMBER, PAGE_SIZE, DATE_DESC);
 
         assertEquals(ALL_TOPIC_PAGE.getTotalElements(), verifyTopics.getTotalElements());
         assertTrue(verifyTopics.getContent().contains(PAGES_TOPIC_DTO1));

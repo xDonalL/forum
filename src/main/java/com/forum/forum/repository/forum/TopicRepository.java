@@ -13,8 +13,6 @@ public interface TopicRepository extends BaseRepository<Topic> {
 
     Page<TopicPagesDto> getAllTopics(Pageable pageable);
 
-    Page<TopicPagesDto> getAllTopicsAsc(Pageable pageable);
-
     Page<TopicPagesDto> getTopicsByTitle(String topicName, Pageable pageable);
 
     Page<TopicPagesDto> getTopicsSortByLikes(Pageable pageable);
