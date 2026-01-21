@@ -102,7 +102,7 @@ public class TopicController {
 
         topicService.create(topicTo.getTitle(), topicTo.getContent(), user);
 
-        return "redirect:/topic";
+        return "redirect:/topic?sort=DATE_DESC";
     }
 
     @GetMapping("/edit/{id}")
