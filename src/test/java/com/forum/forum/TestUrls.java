@@ -1,7 +1,5 @@
 package com.forum.forum;
 
-import java.net.URI;
-
 public class TestUrls {
 
     public static final String LOGIN_VIEW = "**/login";
@@ -9,10 +7,12 @@ public class TestUrls {
     public static final String ADMIN_PANEL = "/admin/panel";
 
     public static final String TOPIC_LIST = "/topic";
+    public static final String TOPIC_LIST_DATE_DESC = "/topic?sort=DATE_DESC";
     public static final String TOPIC_ADD = "/topic/add";
     public static final String COMMENT_ADD = "/topic/comment/add";
     public static final String TOPIC_LIKE = "/topic/like";
     public static final String COMMENT_LIKE = "/topic/comment/like";
+    public static final String ADMIN_LOG = "/admin/log";
 
     public static String topicView(Integer id) {
         return "/topic/" + id;

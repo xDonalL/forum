@@ -77,12 +77,12 @@ class TopicControllerTest {
 
         mockMvc.perform(post(TestUrls.TOPIC_ADD)
                         .with(csrf())
-                        .param("title", "new title")
-                        .param("content", "new content"))
+                        .param("title", TOPIC.getTitle())
+                        .param("content", TOPIC.getContent()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(TestUrls.TOPIC_LIST));
+                .andExpect(redirectedUrl(TestUrls.TOPIC_LIST_DATE_DESC));
 
-        verify(topicService).create("new title", "new content", USER);
+        verify(topicService).create(TOPIC.getTitle(), TOPIC.getContent(), USER);
     }
 
     @Test
@@ -113,12 +113,12 @@ class TopicControllerTest {
     void postEditTopic_whenValid_thenRedirect() throws Exception {
         mockMvc.perform(post(TestUrls.topicEdit(TOPIC1_ID))
                         .with(csrf())
-                        .param("title", "new title")
-                        .param("content", "new content"))
+                        .param("title", TOPIC.getTitle())
+                        .param("content", TOPIC.getContent()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(TestUrls.topicView(TOPIC1_ID)));
 
-        verify(topicService).update(TOPIC1_ID, "new title", "new content");
+        verify(topicService).update(TOPIC1_ID, TOPIC.getTitle(), TOPIC.getContent());
     }
 
     @Test

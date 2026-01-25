@@ -30,7 +30,6 @@ public class TopicCommentController {
     private final TopicCommentService commentService;
     private final UserService userService;
     private final AdminLogService adminLogService;
-    private final TopicCommentService topicCommentService;
 
     @PostMapping("/add")
     public String addComment(@RequestParam Integer topicId,
@@ -92,7 +91,7 @@ public class TopicCommentController {
         log.warn("Moderator/Admin deletes comment {}, topic {}",
                 id, topicId);
 
-        String authorLogin = topicCommentService.get(id).getAuthor().getLogin();
+        String authorLogin = commentService.get(id).getAuthor().getLogin();
 
         commentService.delete(id);
 

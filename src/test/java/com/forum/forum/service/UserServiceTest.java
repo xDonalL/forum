@@ -7,11 +7,11 @@ import com.forum.forum.util.exception.EmailAlreadyExistsException;
 import com.forum.forum.util.exception.LoginAlreadyExistsException;
 import com.forum.forum.util.exception.NotFoundException;
 import com.forum.forum.util.exception.PasswordMismatchException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
@@ -20,6 +20,7 @@ import static com.forum.forum.UserTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
     @Mock
@@ -30,11 +31,6 @@ class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
-
-    @BeforeEach
-    void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void createSuccess() {
@@ -67,8 +63,7 @@ class UserServiceTest {
 
     @Test
     void updateUserNotFoundException() {
-        when(userRepository.save(any(User.class))).thenReturn(null);
-
+        assertThrows(NotFoundException.class, () -> userService.update(USER, null));
     }
 
     @Test

@@ -162,7 +162,7 @@ public class TopicService {
         return result;
     }
 
-    private TopicDto htmlTopicRender(TopicDto topic) {
+    protected TopicDto htmlTopicRender(TopicDto topic) {
         return new TopicDto(
                 topic.id(),
                 topic.title(),

@@ -10,17 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
 
+import static com.forum.forum.AuthTestData.getAuthToken;
 import static com.forum.forum.TopicCommentTestData.COMMENT1;
 import static com.forum.forum.TopicCommentTestData.COMMENT1_ID;
 import static com.forum.forum.TopicTestData.TOPIC1_ID;
-import static com.forum.forum.UserTestData.ADMIN;
-import static com.forum.forum.UserTestData.USER;
+import static com.forum.forum.UserTestData.*;
 import static com.forum.forum.model.ActionLog.DELETE_TOPIC;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -46,7 +47,6 @@ class TopicCommentControllerTest {
     @MockBean
     private AdminLogService adminLogService;
 
-
     @Test
     void postAddComment_whenValid_thenRedirectAndAdd() throws Exception {
         when(userService.getCurrentUser()).thenReturn(USER);
@@ -54,11 +54,11 @@ class TopicCommentControllerTest {
         mockMvc.perform(post(TestUrls.COMMENT_ADD)
                         .with(csrf())
                         .param("topicId", String.valueOf(TOPIC1_ID))
-                        .param("comment", "test comment"))
+                        .param("comment", COMMENT1.getComment()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(TestUrls.topicView(TOPIC1_ID)));
 
-        verify(commentService).add(TOPIC1_ID, USER, "test comment");
+        verify(commentService).add(TOPIC1_ID, USER, COMMENT1.getComment());
     }
 
     @Test
@@ -77,6 +77,10 @@ class TopicCommentControllerTest {
 
     @Test
     void getEditCommentPage_thenOkAndModel() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new TopicCommentController(
+                        commentService, userService, adminLogService))
+                .build();
+
         when(commentService.get(COMMENT1_ID)).thenReturn(COMMENT1);
 
         mockMvc.perform(get(TestUrls.commentEdit(COMMENT1_ID)))
@@ -98,8 +102,11 @@ class TopicCommentControllerTest {
     }
 
     @Test
-    @WithMockUser
     void postEditComment_whenInvalid_thenReturnEditView() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new TopicCommentController(
+                        commentService, userService, adminLogService))
+                .build();
+
         mockMvc.perform(post(TestUrls.commentEdit(COMMENT1_ID))
                         .with(csrf())
                         .param("topicId", String.valueOf(TOPIC1_ID))

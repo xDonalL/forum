@@ -1,33 +1,39 @@
 package com.forum.forum.service;
 
+import com.forum.forum.dto.TopicPageDto;
 import com.forum.forum.dto.TopicPagesDto;
 import com.forum.forum.model.Topic;
-import com.forum.forum.model.TopicSort;
 import com.forum.forum.model.User;
 import com.forum.forum.repository.forum.TopicCommentRepository;
 import com.forum.forum.repository.forum.TopicRepository;
+import com.forum.forum.security.SecurityConfig;
+import com.forum.forum.service.content.SafeMarkdownService;
 import com.forum.forum.util.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
 import static com.forum.forum.PageTestData.*;
+import static com.forum.forum.TopicCommentTestData.COMMENT_PAGE;
 import static com.forum.forum.TopicTestData.*;
 import static com.forum.forum.UserTestData.USER;
+import static com.forum.forum.UserTestData.USER_ID;
 import static com.forum.forum.model.TopicSort.DATE_DESC;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Import(SecurityConfig.class)
 class TopicServiceTest {
 
     @Mock
@@ -36,6 +42,16 @@ class TopicServiceTest {
     @Mock
     private TopicCommentRepository commentRepository;
 
+    @Mock
+    private UserService userService;
+
+    @Mock
+    private TopicCommentService commentService;
+
+    @Mock
+    private SafeMarkdownService safeMarkdownService;
+
+    @Spy
     @InjectMocks
     private TopicService topicService;
 
@@ -80,6 +96,23 @@ class TopicServiceTest {
         Topic topic = topicService.get(TOPIC1_ID);
         assertNotNull(topic);
         assertEquals(TOPIC.getId(), topic.getId());
+    }
+
+    @Test
+    void getTopicViewSuccess() {
+        doReturn(TOPIC_DTO)
+                .when(topicService)
+                .htmlTopicRender(any());
+
+        when(userService.getCurrentUser()).thenReturn(USER);
+        when(topicRepository.getDetails(TOPIC1_ID, USER_ID)).thenReturn(TOPIC_DTO);
+        when(commentService.getPageForTopic(PAGE, TOPIC1_ID, USER_ID)).thenReturn(COMMENT_PAGE);
+
+        TopicPageDto verifyTopicPage = topicService.getTopicView(PAGE_NUMBER, PAGE_SIZE, TOPIC1_ID);
+
+        assertNotNull(verifyTopicPage);
+        assertEquals(verifyTopicPage.topic(), TOPIC_DTO);
+        assertEquals(verifyTopicPage.comments(), COMMENT_PAGE);
     }
 
     @Test

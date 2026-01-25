@@ -17,9 +17,9 @@ public class UserTestData {
     public static final Integer NOT_FOUND_ID = 100;
     public static final String NOT_FOUND_EMAIL = "notFoundEmail";
 
-    public static final User USER = new User(USER_ID, "user@yandex.ru", "user", "password", Role.USER);
+    public static final User USER = new User(USER_ID, "user@yandex.ru", "user1", "password", Role.USER);
     public static final User ADMIN = new User(ADMIN_ID, "admin@gmail.com", "admin", "admin", Role.ADMIN, Role.USER);
-    public static final User MODER = new User(MODER_ID, "moder@gmail.com", "admin", "admin", Role.MODERATOR, Role.USER);
+    public static final User MODER = new User(MODER_ID, "moder@gmail.com", "moderator", "moderator", Role.MODERATOR, Role.USER);
 
     public static final List<User> ALL_USERS = List.of(USER, ADMIN);
 

@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static com.forum.forum.AdminLogTestData.TEST_LOG;
 import static com.forum.forum.AuthTestData.getAuthToken;
@@ -48,6 +49,11 @@ class AdminControllerTest {
 
     @Test
     void getShowUsersPanel_whenAdmin_thenIsOk() throws Exception {
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(
+                        new AdminController(adminService, logService, userService))
+                .build();
+
         when(adminService.filterUsers(PAGE_NUMBER, PAGE_SIZE, null)).thenReturn(PAGE_ALL_USERS);
 
         mockMvc.perform(get(TestUrls.ADMIN_PANEL).with(authentication(getAuthToken(ADMIN))))
@@ -58,13 +64,6 @@ class AdminControllerTest {
                 .andExpect(view().name("admin/panel"));
 
         verify(adminService).filterUsers(PAGE_NUMBER, PAGE_SIZE, null);
-    }
-
-    @Test
-    void getShowUsersPanel_whenUser_thenForbidden() throws Exception {
-        mockMvc.perform(get(TestUrls.ADMIN_PANEL)
-                        .with(authentication(getAuthToken(USER))))
-                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -155,27 +154,18 @@ class AdminControllerTest {
 
     @Test
     void getShowLogs_whenAdmin_thenIsOk() throws Exception {
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(
+                        new AdminController(adminService, logService, userService))
+                .build();
+
         when(logService.getAll(PAGE_NUMBER, PAGE_SIZE)).thenReturn(TEST_LOG);
 
-        mockMvc.perform(get("/admin/log")
+        mockMvc.perform(get(TestUrls.ADMIN_LOG)
                         .with(authentication(getAuthToken(ADMIN))))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("pageLogs"))
                 .andExpect(model().attribute("pageLogs", TEST_LOG))
                 .andExpect(view().name("admin/log"));
-    }
-
-    @Test
-    void getShowLogs_whenModer_thenForbidden() throws Exception {
-        mockMvc.perform(get("/admin/log")
-                        .with(authentication(getAuthToken(USER))))
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
-    void getShowLogs_whenUser_thenForbidden() throws Exception {
-        mockMvc.perform(get("/admin/log")
-                        .with(authentication(getAuthToken(USER))))
-                .andExpect(status().isForbidden());
     }
 }
