@@ -26,6 +26,10 @@ public class RegistrationUserTo {
 
     @NotBlank(message = "{validation.notBlank}")
     @Size(min = 4, max = 20, message = "{validation.login.size}")
+    @Pattern(
+            regexp = "^(?!\\d)[^\\s]+$",
+            message = "{validation.login.pattern}"
+    )
     private String login;
 
     @NotBlank(message = "{validation.notBlank}")
