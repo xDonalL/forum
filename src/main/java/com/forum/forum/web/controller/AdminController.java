@@ -6,6 +6,7 @@ import com.forum.forum.security.AuthorizedUser;
 import com.forum.forum.service.AdminLogService;
 import com.forum.forum.service.AdminService;
 import com.forum.forum.service.UserService;
+import com.forum.forum.util.exception.AccessDeniedException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +63,12 @@ public class AdminController {
 
         log.info("Admin banning user: id={}", id);
 
-        String authorLogin = userService.getUserById(id).getLogin();
+        User user = userService.getUserById(id);
+        String authorLogin = user.getLogin();
+
+        if (user.isAdmin()) {
+            throw new AccessDeniedException("Unable to ban administrator");
+        }
 
         adminService.banUser(id);
 
@@ -89,7 +95,7 @@ public class AdminController {
 
     @PostMapping("/moder/set/{id}")
     public String setModerator(@PathVariable int id,
-                            Authentication auth) {
+                               Authentication auth) {
         log.info("Admin set moderator user: id={}", id);
 
         String authorLogin = userService.getUserById(id).getLogin();
@@ -104,7 +110,7 @@ public class AdminController {
 
     @PostMapping("/moder/remove/{id}")
     public String removeModerator(@PathVariable int id,
-                            Authentication auth) {
+                                  Authentication auth) {
         log.info("Admin remove moderator user: id={}", id);
 
         String authorLogin = userService.getUserById(id).getLogin();

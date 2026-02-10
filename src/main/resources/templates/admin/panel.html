@@ -70,13 +70,13 @@
                 </div>
 
                 <div class="user-actions">
-                    <form th:if="${user.enabled}"
+                    <form th:if="${user.enabled and !user.admin}"
                           th:action="@{/admin/ban/{id}(id=${user.id})}"
                           method="post">
                         <button class="btn-danger">Ban</button>
                     </form>
 
-                    <form th:if="${!user.enabled}"
+                    <form th:if="${!user.enabled and !user.admin}"
                           th:action="@{/admin/unban/{id}(id=${user.id})}"
                           method="post">
                         <button class="btn-success">Unban</button>
