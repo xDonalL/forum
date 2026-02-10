@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   app:
-    build: .
+    image: yuriyjava/forum:latest
     container_name: forum-app
     ports:
       - "8080:8080"
